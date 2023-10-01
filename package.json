@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "sl": "node.exe \"C:\\Program Files\\Sapling\\edenscm-isl\\isl-server\\dist\\run-proxy.js\" --port 3011 --command \"C:\\Program Files\\Sapling\\sl.exe\" --force",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
