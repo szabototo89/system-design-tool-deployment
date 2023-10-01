@@ -10,6 +10,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mantine/core": "^7.1.0",
+    "@mantine/form": "^7.1.0",
+    "@mantine/hooks": "^7.1.0",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest"
@@ -20,6 +23,9 @@
     "@types/react-dom": "latest",
     "eslint": "latest",
     "eslint-config-next": "latest",
+    "postcss": "^8.4.31",
+    "postcss-preset-mantine": "^1.7.0",
+    "postcss-simple-vars": "^7.0.1",
     "prettier": "3.0.3",
     "typescript": "latest"
   }
