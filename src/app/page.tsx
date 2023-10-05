@@ -1,9 +1,5 @@
-import { Button } from "@mantine/core";
+import { MessageBoardCard } from "@/components/MessageBoardCard";
 
 export default function Home() {
-  return (
-    <main>
-      Hello World <Button>Click here</Button>
-    </main>
-  );
+  return <MessageBoardCard messageBoard={{}} />;
 }
