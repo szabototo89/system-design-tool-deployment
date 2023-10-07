@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "sl": "node.exe \"C:\\Program Files\\Sapling\\edenscm-isl\\isl-server\\dist\\run-proxy.js\" --port 3011 --command \"C:\\Program Files\\Sapling\\sl.exe\" --force",
-    "dev": "next dev --open",
+    "db:generate": "drizzle-kit generate:sqlite",
+    "db:studio": "drizzle-kit studio",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -13,14 +15,18 @@
     "@mantine/core": "^7.1.0",
     "@mantine/form": "^7.1.0",
     "@mantine/hooks": "^7.1.0",
+    "better-sqlite3": "^8.7.0",
+    "drizzle-orm": "^0.28.6",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.5",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "drizzle-kit": "^0.19.13",
     "eslint": "latest",
     "eslint-config-next": "latest",
     "postcss": "^8.4.31",

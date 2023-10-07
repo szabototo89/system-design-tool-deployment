@@ -1,6 +1,7 @@
 import { Badge, Button, Card, CardSection, Group, Text } from "@mantine/core";
+import { db, MessageBoard, MessageBoards as MessageBoards } from "@/db/schema";
 
-type Props = { messageBoard: Record<string, string> };
+type Props = { messageBoard: MessageBoard };
 
 export function MessageBoardCard(props: Props) {
   return (
