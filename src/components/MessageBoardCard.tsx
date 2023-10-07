@@ -34,7 +34,12 @@ export function MessageBoardCard(props: Props) {
       {/*</CardSection>*/}
 
       <Group mt="xs">
-        <Button radius="md" style={{ flex: 1 }}>
+        <Button
+          radius="md"
+          style={{ flex: 1 }}
+          component="a"
+          href={`/messages/${props.messageBoard.id}`}
+        >
           Show details
         </Button>
       </Group>

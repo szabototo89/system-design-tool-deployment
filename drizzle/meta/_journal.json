@@ -15,6 +15,27 @@
       "when": 1696543539846,
       "tag": "0001_solid_skreet",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1696709161554,
+      "tag": "0002_complex_toad",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1696709506698,
+      "tag": "0003_flat_shiver_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1696709601744,
+      "tag": "0004_unknown_black_cat",
+      "breakpoints": true
     }
   ]
 }

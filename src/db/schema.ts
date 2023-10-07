@@ -6,10 +6,22 @@ export const MessageBoards = sqliteTable("message_boards", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   title: text("title"),
   description: text("description"),
-  status: text("status"),
+  status: text("status").$type<MessageBoardStatus>(),
 });
 
+export const Messages = sqliteTable("messages", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  content: text("content"),
+  messageBoardID: integer("message_board_id").references(
+    () => MessageBoards.id,
+  ),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
+});
+
+type MessageBoardStatus = "draft" | "published";
+
 export type MessageBoard = typeof MessageBoards.$inferSelect;
+export type Message = typeof Messages.$inferSelect;
 
 const sqliteClient = new Database("./app.db");
 export const db = drizzle(sqliteClient);
