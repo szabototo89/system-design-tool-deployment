@@ -36,6 +36,20 @@
       "when": 1696709601744,
       "tag": "0004_unknown_black_cat",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1696887443148,
+      "tag": "0005_wild_romulus",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1696888098215,
+      "tag": "0006_overconfident_kinsey_walden",
+      "breakpoints": true
     }
   ]
 }

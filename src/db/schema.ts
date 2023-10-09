@@ -1,6 +1,7 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import Database from "better-sqlite3";
 import { drizzle } from "drizzle-orm/better-sqlite3";
+import { sql } from "drizzle-orm";
 
 export const MessageBoards = sqliteTable("message_boards", {
   id: integer("id").primaryKey({ autoIncrement: true }),
@@ -15,7 +16,9 @@ export const Messages = sqliteTable("messages", {
   messageBoardID: integer("message_board_id").references(
     () => MessageBoards.id,
   ),
-  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
+  createdAt: integer("created_at", { mode: "timestamp_ms" })
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
 });
 
 type MessageBoardStatus = "draft" | "published";

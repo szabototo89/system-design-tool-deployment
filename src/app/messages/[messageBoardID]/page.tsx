@@ -1,9 +1,10 @@
 import { db, MessageBoard, MessageBoards, Messages } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { MessageBoardHeroHeader } from "@/app/messages/[messageBoardID]/MessageBoardHeroHeader";
 import { MessageCard } from "@/app/messages/[messageBoardID]/MessageCard";
 import { Button, Flex, Stack, TextInput } from "@mantine/core";
 import React from "react";
+import { MessageBoardSendMessageSection } from "@/app/messages/[messageBoardID]/MessageBoardSendMessageSection";
 
 type Props = {
   params: { messageBoardID: MessageBoard["id"] };
@@ -27,11 +28,7 @@ export default async function MessageBoardDetailsPage(props: Props) {
   return (
     <Stack>
       <MessageBoardHeroHeader messageBoard={messageBoard} />
-
-      <Stack>
-        <TextInput label="Message" placeholder="Leave a message here ..." />
-        <Button>Send message</Button>
-      </Stack>
+      <MessageBoardSendMessageSection messageBoard={messageBoard} />
 
       {messages.map((message) => (
         <MessageCard key={message.id} message={message} />
