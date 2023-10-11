@@ -1,5 +1,6 @@
 import { MessageBoardCard } from "@/components/MessageBoardCard";
-import { db, MessageBoards } from "@/db/schema";
+import { db } from "@/db/schema";
+import { MessageBoards } from "@/db/schemas/messageBoards.schema";
 
 export default async function Home() {
   const messageBoards = await db.select().from(MessageBoards);

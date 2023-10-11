@@ -1,8 +1,9 @@
 import { Card, Text } from "@mantine/core";
-import { db, Message, Messages } from "@/db/schema";
+import { db } from "@/db/schema";
 import { ActionButton } from "@/components/ActionButton";
 import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
+import { Message, Messages } from "@/db/schemas/messages.schema";
 
 type Props = {
   message: Message;

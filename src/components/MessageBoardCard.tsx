@@ -1,5 +1,6 @@
 import { Badge, Button, Card, CardSection, Group, Text } from "@mantine/core";
-import { db, MessageBoard, MessageBoards as MessageBoards } from "@/db/schema";
+import { db } from "@/db/schema";
+import { MessageBoard, MessageBoards } from "@/db/schemas/messageBoards.schema";
 
 type Props = { messageBoard: MessageBoard };
 

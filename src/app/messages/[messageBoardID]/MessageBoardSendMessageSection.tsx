@@ -7,9 +7,11 @@ import {
   Title,
 } from "@mantine/core";
 import React from "react";
-import { db, MessageBoard, Messages } from "@/db/schema";
+import { db } from "@/db/schema";
 import { revalidatePath } from "next/cache";
 import { zfd } from "zod-form-data";
+import { MessageBoard } from "@/db/schemas/messageBoards.schema";
+import { Messages } from "@/db/schemas/messages.schema";
 
 type Props = {
   messageBoard: MessageBoard;
