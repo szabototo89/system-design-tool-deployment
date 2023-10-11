@@ -9,19 +9,23 @@ import {
 import React from "react";
 import { db, MessageBoard, Messages } from "@/db/schema";
 import { revalidatePath } from "next/cache";
+import { zfd } from "zod-form-data";
 
 type Props = {
   messageBoard: MessageBoard;
 };
 
+const SendMessageFormDataSchema = zfd.formData({
+  content: zfd.text(),
+});
+
 export function MessageBoardSendMessageSection(props: Props) {
   const sendMessage = async (formData: FormData) => {
     "use server";
-
-    const content = formData.get("content") as string;
+    const data = SendMessageFormDataSchema.parse(formData);
 
     await db.insert(Messages).values({
-      content,
+      content: data.content,
       messageBoardID: props.messageBoard.id,
     });
 
