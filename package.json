@@ -17,9 +17,11 @@
     "@mantine/hooks": "^7.1.0",
     "better-sqlite3": "^8.7.0",
     "drizzle-orm": "^0.28.6",
+    "drizzle-zod": "^0.5.1",
     "next": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.5",
