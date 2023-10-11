@@ -1,7 +1,13 @@
-import { Button, Stack, TextInput } from "@mantine/core";
+import {
+  Button,
+  Center,
+  Stack,
+  Textarea,
+  TextInput,
+  Title,
+} from "@mantine/core";
 import React from "react";
 import { db, MessageBoard, Messages } from "@/db/schema";
-import { sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 type Props = {
@@ -25,12 +31,14 @@ export function MessageBoardSendMessageSection(props: Props) {
   return (
     <form action={sendMessage}>
       <Stack>
-        <TextInput
+        <Textarea
           label="Message"
           placeholder="Leave a message here ..."
           name="content"
         />
-        <Button type="submit">Send message</Button>
+        <Stack align="end">
+          <Button type="submit">Send message</Button>
+        </Stack>
       </Stack>
     </form>
   );

@@ -1,8 +1,8 @@
 import { db, MessageBoard, MessageBoards, Messages } from "@/db/schema";
-import { eq, sql } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { MessageBoardHeroHeader } from "@/app/messages/[messageBoardID]/MessageBoardHeroHeader";
 import { MessageCard } from "@/app/messages/[messageBoardID]/MessageCard";
-import { Button, Flex, Stack, TextInput } from "@mantine/core";
+import { SimpleGrid, Stack, Title } from "@mantine/core";
 import React from "react";
 import { MessageBoardSendMessageSection } from "@/app/messages/[messageBoardID]/MessageBoardSendMessageSection";
 
@@ -23,16 +23,30 @@ export default async function MessageBoardDetailsPage(props: Props) {
   const messages = await db
     .select()
     .from(Messages)
-    .where(eq(Messages.messageBoardID, messageBoard.id));
+    .where(eq(Messages.messageBoardID, messageBoard.id))
+    .orderBy(desc(Messages.createdAt));
+
+  // const deleteMessage = async (message: Message) => {
+  //   "use server";
+  //
+  //   await db.delete(Messages).where(eq(Messages.id, message.id));
+  //
+  //   revalidatePath("/messages/[messageBoardID]/page");
+  // };
 
   return (
     <Stack>
       <MessageBoardHeroHeader messageBoard={messageBoard} />
+
+      <Title order={2}>Leave your message</Title>
       <MessageBoardSendMessageSection messageBoard={messageBoard} />
 
-      {messages.map((message) => (
-        <MessageCard key={message.id} message={message} />
-      ))}
+      <Title order={2}>Messages</Title>
+      <SimpleGrid cols={3}>
+        {messages.map((message) => (
+          <MessageCard key={message.id} message={message} />
+        ))}
+      </SimpleGrid>
     </Stack>
   );
 }
