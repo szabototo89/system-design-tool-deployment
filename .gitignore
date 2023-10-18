@@ -125,4 +125,6 @@ fabric.properties
 !.idea/codeStyles
 !.idea/runConfigurations
 
+app.db
+
 # End of https://www.toptal.com/developers/gitignore/api/intellij+all

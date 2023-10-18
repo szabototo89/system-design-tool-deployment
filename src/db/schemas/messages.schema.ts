@@ -1,7 +1,7 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { MessageBoards } from "./messageBoards.schema";
 import { sql } from "drizzle-orm";
-import { createSelectSchema } from "drizzle-zod";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
 export const Messages = sqliteTable("messages", {
@@ -16,6 +16,10 @@ export const Messages = sqliteTable("messages", {
 });
 
 export const MessageSelectSchema = createSelectSchema(Messages, {
+  id: (schema) => schema.id.brand<"MessageID">(),
+});
+
+export const MessageInsertSchema = createInsertSchema(Messages, {
   id: (schema) => schema.id.brand<"MessageID">(),
 });
 

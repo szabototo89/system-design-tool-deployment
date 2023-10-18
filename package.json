@@ -9,7 +9,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:seed": "cross-env NODE_PATH2=./src/db node --experimental-specifier-resolution=node --loader ts-node/esm src/db/seed.ts"
+    "db:seed": "node --experimental-specifier-resolution=node --loader ts-node/esm src/db/seed-script.ts"
   },
   "dependencies": {
     "@mantine/core": "^7.1.0",
