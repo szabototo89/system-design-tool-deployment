@@ -1,19 +1,19 @@
 import { db, MessageBoardSchema, MessageSelectSchema } from "@/db/schema";
 import { desc, eq } from "drizzle-orm";
-import { MessageBoardHeroHeader } from "@/app/messages/[messageBoardID]/MessageBoardHeroHeader";
-import { MessageCard } from "@/app/messages/[messageBoardID]/MessageCard";
 import { SimpleGrid, Stack, Title } from "@mantine/core";
 import React from "react";
-import { MessageBoardSendMessageSection } from "@/app/messages/[messageBoardID]/MessageBoardSendMessageSection";
 import { MessageBoard, MessageBoards } from "@/db/schemas/messageBoards.schema";
 import { Messages } from "@/db/schemas/messages.schema";
 import { z } from "zod";
+import { MessageboardHeroHeader } from "@/app/messages/[messageBoardID]/messageboard-hero-header";
+import { MessageCard } from "@/app/messages/[messageBoardID]/message-card";
+import { MessageboardSendMessageSection } from "@/app/messages/[messageBoardID]/messageboard-send-message-section";
 
 type Props = {
   params: { messageBoardID: MessageBoard["id"] };
 };
 
-export default async function MessageBoardDetailsPage(props: Props) {
+export default async function MessageboardDetailsPage(props: Props) {
   const [messageBoardFromDb] = await db
     .select()
     .from(MessageBoards)
@@ -35,10 +35,10 @@ export default async function MessageBoardDetailsPage(props: Props) {
 
   return (
     <Stack>
-      <MessageBoardHeroHeader messageBoard={messageBoard} />
+      <MessageboardHeroHeader messageBoard={messageBoard} />
 
       <Title order={2}>Leave your message</Title>
-      <MessageBoardSendMessageSection messageBoard={messageBoard} />
+      <MessageboardSendMessageSection messageBoard={messageBoard} />
 
       <Title order={2}>Messages</Title>
       <SimpleGrid cols={3}>

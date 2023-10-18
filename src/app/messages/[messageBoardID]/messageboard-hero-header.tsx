@@ -7,7 +7,7 @@ function isMessageBoardDraft(messageBoard: MessageBoard) {
   return messageBoard.status === "draft";
 }
 
-export function MessageBoardHeroHeader(props: Props) {
+export function MessageboardHeroHeader(props: Props) {
   return (
     <Container size={1400}>
       <Flex direction="column" align="center" gap="md">

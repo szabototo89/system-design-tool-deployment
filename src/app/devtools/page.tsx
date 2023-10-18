@@ -1,5 +1,5 @@
 import { readSeedFile, seedDatabase } from "@/db/seed-script-utils";
-import { ActionButton } from "@/components/ActionButton";
+import { ActionButton } from "@/components/action-button";
 import {
   Button,
   Card,

@@ -1,4 +1,4 @@
-import { MessageBoardCard } from "@/components/MessageBoardCard";
+import { MessageBoardCard } from "@/components/messageboard-card";
 import { db, MessageBoardSchema } from "@/db/schema";
 import { MessageBoards } from "@/db/schemas/messageBoards.schema";
 import { Button, Textarea, TextInput } from "@mantine/core";

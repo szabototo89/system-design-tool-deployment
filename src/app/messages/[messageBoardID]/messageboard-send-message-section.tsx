@@ -21,7 +21,7 @@ const SendMessageFormDataSchema = zfd.formData({
   content: zfd.text(),
 });
 
-export function MessageBoardSendMessageSection(props: Props) {
+export function MessageboardSendMessageSection(props: Props) {
   const sendMessage = async (formData: FormData) => {
     "use server";
     const data = SendMessageFormDataSchema.parse(formData);

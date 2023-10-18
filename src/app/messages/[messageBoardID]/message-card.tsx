@@ -1,6 +1,6 @@
 import { Card, Text } from "@mantine/core";
 import { db } from "@/db/schema";
-import { ActionButton } from "@/components/ActionButton";
+import { ActionButton } from "@/components/action-button";
 import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
 import { Message, Messages } from "@/db/schemas/messages.schema";
