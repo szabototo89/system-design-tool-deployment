@@ -1,7 +1,6 @@
 {
   "name": "kudos",
   "version": "0.1.0",
-  "private": true,
   "scripts": {
     "sl": "node.exe \"C:\\Program Files\\Sapling\\edenscm-isl\\isl-server\\dist\\run-proxy.js\" --port 3011 --command \"C:\\Program Files\\Sapling\\sl.exe\" --force",
     "db:generate": "drizzle-kit generate:sqlite",
@@ -9,7 +8,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:seed": "cross-env NODE_PATH2=./src/db node --experimental-specifier-resolution=node --loader ts-node/esm src/db/seed.ts"
   },
   "dependencies": {
     "@mantine/core": "^7.1.0",
@@ -25,10 +25,12 @@
     "zod-form-data": "^2.0.2"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.1.0",
     "@types/better-sqlite3": "^7.6.5",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "cross-env": "^7.0.3",
     "drizzle-kit": "^0.19.13",
     "eslint": "latest",
     "eslint-config-next": "latest",
@@ -36,6 +38,7 @@
     "postcss-preset-mantine": "^1.7.0",
     "postcss-simple-vars": "^7.0.1",
     "prettier": "3.0.3",
+    "ts-node": "^10.9.1",
     "typescript": "latest"
   }
 }

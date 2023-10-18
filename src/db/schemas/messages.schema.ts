@@ -1,5 +1,5 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { MessageBoards } from "@/db/schemas/messageBoards.schema";
+import { MessageBoards } from "./messageBoards.schema";
 import { sql } from "drizzle-orm";
 import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
