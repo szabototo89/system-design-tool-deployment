@@ -1,8 +1,8 @@
-import { db, MessageBoardSchema, MessageSchema } from "@/db/schema";
+import { db, queryMessageBoardBy, MessageSchema } from "@/db/schema";
 import { desc, eq } from "drizzle-orm";
 import { SimpleGrid, Stack, Title } from "@mantine/core";
 import React from "react";
-import { MessageBoard, MessageBoards } from "@/db/schemas/messageBoards.schema";
+import { MessageBoard } from "@/db/schemas/messageBoards.schema";
 import { Messages } from "@/db/schemas/messages.schema";
 import { z } from "zod";
 import { MessageboardHeroHeader } from "@/app/messages/[messageBoardID]/messageboard-hero-header";
@@ -14,12 +14,9 @@ type Props = {
 };
 
 export default async function MessageboardDetailsPage(props: Props) {
-  const [messageBoardFromDb] = await db
-    .select()
-    .from(MessageBoards)
-    .where(eq(MessageBoards.id, props.params.messageBoardID));
-
-  const messageBoard = MessageBoardSchema.nullable().parse(messageBoardFromDb);
+  const messageBoard = await queryMessageBoardBy({
+    id: props.params.messageBoardID,
+  });
 
   if (messageBoard == null) {
     throw new Error("Requested message board cannot be loaded.");

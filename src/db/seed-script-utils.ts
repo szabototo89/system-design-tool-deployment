@@ -3,11 +3,7 @@ import {
   MessageBoards,
   MessageBoardSchema,
 } from "./schemas/messageBoards.schema";
-import {
-  MessageInsertSchema,
-  Messages,
-  MessageSchema,
-} from "./schemas/messages.schema";
+import { Messages, MessageSchema } from "./schemas/messages.schema";
 import fs, { PathOrFileDescriptor } from "fs";
 import { db } from "./schema";
 

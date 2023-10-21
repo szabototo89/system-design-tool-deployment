@@ -1,15 +1,12 @@
 import { MessageBoardCard } from "@/components/messageboard-card";
-import { db, MessageBoardSchema } from "@/db/schema";
+import { db, queryMessageBoards } from "@/db/schema";
 import { MessageBoards } from "@/db/schemas/messageBoards.schema";
 import { Button, Textarea, TextInput } from "@mantine/core";
 import { zfd } from "zod-form-data";
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
 
 export default async function Home() {
-  const messageBoards = z
-    .array(MessageBoardSchema)
-    .parse(await db.select().from(MessageBoards));
+  const messageBoards = await queryMessageBoards();
 
   const createMessageBoard = async (formData: FormData) => {
     "use server";
