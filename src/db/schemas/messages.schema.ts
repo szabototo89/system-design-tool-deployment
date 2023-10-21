@@ -15,7 +15,7 @@ export const Messages = sqliteTable("messages", {
     .default(sql`CURRENT_TIMESTAMP`),
 });
 
-export const MessageSelectSchema = createSelectSchema(Messages, {
+export const MessageSchema = createSelectSchema(Messages, {
   id: (schema) => schema.id.brand<"MessageID">(),
 });
 
@@ -23,4 +23,4 @@ export const MessageInsertSchema = createInsertSchema(Messages, {
   id: (schema) => schema.id.brand<"MessageID">(),
 });
 
-export type Message = z.infer<typeof MessageSelectSchema>;
+export type Message = z.infer<typeof MessageSchema>;

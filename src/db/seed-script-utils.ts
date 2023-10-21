@@ -3,13 +3,17 @@ import {
   MessageBoards,
   MessageBoardSchema,
 } from "./schemas/messageBoards.schema";
-import { MessageInsertSchema, Messages } from "./schemas/messages.schema";
+import {
+  MessageInsertSchema,
+  Messages,
+  MessageSchema,
+} from "./schemas/messages.schema";
 import fs, { PathOrFileDescriptor } from "fs";
 import { db } from "./schema";
 
 const SeedFileSchema = z.object({
   messageBoards: z.array(MessageBoardSchema),
-  messages: z.array(MessageInsertSchema),
+  messages: z.array(MessageSchema.partial()),
 });
 type SeedFile = z.infer<typeof SeedFileSchema>;
 

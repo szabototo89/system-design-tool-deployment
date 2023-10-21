@@ -1,4 +1,4 @@
-import { db, MessageBoardSchema, MessageSelectSchema } from "@/db/schema";
+import { db, MessageBoardSchema, MessageSchema } from "@/db/schema";
 import { desc, eq } from "drizzle-orm";
 import { SimpleGrid, Stack, Title } from "@mantine/core";
 import React from "react";
@@ -31,7 +31,7 @@ export default async function MessageboardDetailsPage(props: Props) {
     .where(eq(Messages.messageBoardID, messageBoard.id))
     .orderBy(desc(Messages.createdAt));
 
-  const messages = z.array(MessageSelectSchema).parse(messagesFromDb);
+  const messages = z.array(MessageSchema).parse(messagesFromDb);
 
   return (
     <Stack>
