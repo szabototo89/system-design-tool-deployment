@@ -19,23 +19,26 @@ function MessageBoardStatusBadge(props: {
 export function MessageBoardCard(props: Props) {
   return (
     <Card withBorder radius="md" p="md">
-      <Group justify="apart">
-        <Text fz="lg" fw={500} truncate>
-          {props.messageBoard.title}
+      <Text fz="lg" fw={500} truncate>
+        {props.messageBoard.title}
+      </Text>
+
+      <Group justify="space-between">
+        <Text size="xs" c="dimmed">
+          Created{" "}
+          <RelativeTimestamp>{props.messageBoard.createdAt}</RelativeTimestamp>{" "}
+          ago
         </Text>
+
         <MessageBoardStatusBadge messageBoard={props.messageBoard} />
       </Group>
-
-      <Text size="xs" c="dimmed">
-        Created{" "}
-        <RelativeTimestamp>{props.messageBoard.createdAt}</RelativeTimestamp>
-      </Text>
 
       <Text
         fz="sm"
         mt="xs"
         lineClamp={3}
         title={props.messageBoard.description ?? ""}
+        style={{ flex: 1 }}
       >
         {props.messageBoard.description}
       </Text>
@@ -44,7 +47,7 @@ export function MessageBoardCard(props: Props) {
         <Button
           component="a"
           radius="md"
-          href={`/messages/${props.messageBoard.id}`}
+          href={`application/messages/${props.messageBoard.id}`}
         >
           Show details
         </Button>

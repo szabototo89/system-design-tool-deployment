@@ -5,9 +5,9 @@ import React from "react";
 import { MessageBoard } from "@/db/schemas/messageBoards.schema";
 import { Messages } from "@/db/schemas/messages.schema";
 import { z } from "zod";
-import { MessageboardHeroHeader } from "@/app/messages/[messageBoardID]/messageboard-hero-header";
-import { MessageCard } from "@/app/messages/[messageBoardID]/message-card";
-import { MessageboardSendMessageSection } from "@/app/messages/[messageBoardID]/messageboard-send-message-section";
+import { MessageboardHeroHeader } from "@/app/application/messages/[messageBoardID]/messageboard-hero-header";
+import { MessageboardSendMessageSection } from "@/app/application/messages/[messageBoardID]/messageboard-send-message-section";
+import { MessageCard } from "@/app/application/messages/[messageBoardID]/message-card";
 
 type Props = {
   params: { messageBoardID: MessageBoard["id"] };
