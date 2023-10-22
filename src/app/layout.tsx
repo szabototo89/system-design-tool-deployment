@@ -24,7 +24,7 @@ export default function RootLayout(props: Props) {
       </head>
       <body className={inter.className}>
         <MantineProvider theme={theme}>
-          <Container>{props.children}</Container>
+          <>{props.children}</>
         </MantineProvider>
       </body>
     </html>

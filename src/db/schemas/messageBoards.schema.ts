@@ -14,7 +14,8 @@ export const MessageBoards = sqliteTable("message_boards", {
 export const messageBoardStatusList = ["draft", "published"] as const;
 
 export const MessageBoardSchema = createSelectSchema(MessageBoards, {
-  id: (schema) => schema.id.brand<"MessageBoardID">(),
+  // id: (schema) => schema.id.brand<"MessageBoardID">(),
+  id: z.coerce.number().brand<"MessageBoardID">(),
   status: z.enum(messageBoardStatusList),
 });
 
@@ -26,11 +27,15 @@ export async function queryMessageBoards() {
   return z.array(MessageBoardSchema).parse(messageBoards);
 }
 
-export async function queryMessageBoardBy(options: { id: MessageBoard["id"] }) {
+export const messageBoardID = MessageBoardSchema.shape.id.parse;
+
+export async function queryMessageBoardBy<
+  TThrowException extends boolean,
+>(options: { id: MessageBoard["id"] }) {
   const [messageBoardFromDb] = await db
     .select()
     .from(MessageBoards)
-    .where(eq(MessageBoards.id, MessageBoardSchema.shape.id.parse(options.id)));
+    .where(eq(MessageBoards.id, messageBoardID(options.id)));
 
-  return MessageBoardSchema.nullable().parse(messageBoardFromDb);
+  return MessageBoardSchema.parse(messageBoardFromDb);
 }
