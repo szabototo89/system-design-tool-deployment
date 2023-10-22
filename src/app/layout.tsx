@@ -23,9 +23,7 @@ export default function RootLayout(props: Props) {
         <ColorSchemeScript />
       </head>
       <body className={inter.className}>
-        <MantineProvider theme={theme}>
-          <>{props.children}</>
-        </MantineProvider>
+        <MantineProvider theme={theme}>{props.children}</MantineProvider>
       </body>
     </html>
   );

@@ -8,7 +8,7 @@ import fs, { PathOrFileDescriptor } from "fs";
 import { db } from "./schema";
 
 const SeedFileSchema = z.object({
-  messageBoards: z.array(MessageBoardSchema),
+  messageBoards: z.array(MessageBoardSchema.partial()),
   messages: z.array(MessageSchema.partial()),
 });
 type SeedFile = z.infer<typeof SeedFileSchema>;

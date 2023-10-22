@@ -14,9 +14,9 @@ import {
   Group,
   Select,
   Stack,
+  Text,
   Textarea,
   TextInput,
-  Text,
 } from "@mantine/core";
 
 type Params =
@@ -27,17 +27,19 @@ type Params =
       description: MessageBoard["description"];
     }
   | { type: "database"; entity: MessageBoard["id"] };
+
 type Props = {
   searchParams?: Params;
 };
 
 export default async function StoriesPage(props: Props) {
   const data =
-    props.searchParams?.type === "manual"
+    props.searchParams?.type !== "database"
       ? MessageBoardSchema.required().parse({
           title: props.searchParams?.title ?? "Test title",
           status: props.searchParams?.status ?? "draft",
           description: props.searchParams?.description ?? "test description",
+          createdAt: new Date(),
           id: 12,
         })
       : await queryMessageBoardBy({

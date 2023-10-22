@@ -1,44 +1,49 @@
-import { Badge, Button, Card, CardSection, Group, Text } from "@mantine/core";
-import { db } from "@/db/schema";
-import { MessageBoard, MessageBoards } from "@/db/schemas/messageBoards.schema";
+import { Badge, Button, Card, Group, Text } from "@mantine/core";
+import { MessageBoard } from "@/db/schemas/messageBoards.schema";
+import { RelativeTimestamp } from "@/components/relative-timestamp";
 
 type Props = { messageBoard: MessageBoard };
+
+function MessageBoardStatusBadge(props: {
+  messageBoard: Pick<MessageBoard, "status">;
+}) {
+  const color = props.messageBoard.status === "draft" ? "yellow" : "green";
+
+  return (
+    <Badge size="sm" variant="light" color={color}>
+      {props.messageBoard.status}
+    </Badge>
+  );
+}
 
 export function MessageBoardCard(props: Props) {
   return (
     <Card withBorder radius="md" p="md">
-      <CardSection>
-        {/*<Image src={image} alt={title} height={180} />*/}
-      </CardSection>
-
-      <CardSection mt="md">
-        <Group justify="apart">
-          <Text fz="lg" fw={500}>
-            {props.messageBoard.title}
-          </Text>
-          <Badge size="sm" variant="light">
-            {props.messageBoard.status}
-          </Badge>
-        </Group>
-        <Text fz="sm" mt="xs">
-          {props.messageBoard.description}
+      <Group justify="apart">
+        <Text fz="lg" fw={500} truncate>
+          {props.messageBoard.title}
         </Text>
-      </CardSection>
+        <MessageBoardStatusBadge messageBoard={props.messageBoard} />
+      </Group>
 
-      {/*<CardSection>*/}
-      {/*  <Text mt="md" c="dimmed">*/}
-      {/*    Perfect for you, if you enjoy*/}
-      {/*  </Text>*/}
-      {/*  <Group gap={7} mt={5}>*/}
-      {/*    {features}*/}
-      {/*  </Group>*/}
-      {/*</CardSection>*/}
+      <Text size="xs" c="dimmed">
+        Created{" "}
+        <RelativeTimestamp>{props.messageBoard.createdAt}</RelativeTimestamp>
+      </Text>
 
-      <Group mt="xs">
+      <Text
+        fz="sm"
+        mt="xs"
+        lineClamp={3}
+        title={props.messageBoard.description ?? ""}
+      >
+        {props.messageBoard.description}
+      </Text>
+
+      <Group mt="xs" justify="end" gap={4}>
         <Button
-          radius="md"
-          style={{ flex: 1 }}
           component="a"
+          radius="md"
           href={`/messages/${props.messageBoard.id}`}
         >
           Show details
