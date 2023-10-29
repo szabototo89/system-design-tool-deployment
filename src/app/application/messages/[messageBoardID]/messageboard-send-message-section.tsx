@@ -41,14 +41,16 @@ export function MessageboardSendMessageSection(props: Props) {
       <Stack>
         <Textarea
           label="Message"
-          placeholder="Leave a message here ..."
+          placeholder="Type your message..."
+          description="Write your message here. Share thoughts, greetings, or information with others."
           name="content"
         />
         <FileInput
           name="image"
-          label="Image"
-          placeholder="Click to upload an image"
-          accept="image/png,image/jpeg"
+          label="Upload Picture"
+          description="You can include a picture along with your message. Accepted file types: .jpg, .png, .jpeg. Max file size: 5MB."
+          placeholder="Choose file ..."
+          accept="image/png,image/jpg,image/jpeg"
         />
         <Stack align="end">
           <Button type="submit">Send message</Button>

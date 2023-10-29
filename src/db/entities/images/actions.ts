@@ -3,6 +3,7 @@ import { ImageSchema } from "@/db/entities/images/types";
 import { db } from "@/db/schema";
 import { z } from "zod";
 
+const FIVE_MB = 5 * 1024 * 1024;
 export const SupportedImageFileSchema = z
   .custom<File>()
   .refine(
@@ -11,6 +12,9 @@ export const SupportedImageFileSchema = z
       message: `${file.type} is not supported. Only PNG and JPG image files are supported.`,
     }),
   )
+  .refine((file) => file.size <= FIVE_MB, {
+    message: "File size cannot be more than 5MB.",
+  })
   .brand("SupportedImageFile");
 
 type SupportedImageFile = z.infer<typeof SupportedImageFileSchema>;

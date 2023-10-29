@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 type StaticParams = { params: { imageID: string } };
 
-export const dynamic = "auto";
+export const dynamic = "error";
 
 export async function GET(_request: NextRequest, { params }: StaticParams) {
   const image = await queryImageByID(imageID(params.imageID));
