@@ -5,7 +5,7 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { Images } from "../entities/images/table";
 import { queryImageByID } from "../entities/images/queries";
-import { imageID } from "@/db/entities/images/types";
+import { imageID } from "../entities/images/types";
 
 export const Messages = sqliteTable("messages", {
   id: integer("id").primaryKey({ autoIncrement: true }),
