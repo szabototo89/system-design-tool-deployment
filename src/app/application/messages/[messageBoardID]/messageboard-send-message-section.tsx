@@ -1,18 +1,13 @@
-import {
-  Button,
-  Center,
-  FileInput,
-  Stack,
-  Textarea,
-  TextInput,
-  Title,
-} from "@mantine/core";
+import { Button, FileInput, Stack, Textarea } from "@mantine/core";
 import React from "react";
-import { db, Images, ImageSchema } from "@/db/schema";
+import { createMessage } from "@/db/schema";
 import { revalidatePath } from "next/cache";
 import { zfd } from "zod-form-data";
 import { MessageBoard } from "@/db/schemas/messageBoards.schema";
-import { Messages } from "@/db/schemas/messages.schema";
+import {
+  createImageFromFile,
+  SupportedImageFileSchema,
+} from "@/db/entities/images/actions";
 
 type Props = {
   messageBoard: MessageBoard;
@@ -28,31 +23,17 @@ export function MessageboardSendMessageSection(props: Props) {
     "use server";
     const data = SendMessageFormDataSchema.parse(formData);
 
-    async function insertImage(imageFile: File | null) {
-      if (imageFile == null) {
-        return null;
-      }
+    const imageFile = SupportedImageFileSchema.nullable().parse(data.image);
+    const image =
+      imageFile != null ? await createImageFromFile(imageFile) : null;
 
-      const [image] = await db
-        .insert(Images)
-        .values({
-          fileName: imageFile.name,
-          fileContent: new Uint8Array(await imageFile.arrayBuffer()),
-        })
-        .returning();
-
-      return ImageSchema.parse(image);
-    }
-
-    const image = await insertImage(data.image);
-
-    await db.insert(Messages).values({
+    await createMessage({
       content: data.content,
-      messageBoardID: props.messageBoard.id,
-      imageID: image.id,
+      messageBoard: props.messageBoard,
+      image,
     });
 
-    revalidatePath("/messages/[messageBoardID]/page");
+    revalidatePath(`/messages/${props.messageBoard.id}/page`);
   };
 
   return (
