@@ -1,17 +1,25 @@
-import { Card, Text } from "@mantine/core";
-import { db } from "@/db/schema";
+import { Card, CardSection, Text, Image, Stack } from "@mantine/core";
+import { db, imageID, queryImageByID } from "@/db/schema";
 import { ActionButton } from "@/components/action-button";
 import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
 import { Message, Messages } from "@/db/schemas/messages.schema";
+import React from "react";
 
 type Props = {
   message: Message;
 };
 
-export function MessageCard(props: Props) {
+export async function MessageCard(props: Props) {
+  const image =
+    props.message.imageID != null
+      ? await queryImageByID(imageID(props.message.imageID))
+      : null;
+
   return (
-    <Card shadow="sm" padding="xl">
+    <Card shadow="sm" radius="md" withBorder>
+      {image != null && <MessageCardHeaderImage imageSrc={image.imageSrc()} />}
+
       <Text>{props.message.content}</Text>
 
       <ActionButton

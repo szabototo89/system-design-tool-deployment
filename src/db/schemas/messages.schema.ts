@@ -3,6 +3,7 @@ import { MessageBoards } from "./messageBoards.schema";
 import { sql } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
+import { Images } from "./images.schema";
 
 export const Messages = sqliteTable("messages", {
   id: integer("id").primaryKey({ autoIncrement: true }),
@@ -13,6 +14,7 @@ export const Messages = sqliteTable("messages", {
   createdAt: integer("created_at", { mode: "timestamp_ms" })
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
+  imageID: integer("image_id").references(() => Images.id),
 });
 
 export const MessageSchema = createSelectSchema(Messages, {

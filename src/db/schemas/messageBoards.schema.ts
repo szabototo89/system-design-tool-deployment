@@ -31,9 +31,7 @@ export async function queryMessageBoards() {
 
 export const messageBoardID = MessageBoardSchema.shape.id.parse;
 
-export async function queryMessageBoardBy<
-  TThrowException extends boolean,
->(options: { id: MessageBoard["id"] }) {
+export async function queryMessageBoardBy(options: { id: MessageBoard["id"] }) {
   const [messageBoardFromDb] = await db
     .select()
     .from(MessageBoards)
