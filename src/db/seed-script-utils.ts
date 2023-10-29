@@ -9,7 +9,7 @@ import { db, Images, ImageSchema } from "./schema";
 
 const SeedFileSchema = z.object({
   messageBoards: z.array(MessageBoardSchema.partial()),
-  messages: z.array(MessageSchema.partial()),
+  messages: z.array(MessageSchema.innerType().partial()),
   images: z.array(
     z.object({
       id: z.number(),

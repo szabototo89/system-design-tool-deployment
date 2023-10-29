@@ -4,6 +4,8 @@ import { sql } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { Images } from "../entities/images/table";
+import { queryImageByID } from "../entities/images/queries";
+import { imageID } from "@/db/entities/images/types";
 
 export const Messages = sqliteTable("messages", {
   id: integer("id").primaryKey({ autoIncrement: true }),
@@ -19,6 +21,17 @@ export const Messages = sqliteTable("messages", {
 
 export const MessageSchema = createSelectSchema(Messages, {
   id: (schema) => schema.id.brand<"MessageID">(),
+}).transform((message) => {
+  return {
+    ...message,
+    image() {
+      if (message.imageID == null) {
+        return null;
+      }
+
+      return queryImageByID(imageID(message.imageID));
+    },
+  };
 });
 
 export const MessageInsertSchema = createInsertSchema(Messages, {

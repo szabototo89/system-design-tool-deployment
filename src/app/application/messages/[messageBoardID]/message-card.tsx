@@ -11,16 +11,14 @@ import {
   EntityCardFooter,
   EntityCardHeader,
 } from "@/components/entity-card";
+import { NextImage } from "@/components/next-image";
 
 type Props = {
   message: Message;
 };
 
 export async function MessageCard(props: Props) {
-  const image =
-    props.message.imageID != null
-      ? await queryImageByID(imageID(props.message.imageID))
-      : null;
+  const image = await props.message.image();
 
   return (
     <EntityCard
@@ -28,7 +26,15 @@ export async function MessageCard(props: Props) {
         <EntityCardHeader
           title="Message from anonymous"
           time={props.message.createdAt}
-          image={<Image src={image?.imageSrc()} alt="Message header image" />}
+          image={
+            <Image
+              component={NextImage}
+              src={image?.imageSrc()}
+              alt="Message header image"
+              width={640}
+              height={180}
+            />
+          }
         />
       }
       footer={
