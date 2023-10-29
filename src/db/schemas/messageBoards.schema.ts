@@ -1,8 +1,14 @@
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import {
+  integer,
+  QueryBuilder,
+  SQLiteSelect,
+  sqliteTable,
+  text,
+} from "drizzle-orm/sqlite-core";
 import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { db } from "../schema";
-import { eq, sql } from "drizzle-orm";
+import { eq, Query, sql } from "drizzle-orm";
 
 export const MessageBoards = sqliteTable("message_boards", {
   id: integer("id").primaryKey({ autoIncrement: true }),

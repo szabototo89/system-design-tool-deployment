@@ -1,6 +1,6 @@
 import { db, queryMessageBoardBy, MessageSchema } from "@/db/schema";
 import { desc, eq } from "drizzle-orm";
-import { SimpleGrid, Stack, Title } from "@mantine/core";
+import { Divider, SimpleGrid, Stack, Title } from "@mantine/core";
 import React from "react";
 import { MessageBoard } from "@/db/schemas/messageBoards.schema";
 import { Messages } from "@/db/schemas/messages.schema";
@@ -34,15 +34,17 @@ export default async function MessageboardDetailsPage(props: Props) {
     <Stack>
       <MessageboardHeroHeader messageBoard={messageBoard} />
 
-      <Title order={2}>Leave your message</Title>
-      <MessageboardSendMessageSection messageBoard={messageBoard} />
+      <Divider labelPosition="center" label="Messages" />
 
-      <Title order={2}>Messages</Title>
       <SimpleGrid cols={3}>
         {messages.map((message) => (
           <MessageCard key={message.id} message={message} />
         ))}
       </SimpleGrid>
+
+      <Divider labelPosition="center" label="Leave your message below" />
+
+      <MessageboardSendMessageSection messageBoard={messageBoard} />
     </Stack>
   );
 }
