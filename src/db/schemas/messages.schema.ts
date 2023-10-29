@@ -3,7 +3,7 @@ import { MessageBoards } from "./messageBoards.schema";
 import { sql } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
-import { Images } from "./images.schema";
+import { Images } from "../entities/images/table";
 
 export const Messages = sqliteTable("messages", {
   id: integer("id").primaryKey({ autoIncrement: true }),
