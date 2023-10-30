@@ -3,6 +3,9 @@ import { Button, Container, Title, Text, Flex, Image } from "@mantine/core";
 import { MessageBoard } from "@/db/entities/message-boards/types";
 import { NextImage } from "@/components/next-image";
 import { messageBoardQuery } from "@/db/entities/message-boards/queries";
+import { ActionButton } from "@/components/action-button";
+import { messageBoardAction } from "@/db/entities/message-boards/actions";
+import { revalidatePath } from "next/cache";
 
 type Props = { messageBoard: MessageBoard };
 
@@ -38,7 +41,22 @@ export async function MessageboardHeroHeader(props: Props) {
             <Button size="md" variant="default" color="gray">
               Delete
             </Button>
-            <Button size="md">Publish</Button>
+            <ActionButton
+              onClick={async () => {
+                "use server";
+
+                await messageBoardAction.publishMessageBoard(
+                  props.messageBoard,
+                );
+
+                revalidatePath(
+                  `/application/messages/${props.messageBoard.id}/`,
+                );
+              }}
+              size="md"
+            >
+              Publish
+            </ActionButton>
           </Flex>
         )}
       </Flex>
