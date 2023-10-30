@@ -3,7 +3,7 @@ import React from "react";
 import { createMessage } from "@/db/schema";
 import { revalidatePath } from "next/cache";
 import { zfd } from "zod-form-data";
-import { createImageFromFile } from "@/db/entities/images/actions";
+import { imagesAction } from "@/db/entities/images/actions";
 
 import { MessageBoard } from "@/db/entities/message-boards/types";
 
@@ -22,7 +22,7 @@ export function MessageboardSendMessageSection(props: Props) {
     const data = SendMessageFormDataSchema.parse(formData);
 
     const image =
-      data.image != null ? await createImageFromFile(data.image) : null;
+      data.image != null ? await imagesAction.createFromFile(data.image) : null;
 
     await createMessage({
       content: data.content,
