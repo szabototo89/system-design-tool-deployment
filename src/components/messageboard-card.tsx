@@ -1,6 +1,7 @@
 import { Badge, Button, Card, Group, Text } from "@mantine/core";
-import { MessageBoard } from "@/db/schemas/messageBoards.schema";
 import { RelativeTimestamp } from "@/components/relative-timestamp";
+
+import { MessageBoard } from "@/db/entities/message-boards/types";
 
 type Props = { messageBoard: MessageBoard };
 

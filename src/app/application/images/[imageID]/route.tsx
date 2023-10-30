@@ -1,4 +1,4 @@
-import { imageID, ImageSchema, queryImageByID } from "@/db/schema";
+import { imageID, queryImageByID } from "@/db/schema";
 import { NextRequest, NextResponse } from "next/server";
 
 type StaticParams = { params: { imageID: string } };

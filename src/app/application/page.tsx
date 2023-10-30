@@ -1,6 +1,5 @@
 import { MessageBoardCard } from "@/components/messageboard-card";
-import { db, queryMessageBoards } from "@/db/schema";
-import { MessageBoards } from "@/db/schemas/messageBoards.schema";
+import { db } from "@/db/schema";
 import {
   Button,
   Divider,
@@ -11,6 +10,8 @@ import {
 } from "@mantine/core";
 import { zfd } from "zod-form-data";
 import { revalidatePath } from "next/cache";
+import { MessageBoards } from "@/db/entities/message-boards/table";
+import { queryMessageBoards } from "@/db/entities/message-boards/queries";
 
 export default async function Home() {
   const messageBoards = await queryMessageBoards();

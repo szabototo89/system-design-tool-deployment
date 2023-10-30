@@ -1,4 +1,4 @@
-import { Images } from "@/db/entities/images/table";
+import { Images } from "@/db/entities/images/tables";
 import { ImageSchema } from "@/db/entities/images/types";
 import { db } from "@/db/schema";
 import { z } from "zod";

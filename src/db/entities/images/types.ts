@@ -1,6 +1,6 @@
 import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
-import { Images } from "./table";
+import { Images } from "./tables";
 
 export const ImageSchema = createSelectSchema(Images, {
   id: () => z.coerce.number().brand<"ImageID">(),

@@ -1,6 +1,6 @@
 import { db } from "../../schema";
 import { eq } from "drizzle-orm";
-import { Images } from "./table";
+import { Images } from "./tables";
 import { Image, ImageSchema } from "./types";
 
 export async function queryImageByID(id: Image["id"]) {

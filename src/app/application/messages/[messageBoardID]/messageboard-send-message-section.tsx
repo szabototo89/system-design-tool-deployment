@@ -3,8 +3,9 @@ import React from "react";
 import { createMessage } from "@/db/schema";
 import { revalidatePath } from "next/cache";
 import { zfd } from "zod-form-data";
-import { MessageBoard } from "@/db/schemas/messageBoards.schema";
 import { createImageFromFile } from "@/db/entities/images/actions";
+
+import { MessageBoard } from "@/db/entities/message-boards/types";
 
 type Props = {
   messageBoard: MessageBoard;

@@ -1,12 +1,13 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { MessageBoard, MessageBoards } from "./messageBoards.schema";
 import { sql } from "drizzle-orm";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
-import { Images } from "../entities/images/table";
+import { Images } from "../entities/images/tables";
 import { queryImageByID } from "../entities/images/queries";
 import { Image, imageID } from "../entities/images/types";
-import { db } from "@/db/schema";
+import { db } from "../schema";
+import { MessageBoards } from "../entities/message-boards/table";
+import { MessageBoard } from "../entities/message-boards/types";
 
 export const Messages = sqliteTable("messages", {
   id: integer("id").primaryKey({ autoIncrement: true }),

@@ -1,11 +1,4 @@
 import { MessageBoardCard } from "@/components/messageboard-card";
-import {
-  MessageBoard,
-  messageBoardID,
-  MessageBoardSchema,
-  queryMessageBoardBy,
-  queryMessageBoards,
-} from "@/db/schemas/messageBoards.schema";
 import React from "react";
 import {
   Button,
@@ -18,6 +11,15 @@ import {
   Textarea,
   TextInput,
 } from "@mantine/core";
+import {
+  queryMessageBoardBy,
+  queryMessageBoards,
+} from "@/db/entities/message-boards/queries";
+import {
+  MessageBoard,
+  messageBoardID,
+  MessageBoardSchema,
+} from "@/db/entities/message-boards/types";
 
 type Params =
   | {

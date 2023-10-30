@@ -1,5 +1,6 @@
 import { Button, Container, Title, Text, Flex } from "@mantine/core";
-import { MessageBoard } from "@/db/schemas/messageBoards.schema";
+
+import { MessageBoard } from "@/db/entities/message-boards/types";
 
 type Props = { messageBoard: MessageBoard };
 
