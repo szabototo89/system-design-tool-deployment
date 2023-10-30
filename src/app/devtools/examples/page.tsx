@@ -11,10 +11,7 @@ import {
   Textarea,
   TextInput,
 } from "@mantine/core";
-import {
-  queryMessageBoardBy,
-  queryMessageBoards,
-} from "@/db/entities/message-boards/queries";
+import { messageBoardQuery } from "@/db/entities/message-boards/queries";
 import {
   MessageBoard,
   messageBoardID,
@@ -44,11 +41,11 @@ export default async function StoriesPage(props: Props) {
           createdAt: new Date(),
           id: 12,
         })
-      : await queryMessageBoardBy({
+      : await messageBoardQuery.queryBy({
           id: messageBoardID(props.searchParams?.entity),
         });
 
-  const messageBoards = await queryMessageBoards();
+  const messageBoards = await messageBoardQuery.queryAll();
 
   return (
     <Group>

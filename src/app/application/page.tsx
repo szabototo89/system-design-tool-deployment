@@ -11,10 +11,10 @@ import {
 import { zfd } from "zod-form-data";
 import { revalidatePath } from "next/cache";
 import { MessageBoards } from "@/db/entities/message-boards/table";
-import { queryMessageBoards } from "@/db/entities/message-boards/queries";
+import { messageBoardQuery } from "@/db/entities/message-boards/queries";
 
 export default async function Home() {
-  const messageBoards = await queryMessageBoards();
+  const messageBoards = await messageBoardQuery.queryAll();
 
   const createMessageBoard = async (formData: FormData) => {
     "use server";

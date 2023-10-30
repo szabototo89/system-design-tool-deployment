@@ -7,7 +7,7 @@ import { z } from "zod";
 import { MessageboardHeroHeader } from "@/app/application/messages/[messageBoardID]/messageboard-hero-header";
 import { MessageboardSendMessageSection } from "@/app/application/messages/[messageBoardID]/messageboard-send-message-section";
 import { MessageCard } from "@/app/application/messages/[messageBoardID]/message-card";
-import { queryMessageBoardBy } from "@/db/entities/message-boards/queries";
+import { messageBoardQuery } from "@/db/entities/message-boards/queries";
 import { MessageBoard } from "@/db/entities/message-boards/types";
 
 type Props = {
@@ -15,7 +15,7 @@ type Props = {
 };
 
 export default async function MessageboardDetailsPage(props: Props) {
-  const messageBoard = await queryMessageBoardBy({
+  const messageBoard = await messageBoardQuery.queryBy({
     id: props.params.messageBoardID,
   });
 
