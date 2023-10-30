@@ -3,7 +3,6 @@ import { db } from "@/db/schema";
 import { ActionButton } from "@/components/action-button";
 import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
-import { Message, Messages } from "@/db/schemas/messages.schema";
 import React from "react";
 import {
   EntityCard,
@@ -11,6 +10,8 @@ import {
   EntityCardHeader,
 } from "@/components/entity-card";
 import { NextImage } from "@/components/next-image";
+import { Messages } from "@/db/entities/messages/tables";
+import { Message } from "@/db/entities/messages/types";
 
 type Props = {
   message: Message;

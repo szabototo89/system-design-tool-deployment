@@ -1,9 +1,10 @@
 import { z } from "zod";
 import { MessageBoards } from "./entities/message-boards/table";
-import { Messages, MessageSchema } from "./schemas/messages.schema";
 import fs, { PathOrFileDescriptor } from "fs";
 import { db, Images, ImageSchema } from "./schema";
 import { MessageBoardSchema } from "@/db/entities/message-boards/types";
+import { Messages } from "@/db/entities/messages/tables";
+import { MessageSchema } from "@/db/entities/messages/types";
 
 const SeedFileSchema = z.object({
   messageBoards: z.array(MessageBoardSchema.partial()),
