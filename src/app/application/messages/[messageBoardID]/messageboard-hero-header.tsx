@@ -1,6 +1,8 @@
-import { Button, Container, Title, Text, Flex } from "@mantine/core";
+import { Button, Container, Title, Text, Flex, Image } from "@mantine/core";
 
 import { MessageBoard } from "@/db/entities/message-boards/types";
+import { NextImage } from "@/components/next-image";
+import { messageBoardQuery } from "@/db/entities/message-boards/queries";
 
 type Props = { messageBoard: MessageBoard };
 
@@ -8,10 +10,21 @@ function isMessageBoardDraft(messageBoard: MessageBoard) {
   return messageBoard.status === "draft";
 }
 
-export function MessageboardHeroHeader(props: Props) {
+export async function MessageboardHeroHeader(props: Props) {
+  const headerImage = await messageBoardQuery.queryImage(props.messageBoard);
+
   return (
     <Container size={1400}>
       <Flex direction="column" align="center" gap="md">
+        {headerImage != null && (
+          <Image
+            component={NextImage}
+            height={180}
+            width={640}
+            src={headerImage.imageSrc()}
+            alt="Message board header image"
+          />
+        )}
         <Title>{props.messageBoard.title}</Title>
 
         <Container p={0} size={600}>

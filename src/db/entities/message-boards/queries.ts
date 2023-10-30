@@ -1,5 +1,5 @@
 import { MessageBoards } from "./table";
-import { db } from "../../schema";
+import { db, imagesQuery } from "../../schema";
 import { z } from "zod";
 import { eq } from "drizzle-orm";
 import { MessageBoard, messageBoardID, MessageBoardSchema } from "./types";
@@ -16,7 +16,16 @@ async function queryMessageBoardBy(options: { id: MessageBoard["id"] }) {
   return MessageBoardSchema.parse(messageBoardFromDb);
 }
 
+async function queryImage(messageBoard: MessageBoard) {
+  if (messageBoard.imageID == null) {
+    return null;
+  }
+
+  return imagesQuery.queryByID(messageBoard.imageID);
+}
+
 export const messageBoardQuery = {
   queryAll: queryMessageBoards,
   queryBy: queryMessageBoardBy,
+  queryImage,
 };

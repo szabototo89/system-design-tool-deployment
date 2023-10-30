@@ -3,6 +3,7 @@ import { RelativeTimestamp } from "@/components/relative-timestamp";
 
 import { MessageBoard } from "@/db/entities/message-boards/types";
 import { NextImage } from "@/components/next-image";
+import { messageBoardQuery } from "@/db/entities/message-boards/queries";
 
 type Props = { messageBoard: MessageBoard };
 
@@ -19,7 +20,7 @@ function MessageBoardStatusBadge(props: {
 }
 
 export async function MessageBoardCard(props: Props) {
-  const image = await props.messageBoard.image();
+  const image = await messageBoardQuery.queryImage(props.messageBoard);
 
   return (
     <Card withBorder radius="md" p="md">
