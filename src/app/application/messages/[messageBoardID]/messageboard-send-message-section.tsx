@@ -2,7 +2,7 @@ import { Button, FileInput, Stack, Textarea } from "@mantine/core";
 import React from "react";
 import { revalidatePath } from "next/cache";
 import { zfd } from "zod-form-data";
-import { imagesAction } from "@/db/entities/images/actions";
+import { imageAction } from "@/db/entities/images/actions";
 
 import { MessageBoard } from "@/db/entities/message-boards/types";
 import { createMessage, messageAction } from "@/db/entities/messages/actions";
@@ -22,7 +22,7 @@ export function MessageboardSendMessageSection(props: Props) {
     const data = SendMessageFormDataSchema.parse(formData);
 
     const image =
-      data.image != null ? await imagesAction.createFromFile(data.image) : null;
+      data.image != null ? await imageAction.createFromFile(data.image) : null;
 
     await messageAction.create({
       content: data.content,

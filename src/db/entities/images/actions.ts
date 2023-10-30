@@ -21,7 +21,7 @@ type SupportedImageFile = z.infer<typeof SupportedImageFileSchema>;
 
 export async function createImageFromFile(file: File) {
   const imageFile = SupportedImageFileSchema.parse(file);
-  return imagesAction.create(imageFile);
+  return imageAction.create(imageFile);
 }
 
 export async function createImage(imageFile: SupportedImageFile) {
@@ -39,7 +39,7 @@ export async function createImage(imageFile: SupportedImageFile) {
   return ImageSchema.parse(image);
 }
 
-export const imagesAction = {
+export const imageAction = {
   create: createImage,
   createFromFile: createImageFromFile,
 };
