@@ -10,7 +10,7 @@ import {
   EntityCardHeader,
 } from "@/components/entity-card";
 import { NextImage } from "@/components/next-image";
-import { Messages } from "@/db/entities/messages/tables";
+import { MessagesTable } from "@/db/entities/messages/tables";
 import { Message } from "@/db/entities/messages/types";
 
 type Props = {
@@ -45,8 +45,8 @@ export async function MessageCard(props: Props) {
               "use server";
 
               await db
-                .delete(Messages)
-                .where(eq(Messages.id, props.message.id));
+                .delete(MessagesTable)
+                .where(eq(MessagesTable.id, props.message.id));
               revalidatePath("/messages/[messageBoardID]/page");
             }}
           >

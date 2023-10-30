@@ -1,18 +1,18 @@
-import { MessageBoards } from "./table";
+import { MessageBoardsTable } from "./table";
 import { db, imagesQuery } from "../../schema";
 import { z } from "zod";
 import { eq } from "drizzle-orm";
 import { MessageBoard, messageBoardID, MessageBoardSchema } from "./types";
 
 async function queryMessageBoards() {
-  const messageBoards = await db.select().from(MessageBoards);
+  const messageBoards = await db.select().from(MessageBoardsTable);
   return z.array(MessageBoardSchema).parse(messageBoards);
 }
 async function queryMessageBoardBy(options: { id: MessageBoard["id"] }) {
   const [messageBoardFromDb] = await db
     .select()
-    .from(MessageBoards)
-    .where(eq(MessageBoards.id, messageBoardID(options.id)));
+    .from(MessageBoardsTable)
+    .where(eq(MessageBoardsTable.id, messageBoardID(options.id)));
   return MessageBoardSchema.parse(messageBoardFromDb);
 }
 

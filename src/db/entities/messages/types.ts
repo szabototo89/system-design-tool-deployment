@@ -1,10 +1,10 @@
 import { createSelectSchema } from "drizzle-zod";
-import { Messages } from "../messages/tables";
+import { MessagesTable } from "../messages/tables";
 import { imagesQuery } from "../images/queries";
 import { imageID } from "../images/types";
 import { z } from "zod";
 
-export const MessageSchema = createSelectSchema(Messages, {
+export const MessageSchema = createSelectSchema(MessagesTable, {
   id: (schema) => schema.id.brand<"MessageID">(),
 }).transform((message) => {
   return {

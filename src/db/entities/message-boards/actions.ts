@@ -2,7 +2,7 @@ import {
   MessageBoard,
   MessageBoardSchema,
 } from "@/db/entities/message-boards/types";
-import { db, MessageBoards } from "@/db/schema";
+import { db, MessageBoardsTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export const messageBoardAction = {
@@ -10,8 +10,8 @@ export const messageBoardAction = {
     const statusFieldSchema = MessageBoardSchema.shape.status;
 
     await db
-      .update(MessageBoards)
+      .update(MessageBoardsTable)
       .set({ status: statusFieldSchema.parse("published") })
-      .where(eq(MessageBoards.id, messageBoard.id));
+      .where(eq(MessageBoardsTable.id, messageBoard.id));
   },
 };

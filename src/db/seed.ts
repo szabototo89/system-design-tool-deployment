@@ -3,13 +3,13 @@ import {
   db,
   Message,
   MessageBoard,
-  MessageBoards,
+  MessageBoardsTable,
   messageBoardStatusList,
-  Messages,
+  MessagesTable,
 } from "./schema";
 
-await db.delete(Messages);
-await db.delete(MessageBoards);
+await db.delete(MessagesTable);
+await db.delete(MessageBoardsTable);
 
 const messageBoards = faker.helpers.multiple(
   () => {
@@ -24,7 +24,7 @@ const messageBoards = faker.helpers.multiple(
 );
 
 const updatedMessageBoards = await db
-  .insert(MessageBoards)
+  .insert(MessageBoardsTable)
   .values(messageBoards)
   .returning();
 
@@ -41,4 +41,4 @@ const messages = updatedMessageBoards.flatMap((messageBoard) => {
   );
 });
 
-await db.insert(Messages).values(messages);
+await db.insert(MessagesTable).values(messages);

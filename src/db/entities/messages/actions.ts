@@ -1,6 +1,6 @@
 import { MessageBoard } from "../message-boards/types";
 import { Image } from "../images/types";
-import { db, Messages, MessageSchema } from "../../schema";
+import { db, MessagesTable, MessageSchema } from "../../schema";
 
 export async function createMessage(data: {
   messageBoard: Pick<MessageBoard, "id">;
@@ -8,7 +8,7 @@ export async function createMessage(data: {
   image: Pick<Image, "id"> | null;
 }) {
   const [message] = await db
-    .insert(Messages)
+    .insert(MessagesTable)
     .values({
       content: data.content,
       messageBoardID: data.messageBoard.id,

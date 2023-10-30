@@ -9,7 +9,7 @@ import { MessageCard } from "@/app/application/messages/[messageBoardID]/message
 import { messageBoardQuery } from "@/db/entities/message-boards/queries";
 import { MessageBoard } from "@/db/entities/message-boards/types";
 import { messageQuery } from "@/db/entities/messages/queries";
-import { Messages } from "@/db/entities/messages/tables";
+import { MessagesTable } from "@/db/entities/messages/tables";
 
 type Props = {
   params: { messageBoardID: MessageBoard["id"] };

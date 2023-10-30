@@ -10,7 +10,7 @@ import {
 } from "@mantine/core";
 import { zfd } from "zod-form-data";
 import { revalidatePath } from "next/cache";
-import { MessageBoards } from "@/db/entities/message-boards/table";
+import { MessageBoardsTable } from "@/db/entities/message-boards/table";
 import { messageBoardQuery } from "@/db/entities/message-boards/queries";
 
 export default async function Home() {
@@ -25,7 +25,7 @@ export default async function Home() {
     });
     const input = CreateMessageBoardFormDataSchema.parse(formData);
 
-    await db.insert(MessageBoards).values({
+    await db.insert(MessageBoardsTable).values({
       status: "draft",
       ...input,
     });

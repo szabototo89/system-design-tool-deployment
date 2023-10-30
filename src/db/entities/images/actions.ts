@@ -1,4 +1,4 @@
-import { Images } from "@/db/entities/images/tables";
+import { ImagesTable } from "@/db/entities/images/tables";
 import { ImageSchema } from "@/db/entities/images/types";
 import { db } from "@/db/schema";
 import { z } from "zod";
@@ -29,7 +29,7 @@ export async function createImage(imageFile: SupportedImageFile) {
   const fileName = imageFile.name;
 
   const [image] = await db
-    .insert(Images)
+    .insert(ImagesTable)
     .values({
       fileName,
       fileContent,
