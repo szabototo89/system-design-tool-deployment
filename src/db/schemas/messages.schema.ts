@@ -3,7 +3,7 @@ import { sql } from "drizzle-orm";
 import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { Images } from "../entities/images/tables";
-import { queryImageByID } from "../entities/images/queries";
+import { imagesQuery } from "../entities/images/queries";
 import { Image, imageID } from "../entities/images/types";
 import { db } from "../schema";
 import { MessageBoards } from "../entities/message-boards/table";
@@ -31,7 +31,7 @@ export const MessageSchema = createSelectSchema(Messages, {
         return null;
       }
 
-      return queryImageByID(imageID(message.imageID));
+      return imagesQuery.queryByID(imageID(message.imageID));
     },
   };
 });

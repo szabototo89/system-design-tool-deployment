@@ -1,6 +1,5 @@
-import { Card, CardSection, Text, Image, Stack } from "@mantine/core";
-import { db, imageID, queryImageByID } from "@/db/schema";
-import { Button } from "@mantine/core";
+import { Button, Image, Text } from "@mantine/core";
+import { db } from "@/db/schema";
 import { ActionButton } from "@/components/action-button";
 import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
