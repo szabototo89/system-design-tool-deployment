@@ -4,10 +4,7 @@ import { createMessage } from "@/db/schema";
 import { revalidatePath } from "next/cache";
 import { zfd } from "zod-form-data";
 import { MessageBoard } from "@/db/schemas/messageBoards.schema";
-import {
-  createImageFromFile,
-  SupportedImageFileSchema,
-} from "@/db/entities/images/actions";
+import { createImageFromFile } from "@/db/entities/images/actions";
 
 type Props = {
   messageBoard: MessageBoard;
@@ -23,9 +20,8 @@ export function MessageboardSendMessageSection(props: Props) {
     "use server";
     const data = SendMessageFormDataSchema.parse(formData);
 
-    const imageFile = SupportedImageFileSchema.nullable().parse(data.image);
     const image =
-      imageFile != null ? await createImageFromFile(imageFile) : null;
+      data.image != null ? await createImageFromFile(data.image) : null;
 
     await createMessage({
       content: data.content,

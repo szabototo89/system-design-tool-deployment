@@ -19,7 +19,12 @@ export const SupportedImageFileSchema = z
 
 type SupportedImageFile = z.infer<typeof SupportedImageFileSchema>;
 
-export async function createImageFromFile(imageFile: SupportedImageFile) {
+export async function createImageFromFile(file: File) {
+  const imageFile = SupportedImageFileSchema.parse(file);
+  return createImage(imageFile);
+}
+
+export async function createImage(imageFile: SupportedImageFile) {
   const fileContent = new Uint8Array(await imageFile.arrayBuffer());
   const fileName = imageFile.name;
 
