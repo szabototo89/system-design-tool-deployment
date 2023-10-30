@@ -6,6 +6,8 @@ import { messageBoardQuery } from "@/db/entities/message-boards/queries";
 import { ActionButton } from "@/components/action-button";
 import { messageBoardAction } from "@/db/entities/message-boards/actions";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { imagesQuery } from "@/db/entities/images/queries";
 
 type Props = { messageBoard: MessageBoard };
 
@@ -24,7 +26,7 @@ export async function MessageboardHeroHeader(props: Props) {
             component={NextImage}
             height={180}
             width={640}
-            src={headerImage.imageSrc()}
+            src={imagesQuery.getImageSrc(headerImage)}
             alt="Message board header image"
           />
         )}
@@ -38,9 +40,20 @@ export async function MessageboardHeroHeader(props: Props) {
 
         {isMessageBoardDraft(props.messageBoard) && (
           <Flex direction="row" gap="md">
-            <Button size="md" variant="default" color="gray">
+            <ActionButton
+              size="md"
+              variant="default"
+              color="gray"
+              onClick={async () => {
+                "use server";
+
+                await messageBoardAction.delete(props.messageBoard);
+
+                redirect("/application/");
+              }}
+            >
               Delete
-            </Button>
+            </ActionButton>
             <ActionButton
               onClick={async () => {
                 "use server";

@@ -8,7 +8,7 @@ import { MessageSchema } from "@/db/entities/messages/types";
 
 const SeedFileSchema = z.object({
   messageBoards: z.array(MessageBoardSchema.partial()),
-  messages: z.array(MessageSchema.innerType().partial()),
+  messages: z.array(MessageSchema.partial()),
   images: z.array(
     z.object({
       id: z.number(),

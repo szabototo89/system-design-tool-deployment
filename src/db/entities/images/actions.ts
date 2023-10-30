@@ -1,7 +1,9 @@
 import { ImagesTable } from "@/db/entities/images/tables";
-import { ImageSchema } from "@/db/entities/images/types";
-import { db } from "@/db/schema";
+import { Image, ImageSchema } from "@/db/entities/images/types";
+import { db as appDb } from "@/db/schema";
 import { z } from "zod";
+import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
+import { eq } from "drizzle-orm";
 
 const FIVE_MB = 5 * 1024 * 1024;
 export const SupportedImageFileSchema = z
@@ -28,7 +30,7 @@ export async function createImage(imageFile: SupportedImageFile) {
   const fileContent = new Uint8Array(await imageFile.arrayBuffer());
   const fileName = imageFile.name;
 
-  const [image] = await db
+  const [image] = await appDb
     .insert(ImagesTable)
     .values({
       fileName,
@@ -42,4 +44,8 @@ export async function createImage(imageFile: SupportedImageFile) {
 export const imageAction = {
   create: createImage,
   createFromFile: createImageFromFile,
+
+  async deleteByID(imageID: Image["id"], db: BetterSQLite3Database = appDb) {
+    await db.delete(ImagesTable).where(eq(ImagesTable.id, imageID));
+  },
 };

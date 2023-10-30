@@ -5,18 +5,9 @@ import { ImagesTable } from "./tables";
 export const ImageSchema = createSelectSchema(ImagesTable, {
   id: () => z.coerce.number().brand<"ImageID">(),
   fileContent: () => z.custom<Uint8Array>().optional(),
-}).transform((image) => {
-  const imageID = image.id;
-
-  return {
-    ...image,
-    imageSrc() {
-      return "/application/images/" + imageID;
-    },
-  };
 });
 
-export const ImageIDSchema = ImageSchema.innerType().shape.id;
+export const ImageIDSchema = ImageSchema.shape.id;
 
 export type Image = z.output<typeof ImageSchema>;
 

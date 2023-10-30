@@ -1,5 +1,5 @@
 import { Button, Image, Text } from "@mantine/core";
-import { db } from "@/db/schema";
+import { db, messageQuery } from "@/db/schema";
 import { ActionButton } from "@/components/action-button";
 import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
@@ -12,13 +12,14 @@ import {
 import { NextImage } from "@/components/next-image";
 import { MessagesTable } from "@/db/entities/messages/tables";
 import { Message } from "@/db/entities/messages/types";
+import { messageAction } from "@/db/entities/messages/actions";
 
 type Props = {
   message: Message;
 };
 
 export async function MessageCard(props: Props) {
-  const image = await props.message.image();
+  const image = await messageQuery.queryImage(props.message);
 
   return (
     <EntityCard
@@ -29,7 +30,7 @@ export async function MessageCard(props: Props) {
           image={
             <Image
               component={NextImage}
-              src={image?.imageSrc()}
+              src={"/application/images/" + image?.id}
               alt="Message header image"
               width={640}
               height={180}
@@ -44,9 +45,8 @@ export async function MessageCard(props: Props) {
             onClick={async () => {
               "use server";
 
-              await db
-                .delete(MessagesTable)
-                .where(eq(MessagesTable.id, props.message.id));
+              await messageAction.delete(props.message);
+
               revalidatePath("/messages/[messageBoardID]/page");
             }}
           >

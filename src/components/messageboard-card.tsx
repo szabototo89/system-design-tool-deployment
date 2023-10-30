@@ -4,6 +4,7 @@ import { RelativeTimestamp } from "@/components/relative-timestamp";
 import { MessageBoard } from "@/db/entities/message-boards/types";
 import { NextImage } from "@/components/next-image";
 import { messageBoardQuery } from "@/db/entities/message-boards/queries";
+import { imagesQuery } from "@/db/entities/images/queries";
 
 type Props = { messageBoard: MessageBoard };
 
@@ -27,7 +28,7 @@ export async function MessageBoardCard(props: Props) {
       {image != null && (
         <Image
           component={NextImage}
-          src={image.imageSrc()}
+          src={imagesQuery.getImageSrc(image)}
           alt="Message board header image"
           width={640}
           height={180}

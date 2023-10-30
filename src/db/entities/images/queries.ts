@@ -13,4 +13,8 @@ async function queryImageByID(id: Image["id"]) {
 
 export const imagesQuery = {
   queryByID: queryImageByID,
+
+  getImageSrc(image: Image) {
+    return "/application/images/" + image.id;
+  },
 };
