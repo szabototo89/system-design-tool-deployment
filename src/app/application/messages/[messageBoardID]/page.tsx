@@ -9,6 +9,7 @@ import { MessageboardSendMessageSection } from "@/app/application/messages/[mess
 import { MessageCard } from "@/app/application/messages/[messageBoardID]/message-card";
 import { messageBoardQuery } from "@/db/entities/message-boards/queries";
 import { MessageBoard } from "@/db/entities/message-boards/types";
+import { messageQuery } from "@/db/entities/messages/queries";
 
 type Props = {
   params: { messageBoardID: MessageBoard["id"] };
@@ -23,13 +24,7 @@ export default async function MessageboardDetailsPage(props: Props) {
     throw new Error("Requested message board cannot be loaded.");
   }
 
-  const messagesFromDb = await db
-    .select()
-    .from(Messages)
-    .where(eq(Messages.messageBoardID, messageBoard.id))
-    .orderBy(desc(Messages.createdAt));
-
-  const messages = z.array(MessageSchema).parse(messagesFromDb);
+  const messages = await messageQuery.queryFromMessageBoard(messageBoard);
 
   return (
     <Stack>
