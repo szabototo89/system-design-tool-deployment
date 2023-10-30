@@ -6,7 +6,7 @@ import { db, Images, ImageSchema } from "./schema";
 import { MessageBoardSchema } from "@/db/entities/message-boards/types";
 
 const SeedFileSchema = z.object({
-  messageBoards: z.array(MessageBoardSchema.partial()),
+  messageBoards: z.array(MessageBoardSchema.innerType().partial()),
   messages: z.array(MessageSchema.innerType().partial()),
   images: z.array(
     z.object({

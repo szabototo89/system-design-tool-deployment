@@ -16,6 +16,8 @@ export const ImageSchema = createSelectSchema(Images, {
   };
 });
 
+export const ImageIDSchema = ImageSchema.innerType().shape.id;
+
 export type Image = z.output<typeof ImageSchema>;
 
-export const imageID = ImageSchema.innerType().shape.id.parse;
+export const imageID = ImageIDSchema.parse;

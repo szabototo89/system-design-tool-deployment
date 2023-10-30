@@ -1,7 +1,8 @@
-import { Badge, Button, Card, Group, Text } from "@mantine/core";
+import { Badge, Button, Card, Group, Image, Text } from "@mantine/core";
 import { RelativeTimestamp } from "@/components/relative-timestamp";
 
 import { MessageBoard } from "@/db/entities/message-boards/types";
+import { NextImage } from "@/components/next-image";
 
 type Props = { messageBoard: MessageBoard };
 
@@ -17,9 +18,21 @@ function MessageBoardStatusBadge(props: {
   );
 }
 
-export function MessageBoardCard(props: Props) {
+export async function MessageBoardCard(props: Props) {
+  const image = await props.messageBoard.image();
+
   return (
     <Card withBorder radius="md" p="md">
+      {image != null && (
+        <Image
+          component={NextImage}
+          src={image.imageSrc()}
+          alt="Message board header image"
+          width={640}
+          height={180}
+        />
+      )}
+
       <Text fz="lg" fw={500} truncate>
         {props.messageBoard.title}
       </Text>

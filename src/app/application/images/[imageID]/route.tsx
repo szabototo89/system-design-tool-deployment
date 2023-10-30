@@ -1,4 +1,4 @@
-import { imageID, queryImageByID } from "@/db/schema";
+import { imageID, imagesQuery } from "@/db/schema";
 import { NextRequest, NextResponse } from "next/server";
 
 type StaticParams = { params: { imageID: string } };
@@ -6,7 +6,7 @@ type StaticParams = { params: { imageID: string } };
 export const dynamic = "error";
 
 export async function GET(_request: NextRequest, { params }: StaticParams) {
-  const image = await queryImageByID(imageID(params.imageID));
+  const image = await imagesQuery.queryByID(imageID(params.imageID));
   const file = new Blob([image.fileContent]);
 
   return new NextResponse(file, {

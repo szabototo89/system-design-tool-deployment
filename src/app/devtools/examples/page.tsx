@@ -17,6 +17,7 @@ import {
   messageBoardID,
   MessageBoardSchema,
 } from "@/db/entities/message-boards/types";
+import { z } from "zod";
 
 type Params =
   | {
@@ -34,7 +35,7 @@ type Props = {
 export default async function StoriesPage(props: Props) {
   const data =
     props.searchParams?.type !== "database"
-      ? MessageBoardSchema.required().parse({
+      ? MessageBoardSchema.parse({
           title: props.searchParams?.title ?? "Test title",
           status: props.searchParams?.status ?? "draft",
           description: props.searchParams?.description ?? "test description",
