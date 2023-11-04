@@ -23,11 +23,14 @@ export const messageBoardAction = {
         messageBoard,
         tx,
       );
-      await messageAction.deleteMany(messages, tx);
 
-      if (messageBoard.imageID) {
-        await imageAction.deleteByID(messageBoard.imageID, tx);
-      }
+      await Promise.all(
+        [
+          ...messages.map((message) => messageAction.delete(message, tx)),
+          messageBoard.imageID &&
+            imageAction.deleteByID(messageBoard.imageID, tx),
+        ].filter(Boolean),
+      );
 
       await tx
         .delete(MessageBoardsTable)

@@ -41,11 +41,20 @@ export async function createImage(imageFile: SupportedImageFile) {
   return ImageSchema.parse(image);
 }
 
+async function deleteByID(
+  imageID: Image["id"],
+  db: BetterSQLite3Database = appDb,
+) {
+  await db.delete(ImagesTable).where(eq(ImagesTable.id, imageID));
+}
+
 export const imageAction = {
   create: createImage,
   createFromFile: createImageFromFile,
 
-  async deleteByID(imageID: Image["id"], db: BetterSQLite3Database = appDb) {
-    await db.delete(ImagesTable).where(eq(ImagesTable.id, imageID));
+  async delete(image: Image, db: BetterSQLite3Database = appDb) {
+    await deleteByID(image.id, db);
   },
+
+  deleteByID,
 };

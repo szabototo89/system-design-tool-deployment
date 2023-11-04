@@ -1,14 +1,12 @@
 import { MessageBoard } from "../message-boards/types";
-import {
-  db as appDb,
-  MessagesTable,
-  MessageSchema,
-  Message,
-  imagesQuery,
-} from "@/db/schema";
+
 import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
+import { MessagesTable } from "./tables";
+import { Message, MessageSchema } from "./types";
+import { imagesQuery } from "../images/queries";
+import { db as appDb } from "../../schema";
 
 async function queryFromMessageBoard(
   messageBoard: MessageBoard,
