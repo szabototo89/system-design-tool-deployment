@@ -71,6 +71,13 @@
       "when": 1698695264997,
       "tag": "0009_pale_psylocke",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1699135225519,
+      "tag": "0010_premium_shiver_man",
+      "breakpoints": true
     }
   ]
 }
