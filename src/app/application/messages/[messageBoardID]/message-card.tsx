@@ -13,12 +13,15 @@ import { NextImage } from "@/components/next-image";
 import { MessagesTable } from "@/db/entities/messages/tables";
 import { Message } from "@/db/entities/messages/types";
 import { messageAction } from "@/db/entities/messages/actions";
+import { withComponentLogger } from "@/logging/logger";
 
 type Props = {
   message: Message;
 };
 
-export async function MessageCard(props: Props) {
+export const MessageCard = withComponentLogger(async function MessageCard(
+  props: Props,
+) {
   const image = await messageQuery.queryImage(props.message);
 
   return (
@@ -58,4 +61,4 @@ export async function MessageCard(props: Props) {
       <Text size="sm">{props.message.content}</Text>
     </EntityCard>
   );
-}
+});
