@@ -11,10 +11,13 @@ export const messageBoardAction = {
   async publishMessageBoard(messageBoard: Pick<MessageBoard, "id">) {
     const statusFieldSchema = MessageBoardSchema.shape.status;
 
-    await db
+    const [updatedMessageBoard] = await db
       .update(MessageBoardsTable)
       .set({ status: statusFieldSchema.parse("published") })
-      .where(eq(MessageBoardsTable.id, messageBoard.id));
+      .where(eq(MessageBoardsTable.id, messageBoard.id))
+      .returning();
+
+    return MessageBoardSchema.parse(updatedMessageBoard);
   },
 
   async delete(messageBoard: MessageBoard) {
