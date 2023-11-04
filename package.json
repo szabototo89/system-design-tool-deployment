@@ -5,7 +5,7 @@
     "sl": "node.exe \"C:\\Program Files\\Sapling\\edenscm-isl\\isl-server\\dist\\run-proxy.js\" --port 3011 --command \"C:\\Program Files\\Sapling\\sl.exe\" --force",
     "db:generate": "drizzle-kit generate:sqlite",
     "db:studio": "drizzle-kit studio",
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
