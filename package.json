@@ -35,6 +35,8 @@
     "drizzle-kit": "^0.19.13",
     "eslint": "latest",
     "eslint-config-next": "latest",
+    "pino": "^8.16.1",
+    "pino-pretty": "^10.2.3",
     "postcss": "^8.4.31",
     "postcss-preset-mantine": "^1.7.0",
     "postcss-simple-vars": "^7.0.1",
