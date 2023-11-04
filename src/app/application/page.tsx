@@ -12,8 +12,9 @@ import { zfd } from "zod-form-data";
 import { revalidatePath } from "next/cache";
 import { MessageBoardsTable } from "@/db/entities/message-boards/table";
 import { messageBoardQuery } from "@/db/entities/message-boards/queries";
+import { withComponentLogger } from "@/logging/logger";
 
-export default async function Home() {
+export default withComponentLogger(async function Home() {
   const messageBoards = await messageBoardQuery.queryAll();
 
   const createMessageBoard = async (formData: FormData) => {
@@ -50,4 +51,4 @@ export default async function Home() {
       </SimpleGrid>
     </Stack>
   );
-}
+});
