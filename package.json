@@ -12,6 +12,7 @@
     "db:seed": "node --experimental-specifier-resolution=node --loader ts-node/esm src/db/seed-script.ts"
   },
   "dependencies": {
+    "@auth/drizzle-adapter": "^0.3.5",
     "@mantine/core": "^7.1.0",
     "@mantine/form": "^7.1.0",
     "@mantine/hooks": "^7.1.0",
@@ -20,6 +21,7 @@
     "drizzle-orm": "^0.28.6",
     "drizzle-zod": "^0.5.1",
     "next": "latest",
+    "next-auth": "^4.24.4",
     "react": "latest",
     "react-dom": "latest",
     "zod": "^3.22.4",
