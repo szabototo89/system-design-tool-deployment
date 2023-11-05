@@ -7,4 +7,6 @@ export const ReactionSchema = createSelectSchema(ReactionTable, {
   type: z.enum(["like"]),
 });
 
+export const ReactionIDSchema = ReactionSchema.shape.id;
+
 export type Reaction = z.infer<typeof ReactionSchema>;

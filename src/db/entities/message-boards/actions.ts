@@ -2,7 +2,7 @@ import {
   MessageBoard,
   MessageBoardSchema,
 } from "@/db/entities/message-boards/types";
-import { db, imagesQuery, MessageBoardsTable, messageQuery } from "@/db/schema";
+import { db, MessageBoardsTable, messageQuery } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { messageAction } from "@/db/entities/messages/actions";
 import { imageAction } from "@/db/entities/images/actions";
@@ -31,7 +31,7 @@ export const messageBoardAction = {
         [
           ...messages.map((message) => messageAction.delete(message, tx)),
           messageBoard.imageID &&
-            imageAction.deleteByID(messageBoard.imageID, tx),
+            imageAction.delete({ id: messageBoard.imageID }, tx),
         ].filter(Boolean),
       );
 

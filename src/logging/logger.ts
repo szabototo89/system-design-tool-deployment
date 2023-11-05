@@ -10,11 +10,11 @@ interface AsyncFunctionComponent<P = {}> {
   displayName?: string | undefined;
 }
 
-export const logger = pino({
+const logger = pino({
   level: "debug",
 });
 
-const applicationLogger = logger.child({});
+export const applicationLogger = logger.child({});
 
 export function withComponentLogger<TProps>(
   component: AsyncFunctionComponent<TProps>,
