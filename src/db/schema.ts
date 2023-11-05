@@ -11,6 +11,7 @@ export * from "./entities/images/types";
 export * from "./entities/images/queries";
 export * from "./entities/images/tables";
 export * from "./entities/reaction/tables";
+export * from "./entities/users/tables";
 
 const sqliteClient = new Database("./app.db");
 export const db = drizzle(sqliteClient);

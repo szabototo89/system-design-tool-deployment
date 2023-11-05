@@ -8,7 +8,7 @@ import { Message, MessageSchema } from "./types";
 import { imagesQuery } from "../images/queries";
 import { db as appDb } from "../../schema";
 import { reactionQuery } from "../reaction/queries";
-import { ReactionIDSchema } from "@/db/entities/reaction/types";
+import { ReactionIDSchema } from "../reaction/types";
 
 async function queryFromMessageBoard(
   messageBoard: MessageBoard,

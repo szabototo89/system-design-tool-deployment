@@ -9,6 +9,10 @@ const nextConfig = {
       },
     ];
   },
+  env: {
+    NEXTAUTH_SECRET:
+      "Zc^@2f+#XJbsjL%*;&0@'15QQ$]+;bhlPX9:+Gz1<jB&u-qU3Vr9J`;WiK6d({=",
+  },
   experimental: {},
 };
 
