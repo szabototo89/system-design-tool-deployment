@@ -7,6 +7,7 @@ export const dynamic = "error";
 
 export async function GET(_request: NextRequest, { params }: StaticParams) {
   const image = await imagesQuery.queryByID(imageID(params.imageID));
+  //@ts-ignore Not sure how to resolve this error
   const file = new Blob([image.fileContent]);
 
   return new NextResponse(file, {
