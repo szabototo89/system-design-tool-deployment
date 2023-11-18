@@ -1,9 +1,11 @@
 import {
   integer,
+  primaryKey,
   sqliteTable,
   text,
-  primaryKey,
 } from "drizzle-orm/sqlite-core";
+import { createSelectSchema } from "drizzle-zod";
+import { z } from "zod";
 
 export const UsersTable = sqliteTable("user", {
   id: text("id").notNull().primaryKey(),
@@ -11,6 +13,7 @@ export const UsersTable = sqliteTable("user", {
   email: text("email").notNull(),
   emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
   image: text("image"),
+  password: text("password").notNull(),
 });
 
 export const AccountsTable = sqliteTable(
@@ -54,3 +57,9 @@ export const VerificationTokensTable = sqliteTable(
     compoundKey: primaryKey(vt.identifier, vt.token),
   }),
 );
+
+export const UserSchema = createSelectSchema(UsersTable, {
+  email: (schema) => schema.email.email("Must be a valid e-mail address"),
+}).omit({ password: true });
+
+export type User = z.infer<typeof UserSchema>;
