@@ -1,9 +1,9 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { MessageBoardsTable } from "../message-boards/table";
-import { sql } from "drizzle-orm";
 import { ImagesTable } from "../images/tables";
 import { ReactionTable } from "../reaction/tables";
 import { createdByUserPattern } from "../../patterns/created-by-user-pattern";
+import { createdAtPattern } from "../../patterns/created-at-pattern";
 
 export const MessagesTable = sqliteTable("messages", {
   id: integer("id").primaryKey({ autoIncrement: true }),
@@ -11,10 +11,8 @@ export const MessagesTable = sqliteTable("messages", {
   messageBoardID: integer("message_board_id").references(
     () => MessageBoardsTable.id,
   ),
-  createdAt: integer("created_at", { mode: "timestamp_ms" })
-    .notNull()
-    .default(sql`CURRENT_TIMESTAMP`),
   imageID: integer("image_id").references(() => ImagesTable.id),
+  ...createdAtPattern.forTable(),
   ...createdByUserPattern.forTable(),
 });
 
