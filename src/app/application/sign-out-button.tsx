@@ -1,11 +1,11 @@
 "use client";
 
 import React, { ComponentProps } from "react";
-import { ActionButton } from "@/components/action-button";
 import { signOut } from "next-auth/react";
+import { Button } from "@mantine/core";
 
 export function SignOutButton(
-  props: Omit<ComponentProps<typeof ActionButton>, "onClick">,
+  props: Omit<ComponentProps<typeof Button>, "onClick">,
 ) {
-  return <ActionButton {...props} onClick={signOut} />;
+  return <Button {...props} onClick={() => signOut()} />;
 }

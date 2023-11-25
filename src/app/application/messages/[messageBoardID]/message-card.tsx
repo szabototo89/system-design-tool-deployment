@@ -12,6 +12,7 @@ import { NextImage } from "@/components/next-image";
 import { Message } from "@/db/entities/messages/types";
 import { messageAction } from "@/db/entities/messages/actions";
 import { withComponentLogger } from "@/logging/logger";
+import { getUserContext } from "@/app/api/auth/[...nextauth]/auth-options";
 
 type Props = {
   message: Message;
@@ -46,10 +47,11 @@ export const MessageCard = withComponentLogger(async function MessageCard(
           <ActionButton
             onClick={async () => {
               "use server";
+              const userContext = await getUserContext();
 
-              await messageAction.addReaction(props.message);
+              await messageAction.toggleReaction(userContext, props.message);
 
-              revalidatePath("/messages/[messageBoardID]/page");
+              revalidatePath(`/messages/${props.message.messageBoardID}/page`);
             }}
           >
             Like ({reactions.length})

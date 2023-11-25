@@ -4,61 +4,71 @@
       "id": 1,
       "title": "Employee Appreciation Wall",
       "description": "Celebrate your colleagues' hard work and dedication with personalized kudos and messages of thanks.",
-      "status": "published"
+      "status": "published",
+      "createdBy": "user-3"
     },
     {
       "id": 2,
       "title": "Team Kudos and Celebrations",
       "description": "Share your team's achievements, milestones, and celebrate the collaborative spirit with shout-outs and acknowledgments.",
-      "status": "draft"
+      "status": "draft",
+      "createdBy": "user-2"
     },
     {
       "id": 3,
       "title": "Outstanding Performers Recognition",
       "description": "Spotlight your top performers and give them the recognition they deserve for their exceptional contributions.",
-      "status": "draft"
+      "status": "draft",
+      "createdBy": "user-4"
     },
     {
       "id": 4,
       "title": "Milestone Achievements Showcase",
       "description": "Highlight the significant milestones and accomplishments reached by individuals or teams.",
-      "status": "draft"
+      "status": "draft",
+      "createdBy": "user-1"
     },
     {
       "id": 5,
       "title": "Gratitude and Acknowledgment Board",
       "description": "Express your gratitude and acknowledge the efforts of those who make a positive impact in your community or workplace.",
-      "status": "draft"
+      "status": "draft",
+      "createdBy": "user-5"
     },
     {
       "id": 6,
       "title": "Customer Service Excellence Awards",
       "description": "Recognize outstanding customer service representatives and commend their dedication to customer satisfaction.",
-      "status": "draft"
+      "status": "draft",
+      "createdBy": "user-3"
     },
     {
       "id": 7,
       "title": "Innovators and Problem Solvers Tribute",
       "description": "Applaud the innovators and creative problem solvers who bring fresh ideas and solutions to the table.",
-      "status": "draft"
+      "status": "draft",
+      "createdBy": "user-2"
     },
     {
       "id": 8,
       "title": "Continuous Improvement Achievements",
       "description": "Celebrate the small steps that lead to significant improvements in processes, products, or services.",
-      "status": "draft"
+      "status": "draft",
+      "createdBy": "user-1"
     },
     {
       "id": 9,
       "title": "Teacher and Student Appreciation Zone",
       "description": "Show your appreciation for educators, mentors, and students who contribute to the growth and learning experience.",
-      "status": "draft"
+      "status": "draft",
+      "createdBy": "user-4"
     },
     {
       "id": 10,
       "title": "Volunteer Recognition and Thanks",
       "description": "Express your gratitude for the selfless acts of volunteers who make a difference in your community or organization.",
-      "status": "draft"
+      "status": "draft",
+      "createdBy": "user-5"
     }
   ],
   "messages": [
@@ -66,154 +76,184 @@
       "id": 1,
       "messageBoardID": 1,
       "content": "Thank you, Sarah, for always going above and beyond to help the team. Your dedication is truly inspiring!",
-      "imageID": 1
+      "imageID": 1,
+      "createdBy": "user-3"
     },
     {
       "id": 2,
       "messageBoardID": 1,
       "content": "Kudos to John for his outstanding work on the recent project. He's a valuable asset to our department.",
-      "imageID": 2
+      "imageID": 2,
+      "createdBy": "user-2"
     },
     {
       "id": 3,
       "messageBoardID": 1,
       "content": "I want to express my gratitude to Emily for her positive attitude and willingness to help. She brightens up the office!",
-      "imageID": 3
+      "imageID": 3,
+      "createdBy": "user-4"
     },
     {
       "id": 4,
       "messageBoardID": 2,
-      "content": "Congratulations to the marketing team for achieving a 20% increase in website traffic. Great teamwork!"
+      "content": "Congratulations to the marketing team for achieving a 20% increase in website traffic. Great teamwork!",
+      "createdBy": "user-1"
     },
     {
       "id": 5,
       "messageBoardID": 2,
-      "content": "Shout-out to our project management team for delivering the project ahead of schedule. Well done, everyone!"
+      "content": "Shout-out to our project management team for delivering the project ahead of schedule. Well done, everyone!",
+      "createdBy": "user-5"
     },
     {
       "id": 6,
       "messageBoardID": 2,
-      "content": "Cheers to the sales team for exceeding their quarterly targets. Keep up the fantastic work!"
+      "content": "Cheers to the sales team for exceeding their quarterly targets. Keep up the fantastic work!",
+      "createdBy": "user-3"
     },
     {
       "id": 7,
       "messageBoardID": 3,
-      "content": "I'd like to recognize Alex for consistently delivering high-quality work. He's a true standout performer."
+      "content": "I'd like to recognize Alex for consistently delivering high-quality work. He's a true standout performer.",
+      "createdBy": "user-2"
     },
     {
       "id": 8,
       "messageBoardID": 3,
-      "content": "Hannah's problem-solving skills are exceptional. She deserves this recognition for her innovative solutions."
+      "content": "Hannah's problem-solving skills are exceptional. She deserves this recognition for her innovative solutions.",
+      "createdBy": "user-1"
     },
     {
       "id": 9,
       "messageBoardID": 3,
-      "content": "A big round of applause for Michael, who leads by example and motivates the team to excel."
+      "content": "A big round of applause for Michael, who leads by example and motivates the team to excel.",
+      "createdBy": "user-4"
     },
     {
       "id": 10,
       "messageBoardID": 4,
-      "content": "We've reached a significant milestone of serving 10,000 satisfied customers. Thank you, team, for your dedication!"
+      "content": "We've reached a significant milestone of serving 10,000 satisfied customers. Thank you, team, for your dedication!",
+      "createdBy": "user-5"
     },
     {
       "id": 11,
       "messageBoardID": 4,
-      "content": "Celebrate the successful launch of our new product line. It's a testament to our hard work and innovation."
+      "content": "Celebrate the successful launch of our new product line. It's a testament to our hard work and innovation.",
+      "createdBy": "user-3"
     },
     {
       "id": 12,
       "messageBoardID": 4,
-      "content": "A big achievement unlocked: the completion of our first international project. Kudos to the entire team!"
+      "content": "A big achievement unlocked: the completion of our first international project. Kudos to the entire team!",
+      "createdBy": "user-2"
     },
     {
       "id": 13,
       "messageBoardID": 5,
-      "content": "I'm grateful to Mark for always being there to support and mentor me. Your guidance has made a difference."
+      "content": "I'm grateful to Mark for always being there to support and mentor me. Your guidance has made a difference.",
+      "createdBy": "user-1"
     },
     {
       "id": 14,
       "messageBoardID": 5,
-      "content": "Acknowledging Sarah's efforts in organizing the charity drive. You've made a positive impact in the community."
+      "content": "Acknowledging Sarah's efforts in organizing the charity drive. You've made a positive impact in the community.",
+      "createdBy": "user-5"
     },
     {
       "id": 15,
       "messageBoardID": 5,
-      "content": "A heartfelt thanks to David for his dedication to environmental sustainability. Your work inspires us all."
+      "content": "A heartfelt thanks to David for his dedication to environmental sustainability. Your work inspires us all.",
+      "createdBy": "user-3"
     },
     {
       "id": 16,
       "messageBoardID": 6,
-      "content": "Hats off to Linda for her exceptional customer service. Her patience and empathy make all the difference."
+      "content": "Hats off to Linda for her exceptional customer service. Her patience and empathy make all the difference.",
+      "createdBy": "user-4"
     },
     {
       "id": 17,
       "messageBoardID": 6,
-      "content": "Customer satisfaction is Joe's forte. He's earned this award with his unwavering commitment to our clients."
+      "content": "Customer satisfaction is Joe's forte. He's earned this award with his unwavering commitment to our clients.",
+      "createdBy": "user-1"
     },
     {
       "id": 18,
       "messageBoardID": 6,
-      "content": "Recognizing Emily for consistently delivering top-notch service. Our customers adore her!"
+      "content": "Recognizing Emily for consistently delivering top-notch service. Our customers adore her!",
+      "createdBy": "user-2"
     },
     {
       "id": 19,
       "messageBoardID": 7,
-      "content": "A big shout-out to the R&D team for their innovative solutions that drive our products forward."
+      "content": "A big shout-out to the R&D team for their innovative solutions that drive our products forward.",
+      "createdBy": "user-3"
     },
     {
       "id": 20,
       "messageBoardID": 7,
-      "content": "Liam's creative problem-solving skills have saved us time and resources. Keep those ideas coming!"
+      "content": "Liam's creative problem-solving skills have saved us time and resources. Keep those ideas coming!",
+      "createdBy": "user-2"
     },
     {
       "id": 21,
       "messageBoardID": 7,
-      "content": "Recognizing the IT team for their quick thinking and problem-solving in keeping our systems running smoothly."
+      "content": "Recognizing the IT team for their quick thinking and problem-solving in keeping our systems running smoothly.",
+      "createdBy": "user-1"
     },
     {
       "id": 22,
       "messageBoardID": 8,
-      "content": "Celebrating Jane for her commitment to process improvement. Her small changes lead to significant gains."
+      "content": "Celebrating Jane for her commitment to process improvement. Her small changes lead to significant gains.",
+      "createdBy": "user-4"
     },
     {
       "id": 23,
       "messageBoardID": 8,
-      "content": "Kudos to the manufacturing team for their dedication to product quality. Continuous improvement in action!"
+      "content": "Kudos to the manufacturing team for their dedication to product quality. Continuous improvement in action!",
+      "createdBy": "user-5"
     },
     {
       "id": 24,
       "messageBoardID": 8,
-      "content": "Recognizing Tom for his role in optimizing our supply chain, making our operations more efficient."
+      "content": "Recognizing Tom for his role in optimizing our supply chain, making our operations more efficient.",
+      "createdBy": "user-3"
     },
     {
       "id": 25,
       "messageBoardID": 9,
-      "content": "Expressing my appreciation to Mr. Johnson for his passion for teaching and inspiring a love for learning."
+      "content": "Expressing my appreciation to Mr. Johnson for his passion for teaching and inspiring a love for learning.",
+      "createdBy": "user-2"
     },
     {
       "id": 26,
       "messageBoardID": 9,
-      "content": "Sarah's dedication to her studies and her classmates is commendable. Keep up the great work!"
+      "content": "Sarah's dedication to her studies and her classmates is commendable. Keep up the great work!",
+      "createdBy": "user-1"
     },
     {
       "id": 27,
       "messageBoardID": 9,
-      "content": "Thank you, Mrs. Anderson, for your patient guidance and mentorship. You're making a lasting impact."
+      "content": "Thank you, Mrs. Anderson, for your patient guidance and mentorship. You're making a lasting impact.",
+      "createdBy": "user-4"
     },
     {
       "id": 28,
       "messageBoardID": 10,
-      "content": "A big thank you to our volunteers who give their time and energy to make our community a better place."
+      "content": "A big thank you to our volunteers who give their time and energy to make our community a better place.",
+      "createdBy": "user-5"
     },
     {
       "id": 29,
       "messageBoardID": 10,
-      "content": "Recognizing John's volunteer work at the local shelter. Your selflessness is truly appreciated."
+      "content": "Recognizing John's volunteer work at the local shelter. Your selflessness is truly appreciated.",
+      "createdBy": "user-3"
     },
     {
       "id": 30,
       "messageBoardID": 10,
-      "content": "Kudos to the volunteer team for their efforts in the recent charity event. Your dedication shines through."
+      "content": "Kudos to the volunteer team for their efforts in the recent charity event. Your dedication shines through.",
+      "createdBy": "user-2"
     }
   ],
   "images": [
@@ -228,6 +268,38 @@
     {
       "id": 3,
       "imageName": "message_picture_3.jpg"
+    }
+  ],
+  "users": [
+    {
+      "id": "user-1",
+      "name": "John Doe",
+      "email": "john.doe@gmail.com",
+      "password": "john.doe@gmail.com"
+    },
+    {
+      "id": "user-2",
+      "name": "Jane Smith",
+      "email": "jane.smith@example.com",
+      "password": "jane.smith@example.com"
+    },
+    {
+      "id": "user-3",
+      "name": "Bob Johnson",
+      "email": "bob.johnson@hotmail.com",
+      "password": "bob.johnson@hotmail.com"
+    },
+    {
+      "id": "user-4",
+      "name": "Alice Williams",
+      "email": "alice.williams@yahoo.com",
+      "password": "alice.williams@yahoo.com"
+    },
+    {
+      "id": "user-5",
+      "name": "David Brown",
+      "email": "david.brown@gmail.com",
+      "password": "david.brown@gmail.com"
     }
   ]
 }

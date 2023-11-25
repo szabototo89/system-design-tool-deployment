@@ -7,25 +7,31 @@ import {
   MessageReactionTable,
   MessageSchema,
   MessagesTable,
+  ReactionTable,
 } from "../../schema";
 import { and, eq } from "drizzle-orm";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { imageAction } from "@/db/entities/images/actions";
 import { reactionAction } from "@/db/entities/reaction/actions";
-import { Reaction } from "@/db/entities/reaction/types";
+import { Reaction, ReactionSchema } from "@/db/entities/reaction/types";
 import { applicationLogger } from "@/logging/logger";
+import { UserContext } from "@/app/api/auth/[...nextauth]/auth-options";
 
-export async function createMessage(data: {
-  messageBoard: Pick<MessageBoard, "id">;
-  content: string;
-  image: Pick<Image, "id"> | null;
-}) {
+export async function createMessage(
+  userContext: UserContext,
+  data: {
+    messageBoard: Pick<MessageBoard, "id">;
+    content: string;
+    image: Pick<Image, "id"> | null;
+  },
+) {
   const [message] = await appDb
     .insert(MessagesTable)
     .values({
       content: data.content,
       messageBoardID: data.messageBoard.id,
       imageID: data.image?.id ?? null,
+      createdBy: userContext.user().id,
     })
     .returning();
 
@@ -66,8 +72,42 @@ export const messageAction = {
     });
   },
 
-  async addReaction(message: Message, db: BetterSQLite3Database = appDb) {
-    const reaction = await reactionAction.create();
+  async toggleReaction(
+    userContext: UserContext,
+    message: Pick<Message, "id">,
+    db: BetterSQLite3Database = appDb,
+  ) {
+    const user = userContext.user();
+
+    const [result] = await db
+      .select()
+      .from(MessageReactionTable)
+      .innerJoin(
+        ReactionTable,
+        eq(MessageReactionTable.reactionID, ReactionTable.id),
+      )
+      .where(
+        and(
+          eq(MessageReactionTable.messageID, message.id),
+          eq(ReactionTable.createdBy, user.id),
+        ),
+      );
+
+    if (result == null) {
+      return await this.addReaction(userContext, message, db);
+    }
+
+    const reaction = ReactionSchema.parse(result.reaction);
+
+    return await this.deleteReaction(message, reaction, db);
+  },
+
+  async addReaction(
+    userContext: UserContext,
+    message: Pick<Message, "id">,
+    db: BetterSQLite3Database = appDb,
+  ) {
+    const reaction = await reactionAction.create(userContext);
 
     await db.insert(MessageReactionTable).values({
       messageID: message.id,
@@ -76,8 +116,8 @@ export const messageAction = {
   },
 
   async deleteReaction(
-    message: Message,
-    reaction: Reaction,
+    message: Pick<Message, "id">,
+    reaction: Pick<Reaction, "id">,
     db: BetterSQLite3Database = appDb,
   ) {
     const deletedReactions = await db

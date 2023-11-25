@@ -13,12 +13,14 @@ import { revalidatePath } from "next/cache";
 import { MessageBoardsTable } from "@/db/entities/message-boards/table";
 import { messageBoardQuery } from "@/db/entities/message-boards/queries";
 import { withComponentLogger } from "@/logging/logger";
+import { getUserContext } from "@/app/api/auth/[...nextauth]/auth-options";
 
 export default withComponentLogger(async function Home() {
   const messageBoards = await messageBoardQuery.queryAll();
 
   const createMessageBoard = async (formData: FormData) => {
     "use server";
+    const userContext = await getUserContext({ redirectToLoginPage: true });
 
     const CreateMessageBoardFormDataSchema = zfd.formData({
       title: zfd.text(),
@@ -29,6 +31,7 @@ export default withComponentLogger(async function Home() {
     await db.insert(MessageBoardsTable).values({
       status: "draft",
       ...input,
+      createdBy: userContext.user().id,
     });
 
     revalidatePath("/");

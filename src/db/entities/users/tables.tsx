@@ -58,8 +58,12 @@ export const VerificationTokensTable = sqliteTable(
   }),
 );
 
-export const UserSchema = createSelectSchema(UsersTable, {
+export const UserWithPasswordSchema = createSelectSchema(UsersTable, {
+  id: (schema) => schema.id.brand<"UserID">(),
   email: (schema) => schema.email.email("Must be a valid e-mail address"),
-}).omit({ password: true });
+});
+
+export const UserSchema = UserWithPasswordSchema.omit({ password: true });
 
 export type User = z.infer<typeof UserSchema>;
+export type UserWithPassword = z.infer<typeof UserWithPasswordSchema>;

@@ -5,6 +5,7 @@ import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "@/db/schema";
 import { userQuery } from "@/db/entities/users/queries";
 import { getServerSession as getNextServerSession } from "next-auth/next";
+import { redirect } from "next/navigation";
 
 export function getServerSession() {
   return getNextServerSession(authOptions);
@@ -18,6 +19,32 @@ export async function getCurrentUser() {
   }
 
   return userQuery.findUserByEmail(userEmail);
+}
+
+export type UserContext = NonNullable<
+  Awaited<ReturnType<typeof getUserContext>>
+>;
+
+type GetUserContextOptions = {
+  redirectToLoginPage?: boolean;
+};
+
+export async function getUserContext(options?: GetUserContextOptions) {
+  const user = await getCurrentUser();
+
+  return {
+    user() {
+      if (user == null && !options?.redirectToLoginPage) {
+        throw new Error("There is no user context");
+      }
+
+      if (user == null) {
+        redirect("/application/login");
+      }
+
+      return user;
+    },
+  };
 }
 
 export const authOptions = {

@@ -1,4 +1,10 @@
-import { db, User, UserSchema, UsersTable } from "../../schema";
+import {
+  db,
+  User,
+  UserSchema,
+  UsersTable,
+  UserWithPassword,
+} from "../../schema";
 import { and, eq } from "drizzle-orm";
 import { v4 as uuid } from "uuid";
 
@@ -25,7 +31,9 @@ export const userQuery = {
 };
 
 export const userAction = {
-  async registerUser(user: Pick<User, "name" | "email" | "password">) {
+  async registerUser(
+    user: Pick<UserWithPassword, "name" | "email" | "password">,
+  ) {
     return db
       .insert(UsersTable)
       .values({

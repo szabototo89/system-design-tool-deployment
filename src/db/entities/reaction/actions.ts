@@ -1,14 +1,16 @@
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { db as appDb, ReactionTable } from "@/db/schema";
 import { Reaction, ReactionSchema } from "./types";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
+import { UserContext } from "@/app/api/auth/[...nextauth]/auth-options";
 
 export const reactionAction = {
-  async create(db: BetterSQLite3Database = appDb) {
+  async create(userContext: UserContext, db: BetterSQLite3Database = appDb) {
     const [reaction] = await db
       .insert(ReactionTable)
       .values({
         type: "like",
+        createdBy: userContext.user().id,
       })
       .returning();
 

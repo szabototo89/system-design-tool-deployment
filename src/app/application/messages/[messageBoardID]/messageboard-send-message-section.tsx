@@ -6,6 +6,7 @@ import { imageAction } from "@/db/entities/images/actions";
 
 import { MessageBoard } from "@/db/entities/message-boards/types";
 import { createMessage, messageAction } from "@/db/entities/messages/actions";
+import { getUserContext } from "@/app/api/auth/[...nextauth]/auth-options";
 
 type Props = {
   messageBoard: MessageBoard;
@@ -16,7 +17,9 @@ const SendMessageFormDataSchema = zfd.formData({
   image: zfd.file().nullable(),
 });
 
-export function MessageboardSendMessageSection(props: Props) {
+export async function MessageboardSendMessageSection(props: Props) {
+  const userContext = await getUserContext();
+
   const sendMessage = async (formData: FormData) => {
     "use server";
     const data = SendMessageFormDataSchema.parse(formData);
@@ -24,7 +27,7 @@ export function MessageboardSendMessageSection(props: Props) {
     const image =
       data.image != null ? await imageAction.createFromFile(data.image) : null;
 
-    await messageAction.create({
+    await messageAction.create(userContext, {
       content: data.content,
       messageBoard: props.messageBoard,
       image,
