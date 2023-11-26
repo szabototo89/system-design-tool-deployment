@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX `reaction_id_source_id_source_type_type_unique` ON `reaction` (`id`,`source_id`,`source_type`,`type`);

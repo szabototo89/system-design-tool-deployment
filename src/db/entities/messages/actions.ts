@@ -4,18 +4,15 @@ import {
   db as appDb,
   Message,
   messageQuery,
-  MessageReactionTable,
   MessageSchema,
   MessagesTable,
-  ReactionTable,
 } from "../../schema";
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { imageAction } from "@/db/entities/images/actions";
 import { reactionAction } from "@/db/entities/reaction/actions";
-import { Reaction, ReactionSchema } from "@/db/entities/reaction/types";
-import { applicationLogger } from "@/logging/logger";
 import { UserContext } from "@/app/api/auth/[...nextauth]/auth-options";
+import { reactionQuery } from "@/db/entities/reaction/queries";
 
 export async function createMessage(
   userContext: UserContext,
@@ -77,29 +74,16 @@ export const messageAction = {
     message: Pick<Message, "id">,
     db: BetterSQLite3Database = appDb,
   ) {
-    const user = userContext.user();
+    const reactions = await reactionQuery.queryAllFromSource(
+      message.id,
+      "messages",
+    );
 
-    const [result] = await db
-      .select()
-      .from(MessageReactionTable)
-      .innerJoin(
-        ReactionTable,
-        eq(MessageReactionTable.reactionID, ReactionTable.id),
-      )
-      .where(
-        and(
-          eq(MessageReactionTable.messageID, message.id),
-          eq(ReactionTable.createdBy, user.id),
-        ),
-      );
-
-    if (result == null) {
+    if (reactions.length === 0) {
       return await this.addReaction(userContext, message, db);
     }
 
-    const reaction = ReactionSchema.parse(result.reaction);
-
-    return await this.deleteReaction(message, reaction, db);
+    return await this.deleteReaction(message, db);
   },
 
   async addReaction(
@@ -107,43 +91,20 @@ export const messageAction = {
     message: Pick<Message, "id">,
     db: BetterSQLite3Database = appDb,
   ) {
-    const reaction = await reactionAction.create(userContext);
-
-    await db.insert(MessageReactionTable).values({
-      messageID: message.id,
-      reactionID: reaction.id,
-    });
+    await reactionAction.create(userContext, message.id, "messages", db);
   },
 
   async deleteReaction(
     message: Pick<Message, "id">,
-    reaction: Pick<Reaction, "id">,
     db: BetterSQLite3Database = appDb,
   ) {
-    const deletedReactions = await db
-      .delete(MessageReactionTable)
-      .where(
-        and(
-          eq(MessageReactionTable.messageID, message.id),
-          eq(MessageReactionTable.reactionID, reaction.id),
-        ),
-      )
-      .returning();
+    const reactions = await reactionQuery.queryAllFromSource(
+      message.id,
+      "messages",
+    );
 
-    if (deletedReactions.length === 0) {
-      applicationLogger.warn(
-        {
-          action: {
-            name: "deleteReaction",
-            messageID: message.id,
-            reactionID: reaction.id,
-          },
-        },
-        "Invalid reaction deletion on message",
-      );
-      return;
-    }
-
-    await reactionAction.delete(reaction, db);
+    await Promise.all(
+      reactions.map((reaction) => reactionAction.delete(reaction, db)),
+    );
   },
 };

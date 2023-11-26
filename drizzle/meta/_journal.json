@@ -127,6 +127,20 @@
       "when": 1700951384899,
       "tag": "0017_tiny_omega_flight",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "5",
+      "when": 1700956608213,
+      "tag": "0018_sticky_nighthawk",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "5",
+      "when": 1700956778735,
+      "tag": "0019_lucky_infant_terrible",
+      "breakpoints": true
     }
   ]
 }
