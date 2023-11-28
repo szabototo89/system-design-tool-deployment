@@ -2,7 +2,7 @@ import {
   MessageBoard,
   MessageBoardSchema,
 } from "@/db/entities/message-boards/types";
-import { db, MessageBoardsTable, messageQuery } from "@/db/schema";
+import { db, MessageBoardTable, messageQuery } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { messageAction } from "@/db/entities/messages/actions";
 import { imageAction } from "@/db/entities/images/actions";
@@ -12,9 +12,9 @@ export const messageBoardAction = {
     const statusFieldSchema = MessageBoardSchema.shape.status;
 
     const [updatedMessageBoard] = await db
-      .update(MessageBoardsTable)
+      .update(MessageBoardTable)
       .set({ status: statusFieldSchema.parse("published") })
-      .where(eq(MessageBoardsTable.id, messageBoard.id))
+      .where(eq(MessageBoardTable.id, messageBoard.id))
       .returning();
 
     return MessageBoardSchema.parse(updatedMessageBoard);
@@ -36,8 +36,8 @@ export const messageBoardAction = {
       );
 
       await tx
-        .delete(MessageBoardsTable)
-        .where(eq(MessageBoardsTable.id, messageBoard.id));
+        .delete(MessageBoardTable)
+        .where(eq(MessageBoardTable.id, messageBoard.id));
     });
   },
 };

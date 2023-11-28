@@ -1,4 +1,4 @@
-import { ImagesTable } from "@/db/entities/images/tables";
+import { ImageTable } from "@/db/entities/images/tables";
 import { Image, ImageSchema } from "@/db/entities/images/types";
 import { db as appDb } from "@/db/schema";
 import { z } from "zod";
@@ -31,7 +31,7 @@ export async function createImage(imageFile: SupportedImageFile) {
   const fileName = imageFile.name;
 
   const [image] = await appDb
-    .insert(ImagesTable)
+    .insert(ImageTable)
     .values({
       fileName,
       fileContent,
@@ -46,6 +46,6 @@ export const imageAction = {
   createFromFile: createImageFromFile,
 
   async delete(image: Pick<Image, "id">, db: BetterSQLite3Database = appDb) {
-    await db.delete(ImagesTable).where(eq(ImagesTable.id, image.id));
+    await db.delete(ImageTable).where(eq(ImageTable.id, image.id));
   },
 };

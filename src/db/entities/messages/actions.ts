@@ -5,7 +5,7 @@ import {
   Message,
   messageQuery,
   MessageSchema,
-  MessagesTable,
+  MessageTable,
 } from "../../schema";
 import { eq } from "drizzle-orm";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
@@ -23,7 +23,7 @@ export async function createMessage(
   },
 ) {
   const [message] = await appDb
-    .insert(MessagesTable)
+    .insert(MessageTable)
     .values({
       content: data.content,
       messageBoardID: data.messageBoard.id,
@@ -40,7 +40,7 @@ async function deleteMessage(
   db: BetterSQLite3Database = appDb,
 ) {
   await db.transaction(async (tx) => {
-    await tx.delete(MessagesTable).where(eq(MessagesTable.id, message.id));
+    await tx.delete(MessageTable).where(eq(MessageTable.id, message.id));
 
     if (message.imageID != null) {
       await imageAction.delete({ id: message.imageID }, tx);

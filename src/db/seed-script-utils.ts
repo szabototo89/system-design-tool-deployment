@@ -1,15 +1,15 @@
 import { z } from "zod";
-import { MessageBoardsTable } from "./entities/message-boards/table";
+import { MessageBoardTable } from "./entities/message-boards/table";
 import fs, { PathOrFileDescriptor } from "fs";
 import {
   db,
   ImageSchema,
-  ImagesTable,
+  ImageTable,
   UsersTable,
   UserWithPasswordSchema,
 } from "./schema";
 import { MessageBoardSchema } from "@/db/entities/message-boards/types";
-import { MessagesTable } from "@/db/entities/messages/tables";
+import { MessageTable } from "@/db/entities/messages/tables";
 import { MessageSchema } from "@/db/entities/messages/types";
 
 const SeedFileSchema = z.object({
@@ -40,9 +40,9 @@ export function readSeedFile(seedFilePath: PathOrFileDescriptor): SeedFile {
 }
 
 export async function seedDatabase(seedFile: SeedFile) {
-  await db.delete(MessagesTable);
-  await db.delete(MessageBoardsTable);
-  await db.delete(ImagesTable);
+  await db.delete(MessageTable);
+  await db.delete(MessageBoardTable);
+  await db.delete(ImageTable);
   await db.delete(UsersTable);
 
   const images = await Promise.all(
@@ -62,7 +62,7 @@ export async function seedDatabase(seedFile: SeedFile) {
   );
 
   await db.insert(UsersTable).values(seedFile.users);
-  await db.insert(ImagesTable).values(images);
-  await db.insert(MessageBoardsTable).values(seedFile.messageBoards);
-  await db.insert(MessagesTable).values(seedFile.messages);
+  await db.insert(ImageTable).values(images);
+  await db.insert(MessageBoardTable).values(seedFile.messageBoards);
+  await db.insert(MessageTable).values(seedFile.messages);
 }

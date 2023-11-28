@@ -3,7 +3,7 @@ import { MessageBoard } from "../message-boards/types";
 import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
-import { MessagesTable } from "./tables";
+import { MessageTable } from "./tables";
 import { Message, MessageSchema } from "./types";
 import { imagesQuery } from "../images/queries";
 import { db as appDb } from "../../schema";
@@ -15,9 +15,9 @@ async function queryFromMessageBoard(
 ) {
   const messagesFromDb = await db
     .select()
-    .from(MessagesTable)
-    .where(eq(MessagesTable.messageBoardID, messageBoard.id))
-    .orderBy(desc(MessagesTable.createdAt));
+    .from(MessageTable)
+    .where(eq(MessageTable.messageBoardID, messageBoard.id))
+    .orderBy(desc(MessageTable.createdAt));
 
   return z.array(MessageSchema).parse(messagesFromDb);
 }

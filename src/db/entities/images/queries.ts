@@ -1,13 +1,13 @@
 import { db } from "../../schema";
 import { eq } from "drizzle-orm";
-import { ImagesTable } from "./tables";
+import { ImageTable } from "./tables";
 import { Image, ImageSchema } from "./types";
 
 async function queryImageByID(id: Image["id"]) {
   const [image] = await db
     .select()
-    .from(ImagesTable)
-    .where(eq(ImagesTable.id, id));
+    .from(ImageTable)
+    .where(eq(ImageTable.id, id));
   return ImageSchema.parse(image);
 }
 
