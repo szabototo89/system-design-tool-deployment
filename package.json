@@ -46,6 +46,7 @@
     "postcss-simple-vars": "^7.0.1",
     "prettier": "3.0.3",
     "ts-node": "^10.9.1",
+    "tsx": "^4.6.0",
     "typescript": "latest"
   }
 }
