@@ -1,8 +1,9 @@
 import { MessageBoardTable } from "./table";
-import { db, imagesQuery } from "../../schema";
+import { db } from "../../schema";
 import { z } from "zod";
 import { eq } from "drizzle-orm";
 import { MessageBoard, messageBoardID, MessageBoardSchema } from "./types";
+import { imageQuery } from "../images/entity";
 
 async function queryMessageBoards() {
   const messageBoards = await db.select().from(MessageBoardTable);
@@ -21,7 +22,7 @@ async function queryImage(messageBoard: MessageBoard) {
     return null;
   }
 
-  return imagesQuery.queryByID(messageBoard.imageID);
+  return imageQuery.queryByID(messageBoard.imageID);
 }
 
 export const messageBoardQuery = {

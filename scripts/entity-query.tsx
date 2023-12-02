@@ -1,9 +1,4 @@
-import {
-  db as appDb,
-  ImageTable,
-  MessageBoardTable,
-  MessageTable,
-} from "@/db/schema";
+import { db as appDb, MessageBoardTable, MessageTable } from "@/db/schema";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { z } from "zod";
 import { eq } from "drizzle-orm";
@@ -13,12 +8,13 @@ import { createdByUserPattern } from "@/db/patterns/created-by-user-pattern";
 import { createSelectSchema } from "drizzle-zod";
 import { UserContext } from "@/app/api/auth/[...nextauth]/auth-options";
 import { createSQLiteBackedEntity } from "@/entity-framework";
+import { ImageTable } from "@/db/entities/images/entity";
 
 async function main() {
   console.clear();
   const result = await appDb.select().from(MessageTable);
 
-  const MessageEntity = await createSQLiteBackedEntity({
+  const MessageEntity = createSQLiteBackedEntity({
     table() {
       return sqliteTable("message_entity", {
         id: integer("id").primaryKey({ autoIncrement: true }),

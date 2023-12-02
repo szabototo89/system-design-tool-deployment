@@ -1,5 +1,4 @@
 import { MessageBoard } from "../message-boards/types";
-import { Image } from "../images/types";
 import {
   db as appDb,
   Message,
@@ -13,6 +12,7 @@ import { imageAction } from "@/db/entities/images/actions";
 import { reactionAction } from "@/db/entities/reaction/actions";
 import { UserContext } from "@/app/api/auth/[...nextauth]/auth-options";
 import { reactionQuery } from "@/db/entities/reaction/queries";
+import { Image } from "@/db/entities/images/entity";
 
 export async function createMessage(
   userContext: UserContext,

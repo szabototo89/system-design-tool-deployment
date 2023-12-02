@@ -7,11 +7,9 @@ export * from "./entities/message-boards/queries";
 export * from "./entities/messages/tables";
 export * from "./entities/messages/types";
 export * from "./entities/messages/queries";
-export * from "./entities/images/types";
-export * from "./entities/images/queries";
-export * from "./entities/images/tables";
 export * from "./entities/reaction/tables";
 export * from "./entities/users/tables";
+export * from "./entities/images/entity";
 
 const sqliteClient = new Database("./app.db");
 export const db = drizzle(sqliteClient);

@@ -5,9 +5,9 @@ import { z } from "zod";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { MessageTable } from "./tables";
 import { Message, MessageSchema } from "./types";
-import { imagesQuery } from "../images/queries";
 import { db as appDb } from "../../schema";
 import { reactionQuery } from "../reaction/queries";
+import { imageQuery } from "../images/entity";
 
 async function queryFromMessageBoard(
   messageBoard: MessageBoard,
@@ -30,7 +30,7 @@ export const messageQuery = {
       return null;
     }
 
-    return imagesQuery.queryByID(message.imageID);
+    return imageQuery.queryByID(message.imageID);
   },
 
   async queryReactionsFrom(

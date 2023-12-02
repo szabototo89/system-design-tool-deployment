@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { createSelectSchema } from "drizzle-zod";
 import { MessageBoardTable } from "./table";
-import { ImageIDSchema } from "../images/types";
 import { createdByUserPattern } from "../../patterns/created-by-user-pattern";
+import { ImageIDSchema } from "../images/entity";
 
 export const messageBoardStatusList = ["draft", "published"] as const;
 export const MessageBoardSchema = createSelectSchema(MessageBoardTable, {

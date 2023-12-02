@@ -1,8 +1,8 @@
 import { createSelectSchema } from "drizzle-zod";
 import { MessageTable } from "../messages/tables";
-import { ImageSchema } from "../images/types";
 import { z } from "zod";
 import { createdByUserPattern } from "../../patterns/created-by-user-pattern";
+import { ImageSchema } from "../images/entity";
 
 export const MessageSchema = createSelectSchema(MessageTable, {
   id: (schema) => schema.id.brand<"MessageID">(),

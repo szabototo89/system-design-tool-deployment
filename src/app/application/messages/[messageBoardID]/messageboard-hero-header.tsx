@@ -1,4 +1,4 @@
-import { Button, Container, Title, Text, Flex, Image } from "@mantine/core";
+import { Container, Flex, Image, Text, Title } from "@mantine/core";
 
 import { MessageBoard } from "@/db/entities/message-boards/types";
 import { NextImage } from "@/components/next-image";
@@ -7,7 +7,7 @@ import { ActionButton } from "@/components/action-button";
 import { messageBoardAction } from "@/db/entities/message-boards/actions";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { imagesQuery } from "@/db/entities/images/queries";
+import { imageQuery } from "@/db/entities/images/entity";
 
 type Props = { messageBoard: MessageBoard };
 
@@ -26,7 +26,7 @@ export async function MessageboardHeroHeader(props: Props) {
             component={NextImage}
             height={180}
             width={640}
-            src={imagesQuery.getImageSrc(headerImage)}
+            src={await imageQuery.getImageSrc(headerImage)}
             alt="Message board header image"
           />
         )}

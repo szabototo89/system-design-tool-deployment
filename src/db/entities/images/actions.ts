@@ -1,9 +1,8 @@
-import { ImageTable } from "@/db/entities/images/tables";
-import { Image, ImageSchema } from "@/db/entities/images/types";
 import { db as appDb } from "@/db/schema";
 import { z } from "zod";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { eq } from "drizzle-orm";
+import { Image, ImageSchema, ImageTable } from "@/db/entities/images/entity";
 
 const FIVE_MB = 5 * 1024 * 1024;
 export const SupportedImageFileSchema = z

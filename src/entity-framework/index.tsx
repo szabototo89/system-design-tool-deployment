@@ -32,7 +32,7 @@ export class EqlQueryBuilder<
     );
   }
 
-  async buildQuery() {
+  buildQuery() {
     return async (
       ...params: Parameters<TImplementationFn>
     ): Promise<z.infer<TOutputSchema>> => {
@@ -50,7 +50,7 @@ export const entityQueryBuilder = {
   },
 };
 
-export async function createSQLiteBackedEntity<
+export function createSQLiteBackedEntity<
   TSQLiteTableDefinition extends ReturnType<SQLiteTableFn>,
   TQueryConfiguration extends EntityQueryConfiguration,
   TSchema extends z.ZodTypeAny,
@@ -68,10 +68,10 @@ export async function createSQLiteBackedEntity<
       ReturnType<TQueryConfiguration[queryName]["buildQuery"]>
     >;
   }> {
-    const configurations = await Promise.all(
-      Object.entries(configuration).map(async ([queryName, configuration]) => {
-        return [queryName, await configuration.buildQuery()];
-      }),
+    const configurations = Object.entries(configuration).map(
+      ([queryName, configuration]) => {
+        return [queryName, configuration.buildQuery()];
+      },
     );
 
     return Object.fromEntries(configurations);
@@ -84,7 +84,7 @@ export async function createSQLiteBackedEntity<
   const result = {
     table,
     schema,
-    queries: await createQuery(
+    queries: createQuery(
       schemaConfiguration.queries({ table, schema, queryBuilder }),
     ),
   };
