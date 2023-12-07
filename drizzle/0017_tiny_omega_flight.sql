@@ -1,1 +1,0 @@
-ALTER TABLE images ADD `created_at` integer DEFAULT CURRENT_TIMESTAMP NOT NULL;
