@@ -2,7 +2,6 @@ import { ActionBuilder, createSQLiteBackedEntity } from "@/entity-framework";
 import { sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
-import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { randomUUID } from "crypto";
 
 export const SystemTechnology = createSQLiteBackedEntity({

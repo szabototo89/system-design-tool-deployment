@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^0.3.5",
+    "@dagrejs/dagre": "^1.0.4",
     "@mantine/core": "^7.1.0",
     "@mantine/form": "^7.1.0",
     "@mantine/hooks": "^7.1.0",
@@ -24,6 +25,7 @@
     "next-auth": "^4.24.4",
     "react": "latest",
     "react-dom": "latest",
+    "reactflow": "^11.10.1",
     "uuid": "^9.0.1",
     "zod": "^3.22.4",
     "zod-form-data": "^2.0.2"

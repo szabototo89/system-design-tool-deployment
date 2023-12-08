@@ -1,17 +1,22 @@
-import { createSQLiteBackedEntity } from "../../entity-framework";
+import {
+  ActionBuilder,
+  createSQLiteBackedEntity,
+} from "../../entity-framework";
 import { sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { createdAtPattern } from "../patterns/created-at-pattern";
 import { createSelectSchema } from "drizzle-zod";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { z } from "zod";
+import { InferInsertModel } from "drizzle-orm";
+import { randomUUID } from "crypto";
 
-export const SystemElementRelation = createSQLiteBackedEntity({
+export const SystemElementRelationEntity = createSQLiteBackedEntity({
   table() {
     return sqliteTable("system_element_relation", {
       id: text("id").primaryKey(),
       label: text("label"),
-      sourceID: text("source_id"),
-      targetID: text("target_id"),
+      sourceID: text("source_id").notNull(),
+      targetID: text("target_id").notNull(),
       ...createdAtPattern.forTable(),
     });
   },
@@ -27,4 +32,31 @@ export const SystemElementRelation = createSQLiteBackedEntity({
         .output(z.array(schema)),
     };
   },
+
+  actions({ schema, table }) {
+    type Entity = z.infer<typeof schema>;
+
+    return {
+      create: new ActionBuilder(
+        "create",
+        async (db, params: Omit<Entity, "id" | "createdAt">) => {
+          return db
+            .insert(table)
+            .values({
+              id: randomUUID(),
+              sourceID: params.sourceID,
+              targetID: params.targetID,
+              label: params.label,
+            })
+            .returning()
+            .get();
+        },
+        schema,
+      ),
+    };
+  },
 });
+
+export type SystemElementRelation = z.infer<
+  (typeof SystemElementRelationEntity)["schema"]
+>;

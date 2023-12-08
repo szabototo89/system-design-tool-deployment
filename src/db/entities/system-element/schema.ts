@@ -10,7 +10,7 @@ import { z } from "zod";
 import { randomUUID } from "crypto";
 import { eq, InferInsertModel } from "drizzle-orm";
 
-export const SystemElement = createSQLiteBackedEntity({
+export const SystemElementEntity = createSQLiteBackedEntity({
   table() {
     return sqliteTable("system_element", {
       id: text("id").primaryKey(),
@@ -84,3 +84,5 @@ export const SystemElement = createSQLiteBackedEntity({
     };
   },
 });
+
+export type SystemElement = z.infer<typeof SystemElementEntity.schema>
