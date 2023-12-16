@@ -2,6 +2,7 @@ import { SQLiteTableFn } from "drizzle-orm/sqlite-core";
 import { z } from "zod";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { sql } from "drizzle-orm";
+import { SystemElementEntity } from "@/db/entities/system-element/schema";
 
 export type EntityQueryConfiguration = Record<
   string,
@@ -109,13 +110,20 @@ export function createSQLiteBackedEntity<
     };
   }
 
+  const queryConfiguration = schemaConfiguration.queries({
+    table,
+    schema,
+    queryBuilder,
+  });
+
   const result = {
     table,
     schema,
-    queries: createQueries(
-      schemaConfiguration.queries({ table, schema, queryBuilder }),
-    ),
+    queries: createQueries(queryConfiguration),
     actions: createActions(schemaConfiguration.actions?.({ table, schema })),
+    configurations: {
+      queryConfiguration,
+    },
   };
 
   return result;

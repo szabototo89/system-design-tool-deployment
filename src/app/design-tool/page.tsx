@@ -1,61 +1,33 @@
-import { SystemElementEntity } from "@/db/entities/system-element/schema";
-import { db } from "@/db/schema";
-import { Button, Select, Stack, Text, TextInput } from "@mantine/core";
-import { zfd } from "zod-form-data";
-import { revalidatePath } from "next/cache";
-import { GraphEditor } from "./graph-editor";
-import { SystemElementRelationEntity } from "@/db/entities/system-element-relation.schema";
+"use client";
 
-export default async function DesignToolLandingPage() {
-  const systemElements = await SystemElementEntity.queries.queryAll(db);
-  const systemElementRelations =
-    await SystemElementRelationEntity.queries.queryAll(db);
+import { useMemo } from "react";
+import { CreateSystemElementForm } from "./create-system-element-form";
+import { DesignToolEditorPage } from "./design-tool-editor-page";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { ReactFlowProvider } from "reactflow";
+
+export default function DesignToolLandingPage() {
+  const queryClient = useMemo(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            // With SSR, we usually want to set some default staleTime
+            // above 0 to avoid refetching immediately on the client
+            staleTime: 60 * 1000,
+            refetchOnWindowFocus: false,
+          },
+        },
+      }),
+    [],
+  );
 
   return (
-    <Stack>
-      <form
-        action={async (formData: FormData) => {
-          "use server";
-
-          const input = zfd
-            .formData(
-              SystemElementEntity.schema.pick({
-                name: true,
-                description: true,
-                type: true,
-              }),
-            )
-            .parse(formData);
-
-          await SystemElementEntity.actions.create(db, input);
-          revalidatePath("/design-tool");
-        }}
-      >
-        <TextInput name="name" label="Element name" size="xs" />
-        <TextInput name="description" label="Description" size="xs" />
-        <Select
-          name="type"
-          label="Type"
-          placeholder="Select element type ..."
-          data={["system", "person", "container", "component"]}
-          size="xs"
-        />
-        <Button type="submit">Create element</Button>
-      </form>
-
-      <GraphEditor
-        systemElements={systemElements}
-        relations={systemElementRelations}
-        onConnect={async ({ source, target }) => {
-          "use server";
-
-          await SystemElementRelationEntity.actions.create(db, {
-            sourceID: source,
-            targetID: target,
-            label: "test label",
-          });
-        }}
-      />
-    </Stack>
+    <QueryClientProvider client={queryClient}>
+      <ReactFlowProvider>
+        <CreateSystemElementForm />
+        <DesignToolEditorPage />
+      </ReactFlowProvider>
+    </QueryClientProvider>
   );
 }

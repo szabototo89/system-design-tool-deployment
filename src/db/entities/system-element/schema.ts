@@ -21,25 +21,6 @@ export const SystemElementEntity = createSQLiteBackedEntity({
     });
   },
 
-  // edges({ edgeBuilder }) {
-  //   return {
-  //     // relations: edgeBuilder.junction({
-  //     //   table() {
-  //     //     return sqliteTable("system_element__relation", {
-  //     //       systemElementID: text("system_element_id"),
-  //     //       systemElementRelationID: text("system_element_relation_id"),
-  //     //     });
-  //     //   },
-  //     //
-  //     //   junctionSchema(table) {
-  //     //     return createSelectSchema(table);
-  //     //   },
-  //     // }),
-  //
-  //     Relations: edgeBuilder.reference(SystemElementRelation, "relation"),
-  //   };
-  // },
-
   entitySchema(table) {
     return createSelectSchema(table, {
       id: (schema) => schema.id.brand("SystemElementID"),
@@ -51,7 +32,9 @@ export const SystemElementEntity = createSQLiteBackedEntity({
   queries({ table, queryBuilder, schema }) {
     return {
       queryAll: queryBuilder
-        .implementation((db: BetterSQLite3Database) => db.select().from(table))
+        .implementation((db: BetterSQLite3Database = appDb) =>
+          db.select().from(table),
+        )
         .output(z.array(schema)),
 
       queryById: queryBuilder
@@ -85,4 +68,4 @@ export const SystemElementEntity = createSQLiteBackedEntity({
   },
 });
 
-export type SystemElement = z.infer<typeof SystemElementEntity.schema>
+export type SystemElement = z.infer<typeof SystemElementEntity.schema>;

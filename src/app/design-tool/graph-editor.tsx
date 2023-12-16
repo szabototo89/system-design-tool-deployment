@@ -18,10 +18,10 @@ import { SystemElementNode } from "./system-element-node";
 import { SystemElementRelation } from "@/db/entities/system-element-relation.schema";
 
 type Props = {
-  systemElements: readonly SystemElement[];
-  relations: readonly SystemElementRelation[];
+  initialSystemElements: readonly SystemElement[];
+  initialRelations: readonly SystemElementRelation[];
 
-  onConnect?({ source: string, target: string }): void;
+  onConnect?(options: { source: string; target: string }): void;
 };
 
 const nodeTypes = {
@@ -34,20 +34,20 @@ export function GraphEditor(props: Props) {
     const graph = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
     graph.setGraph({ rankdir: "TB" });
 
-    props.systemElements.forEach((systemElement) => {
+    props.initialSystemElements.forEach((systemElement) => {
       graph.setNode(systemElement.id, {
         width: 200,
         height: 100,
       });
     });
 
-    props.relations.forEach((relation) =>
+    props.initialRelations.forEach((relation) =>
       graph.setEdge(relation.sourceID, relation.targetID),
     );
 
     Dagre.layout(graph);
 
-    return props.systemElements.map((systemElement) => {
+    return props.initialSystemElements.map((systemElement) => {
       const { x, y, width, height } = graph.node(systemElement.id);
 
       return {
@@ -62,11 +62,11 @@ export function GraphEditor(props: Props) {
         },
       } satisfies Node;
     });
-  }, [props.systemElements, props.relations]);
+  }, [props.initialSystemElements, props.initialRelations]);
 
   const [nodes, setNodes, onNodesChange] = useNodesState(getInitialNodes());
   const [edges, setEdges, onEdgesChange] = useEdgesState(
-    props.relations.map((relation) => {
+    props.initialRelations.map((relation) => {
       return {
         id: relation.id,
         source: relation.sourceID,
@@ -119,8 +119,8 @@ export function GraphEditor(props: Props) {
 
           startTransition(() => {
             props.onConnect?.({
-              source: connection.source,
-              target: connection.target,
+              source: connection.source ?? "",
+              target: connection.target ?? "",
             });
           });
         }}
