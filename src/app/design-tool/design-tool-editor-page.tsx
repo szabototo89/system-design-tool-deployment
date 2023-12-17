@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { queryAll as systemElementQueryAll } from "@/db/entities/system-element/server-actions";
-import { GraphEditor } from "./graph-editor";
+import { GraphEditor } from "./(components)/graph-editor";
 import { Text } from "@mantine/core";
 import { queryAll as systemElementRelationQueryAll } from "@/db/entities/system-element-relation.server-actions";
 

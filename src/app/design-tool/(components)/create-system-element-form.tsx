@@ -1,23 +1,16 @@
 "use client";
 import { SystemElement } from "@/db/entities/system-element/schema";
-import { create as systemElementCreate } from "@/db/entities/system-element/server-actions";
 import { TextInput, Select, Button, Stack } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useReactFlow } from "reactflow";
 
-export function CreateSystemElementForm() {
-  const queryClient = useQueryClient();
+type FormData = Pick<SystemElement, "name" | "description" | "type">;
 
-  const createSystemElement = useMutation({
-    mutationFn: systemElementCreate,
-    onSuccess(data) {
-      queryClient.invalidateQueries({
-        queryKey: ["system-element"],
-      });
-    },
-  });
+type Props = {
+  onSubmit(values: FormData): void;
+  isSubmitting: boolean;
+};
 
+export function CreateSystemElementForm(props: Props) {
   const form = useForm<Pick<SystemElement, "name" | "description" | "type">>({
     initialValues: {
       name: "",
@@ -30,7 +23,8 @@ export function CreateSystemElementForm() {
     <form
       onSubmit={(ev) => {
         ev.preventDefault();
-        createSystemElement.mutate({
+
+        props.onSubmit({
           name: form.values.name,
           description: form.values.description,
           type: form.values.type,
@@ -58,7 +52,7 @@ export function CreateSystemElementForm() {
           size="xs"
           {...form.getInputProps("type")}
         />
-        <Button disabled={createSystemElement.isPending} type="submit">
+        <Button disabled={props.isSubmitting} type="submit">
           Create element
         </Button>
       </Stack>

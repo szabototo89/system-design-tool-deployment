@@ -1,10 +1,12 @@
 "use client";
 
 import { useMemo } from "react";
-import { CreateSystemElementForm } from "./create-system-element-form";
 import { DesignToolEditorPage } from "./design-tool-editor-page";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactFlowProvider } from "reactflow";
+import { CreateSystemElementModal } from "./(components)/create-system-element-modal";
+import { useDisclosure } from "@mantine/hooks";
+import { Button } from "@mantine/core";
 
 export default function DesignToolLandingPage() {
   const queryClient = useMemo(
@@ -22,10 +24,13 @@ export default function DesignToolLandingPage() {
     [],
   );
 
+  const [isOpened, { open, close }] = useDisclosure(false);
+
   return (
     <QueryClientProvider client={queryClient}>
       <ReactFlowProvider>
-        <CreateSystemElementForm />
+        <Button onClick={open}>Add element</Button>
+        <CreateSystemElementModal opened={isOpened} onClose={close} />
         <DesignToolEditorPage />
       </ReactFlowProvider>
     </QueryClientProvider>
