@@ -1,21 +1,12 @@
 import { Modal } from "@mantine/core";
 import React from "react";
 import { SystemElementEditorForm } from "./system-element-editor-form";
-import { systemElementCreate } from "@/db/entities/system-element/server-actions";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useCreateSystemElement } from "./system-element-hooks";
 
 type Props = Pick<React.ComponentProps<typeof Modal>, "opened" | "onClose">;
 
 export function CreateSystemElementModal(props: Props) {
-  const queryClient = useQueryClient();
-  const createSystemElement = useMutation({
-    mutationFn: systemElementCreate,
-    onSuccess() {
-      queryClient.invalidateQueries({
-        queryKey: ["system-element"],
-      });
-    },
-  });
+  const createSystemElement = useCreateSystemElement();
 
   return (
     <Modal {...props} title="Create an element" centered>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { queryAll as systemElementQueryAll } from "@/db/entities/system-element/server-actions";
+import { systemElementQueryAll } from "@/db/entities/system-element/server-actions";
 import { GraphEditor } from "./(components)/graph-editor";
 import { Button, Text } from "@mantine/core";
 import {
@@ -17,17 +17,16 @@ import { CreateSystemElementModal } from "./(components)/create-system-element-m
 import { EditSystemElementModal } from "./(components)/edit-system-element-modal";
 import { ModalLauncher } from "@/components/modal-launcher";
 import { EditSystemElementRelationModal } from "./(components)/edit-system-element-relation-modal";
-import { SystemElementRelation, SystemElementRelationIDSchema } from "@/db/entities/system-element-relation.schema";
+import {
+  SystemElementRelation,
+  SystemElementRelationIDSchema,
+} from "@/db/entities/system-element-relation.schema";
+import { useQueryAllSystemElements } from "./(components)/system-element-hooks";
 
 export function DesignToolEditorPage() {
   const queryClient = useQueryClient();
 
-  const systemElements = useQuery({
-    queryKey: ["system-element"],
-    async queryFn() {
-      return await systemElementQueryAll();
-    },
-  });
+  const systemElements = useQueryAllSystemElements();
 
   const systemElementRelations = useQuery({
     queryKey: ["system-element-relation"],
