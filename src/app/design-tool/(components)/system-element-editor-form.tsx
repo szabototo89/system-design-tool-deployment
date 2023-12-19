@@ -7,10 +7,13 @@ import {
   Stack,
   Group,
   Textarea,
+  TagsInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
-type FormData = Pick<SystemElement, "name" | "description" | "type">;
+type FormData = Pick<SystemElement, "name" | "description" | "type"> & {
+  technologies: readonly string[];
+};
 
 type Props = {
   initialValue?: FormData;
@@ -21,11 +24,12 @@ type Props = {
 };
 
 export function SystemElementEditorForm(props: Props) {
-  const form = useForm<Pick<SystemElement, "name" | "description" | "type">>({
+  const form = useForm<FormData>({
     initialValues: {
       name: props.initialValue?.name ?? "",
       description: props.initialValue?.description ?? "",
       type: props.initialValue?.type ?? "system",
+      technologies: [],
     },
   });
 
@@ -42,14 +46,23 @@ export function SystemElementEditorForm(props: Props) {
           name: form.values.name,
           description: form.values.description,
           type: form.values.type,
+          technologies: form.values.technologies,
         });
       }}
     >
       <Stack>
         <Stack gap="sm">
+          <Select
+            name="type"
+            label="Type"
+            placeholder="Select element type ..."
+            data={["system", "person", "container", "component"]}
+            size="xs"
+            {...form.getInputProps("type")}
+          />
           <TextInput
             name="name"
-            label="Element name"
+            label="Name"
             size="xs"
             {...form.getInputProps("name")}
           />
@@ -59,16 +72,15 @@ export function SystemElementEditorForm(props: Props) {
             size="xs"
             {...form.getInputProps("description")}
           />
-          <Select
-            name="type"
-            label="Type"
-            placeholder="Select element type ..."
-            data={["system", "person", "container", "component"]}
-            size="xs"
-            {...form.getInputProps("type")}
-          />
+          {doesSupportTechnologies && (
+            <TagsInput
+              label="Technologies"
+              size="xs"
+              {...form.getInputProps("technologies")}
+            />
+          )}
         </Stack>
-        <Group justify="space-between">
+        <Group justify="flex-end">
           {props.startContent}
           <Button
             disabled={props.isSubmitting}

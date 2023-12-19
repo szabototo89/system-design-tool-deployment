@@ -22,6 +22,7 @@ export function EditSystemElementModal(props: Props) {
           name: props.systemElement.name,
           description: props.systemElement.description,
           type: props.systemElement.type,
+          technologies: [],
         }}
         isSubmitting={updateSystemElement.isPending}
         onSubmit={async ({ name, description, type }) => {
