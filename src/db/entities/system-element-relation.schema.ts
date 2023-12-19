@@ -7,8 +7,8 @@ import { createdAtPattern } from "../patterns/created-at-pattern";
 import { createSelectSchema } from "drizzle-zod";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { z } from "zod";
-import { InferInsertModel } from "drizzle-orm";
 import { randomUUID } from "crypto";
+import { eq } from "drizzle-orm";
 
 export const SystemElementRelationEntity = createSQLiteBackedEntity({
   table() {
@@ -48,6 +48,26 @@ export const SystemElementRelationEntity = createSQLiteBackedEntity({
               targetID: params.targetID,
               label: params.label,
             })
+            .returning()
+            .get();
+        },
+        schema,
+      ),
+      update: new ActionBuilder(
+        "update",
+        async (
+          db,
+          options: {
+            entity: Pick<Entity, "id">;
+            params: Pick<Entity, "label">;
+          },
+        ) => {
+          return db
+            .update(table)
+            .set({
+              label: options.params.label,
+            })
+            .where(eq(table.id, options.entity.id))
             .returning()
             .get();
         },

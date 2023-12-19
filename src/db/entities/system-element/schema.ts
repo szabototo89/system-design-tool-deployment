@@ -32,9 +32,7 @@ export const SystemElementEntity = createSQLiteBackedEntity({
   queries({ table, queryBuilder, schema }) {
     return {
       queryAll: queryBuilder
-        .implementation((db: BetterSQLite3Database = appDb) =>
-          db.select().from(table),
-        )
+        .implementation((db: BetterSQLite3Database) => db.select().from(table))
         .output(z.array(schema)),
 
       queryById: queryBuilder
@@ -59,6 +57,40 @@ export const SystemElementEntity = createSQLiteBackedEntity({
               ...value,
               id: randomUUID(),
             })
+            .returning()
+            .get();
+        },
+        schema,
+      ),
+
+      update: new ActionBuilder(
+        "update",
+        async (
+          db,
+          options: {
+            entity: { id: string }; // TODO: Fix it
+            value: Omit<InferInsertModel<typeof table>, "id" | "createdAt">;
+          },
+        ) => {
+          return db
+            .update(table)
+            .set(options.value)
+            .where(eq(table.id, options.entity.id))
+            .returning()
+            .get();
+        },
+        schema,
+      ),
+
+      delete: new ActionBuilder(
+        "delete",
+        async (
+          db,
+          entity: { id: string }, // TODO: Fix it
+        ) => {
+          return db
+            .delete(table)
+            .where(eq(table.id, entity.id))
             .returning()
             .get();
         },

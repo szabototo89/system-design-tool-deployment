@@ -58,8 +58,3 @@ const PersonEntity = createSQLiteBackedEntity({
     };
   },
 });
-
-// const fo = await PersonEntity.queries.queryByID();
-const foo = await PersonEntity.actions.create(db, "Hello World");
-
-console.log(foo);

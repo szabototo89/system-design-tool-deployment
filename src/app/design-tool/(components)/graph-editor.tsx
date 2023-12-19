@@ -1,7 +1,5 @@
 "use client";
 
-import Dagre from "@dagrejs/dagre";
-
 import { SystemElement } from "@/db/entities/system-element/schema";
 import ReactFlow, {
   useNodesState,
@@ -11,91 +9,115 @@ import ReactFlow, {
   MarkerType,
   Edge,
   useReactFlow,
+  Background,
 } from "reactflow";
 
-import "reactflow/dist/style.css";
-import { useCallback, useEffect, useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import { SystemElementNode } from "../system-element-node";
 import { SystemElementRelation } from "@/db/entities/system-element-relation.schema";
-import { systemElementCreate } from "@/db/entities/system-element/server-actions";
+
+import "reactflow/dist/style.css";
 
 type Props = {
-  initialSystemElements: readonly SystemElement[];
-  initialRelations: readonly SystemElementRelation[];
+  systemElements: readonly SystemElement[];
+  systemElementRelations: readonly SystemElementRelation[];
 
   onConnect?(options: { source: string; target: string }): void;
-};
+} & Pick<React.ComponentProps<typeof ReactFlow>, "onEdgeClick">;
 
 const nodeTypes = {
   SystemElementNode,
 } satisfies NodeTypes;
 
+function makeReactFlowNodeFromSystemElement(
+  systemElement: SystemElement,
+): Node {
+  return {
+    id: systemElement.id,
+    width: 200,
+    height: 200,
+    type: SystemElementNode.name,
+    selectable: true,
+    data: {},
+    position: { x: 0, y: 0 },
+  };
+}
+
+function makeReactFlowEdgeFromSystemElementRelation(
+  systemElementRelation: SystemElementRelation,
+) {
+  return {
+    id: systemElementRelation.id,
+    source: systemElementRelation.sourceID,
+    target: systemElementRelation.targetID,
+    label: systemElementRelation.label,
+    type: "smoothstep",
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+      width: 10,
+      height: 10,
+      color: "black",
+    },
+    style: {
+      strokeWidth: 2,
+      stroke: "black",
+    },
+  } satisfies Edge<unknown>;
+}
+
 export function GraphEditor(props: Props) {
-  const [isLoading, startTransition] = useTransition();
-  // const getInitialNodes = useCallback(() => {
-  //   if (props.initialSystemElements.length === 0) {
-  //     return;
-  //   }
-
-  //   const graph = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
-  //   graph.setGraph({ rankdir: "TB" });
-
-  //   props.initialSystemElements.forEach((systemElement) => {
-  //     graph.setNode(systemElement.id, {
-  //       width: 200,
-  //       height: 100,
-  //     });
-  //   });
-
-  //   props.initialRelations.forEach((relation) =>
-  //     graph.setEdge(relation.sourceID, relation.targetID),
-  //   );
-
-  //   Dagre.layout(graph);
-
-  //   return props.initialSystemElements.map((systemElement) => {
-  //     const { x, y, width, height } = graph.node(systemElement.id);
-
-  //     return {
-  //       id: systemElement.id,
-  //       position: { x, y },
-  //       width,
-  //       height,
-  //       type: SystemElementNode.name,
-  //       data: {
-  //         ...systemElement,
-  //         isParent: false,
-  //       },
-  //     } satisfies Node;
-  //   });
-  // }, [props.initialSystemElements, props.initialRelations]);
-
-  // const [nodes, setNodes, onNodesChange] = useNodesState(getInitialNodes());
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(
-    props.initialRelations.map((relation) => {
+  const [nodes, setNodes, onNodesChange] = useNodesState(
+    props.systemElements.map((systemElement, index) => {
       return {
-        id: relation.id,
-        source: relation.sourceID,
-        target: relation.targetID,
-        label: relation.label,
-        markerEnd: {
-          type: MarkerType.ArrowClosed,
-          width: 10,
-          height: 10,
-          color: "black",
-        },
-        style: {
-          strokeWidth: 2,
-          stroke: "black",
-        },
-      } satisfies Edge<unknown>;
+        ...makeReactFlowNodeFromSystemElement(systemElement),
+        position: { x: index * 210, y: 0 },
+      } satisfies Node;
     }),
   );
+  const [edges, setEdges, onEdgesChange] = useEdgesState(
+    props.systemElementRelations.map(
+      makeReactFlowEdgeFromSystemElementRelation,
+    ),
+  );
 
-  if (isLoading) {
-    return <>Loading ...</>;
-  }
+  useEffect(() => {
+    setNodes((previousNodes) => {
+      const previousNodesByID = Object.fromEntries(
+        previousNodes.map((node) => [node.id, node]),
+      );
+
+      return props.systemElements
+        .map(makeReactFlowNodeFromSystemElement)
+        .map((systemElement) => {
+          if (systemElement.id in previousNodesByID) {
+            return previousNodesByID[systemElement.id];
+          }
+
+          return systemElement;
+        });
+    });
+  }, [props.systemElements]);
+
+  useEffect(() => {
+    setEdges((previousEdges) => {
+      const previousEdgesByID = Object.fromEntries(
+        previousEdges.map((edge) => [edge.id, edge]),
+      );
+
+      return props.systemElementRelations
+        .map(makeReactFlowEdgeFromSystemElementRelation)
+        .map((systemElementRelation) => {
+          if (systemElementRelation.id in previousEdgesByID) {
+            return {
+              ...previousEdgesByID[systemElementRelation.id],
+              label: systemElementRelation.label,
+            };
+          }
+
+          return systemElementRelation;
+        });
+    });
+  }, [props.systemElementRelations]);
 
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
@@ -104,64 +126,18 @@ export function GraphEditor(props: Props) {
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
+        snapToGrid
         onConnect={(connection) => {
-          setEdges((previousEdges) => [
-            ...previousEdges,
-            {
-              id: `${connection.source ?? ""}__${connection.target ?? ""}`,
-              source: connection.source ?? "",
-              target: connection.target ?? "",
-              markerEnd: {
-                type: MarkerType.ArrowClosed,
-                width: 10,
-                height: 10,
-                color: "black",
-              },
-              style: {
-                strokeWidth: 2,
-                stroke: "black",
-              },
-            },
-          ]);
-
-          startTransition(() => {
-            props.onConnect?.({
-              source: connection.source ?? "",
-              target: connection.target ?? "",
-            });
+          props.onConnect?.({
+            source: connection.source ?? "",
+            target: connection.target ?? "",
           });
         }}
         nodeTypes={nodeTypes}
+        onEdgeClick={props.onEdgeClick}
       >
-        {props.initialSystemElements.map((systemElement) => (
-          <SystemElementReactFlowNode
-            key={systemElement.id}
-            systemElement={systemElement}
-          />
-        ))}
+        <Background />
       </ReactFlow>
     </div>
   );
-}
-
-function SystemElementReactFlowNode(props: { systemElement: SystemElement }) {
-  const reactFlowInstance = useReactFlow();
-
-  useEffect(() => {
-    reactFlowInstance.addNodes({
-      id: props.systemElement.id,
-      position: { x: 0, y: 0 },
-      width: 200,
-      height: 200,
-      type: SystemElementNode.name,
-      data: {
-        ...props.systemElement,
-      },
-    } satisfies Node);
-
-    return () =>
-      reactFlowInstance.deleteElements({ nodes: [{ id: "test-id" }] });
-  }, []);
-
-  return null;
 }

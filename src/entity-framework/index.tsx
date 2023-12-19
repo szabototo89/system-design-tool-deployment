@@ -137,7 +137,7 @@ export const entityQueryBuilder = {
   },
 };
 
-type ActionType = "create";
+type ActionType = "create" | "update" | "delete";
 
 export class ActionBuilder<
   TActionType extends ActionType,

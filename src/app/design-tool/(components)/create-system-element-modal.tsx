@@ -1,7 +1,6 @@
 import { Modal } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import React from "react";
-import { CreateSystemElementForm } from "./create-system-element-form";
+import { SystemElementEditorForm } from "./system-element-editor-form";
 import { systemElementCreate } from "@/db/entities/system-element/server-actions";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -20,7 +19,7 @@ export function CreateSystemElementModal(props: Props) {
 
   return (
     <Modal {...props} title="Create an element" centered>
-      <CreateSystemElementForm
+      <SystemElementEditorForm
         isSubmitting={createSystemElement.isPending}
         onSubmit={async ({ name, description, type }) => {
           await createSystemElement.mutateAsync({
@@ -31,6 +30,7 @@ export function CreateSystemElementModal(props: Props) {
 
           props.onClose();
         }}
+        submitButtonLabel="Create element"
       />
     </Modal>
   );
