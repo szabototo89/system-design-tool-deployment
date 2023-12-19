@@ -8,14 +8,16 @@ import {
   systemElementRelationCreate,
   queryAll as systemElementRelationQueryAll,
 } from "@/db/entities/system-element-relation.server-actions";
-import { SystemElement } from "@/db/entities/system-element/schema";
+import {
+  SystemElement,
+  SystemElementSchema,
+} from "@/db/entities/system-element/schema";
 import { useState } from "react";
 import { CreateSystemElementModal } from "./(components)/create-system-element-modal";
 import { EditSystemElementModal } from "./(components)/edit-system-element-modal";
-import { useOnSelectionChange } from "reactflow";
 import { ModalLauncher } from "@/components/modal-launcher";
 import { EditSystemElementRelationModal } from "./(components)/edit-system-element-relation-modal";
-import { SystemElementRelation } from "@/db/entities/system-element-relation.schema";
+import { SystemElementRelation, SystemElementRelationIDSchema } from "@/db/entities/system-element-relation.schema";
 
 export function DesignToolEditorPage() {
   const queryClient = useQueryClient();
@@ -54,11 +56,9 @@ export function DesignToolEditorPage() {
     (systemElement) => systemElement.id === selectedSystemElementID,
   );
 
-  useOnSelectionChange({
-    onChange({ nodes }) {
-      setSelectedSystemElementID(nodes[0]?.id ?? null);
-    },
-  });
+  const selectedSystemElementRelation = systemElementRelations.data?.find(
+    (relation) => relation.id === selectedSystemElementRelationID,
+  );
 
   if (systemElements.isLoading || systemElementRelations.isLoading) {
     return <Text>Loading ...</Text>;
@@ -106,17 +106,24 @@ export function DesignToolEditorPage() {
           });
         }}
         onEdgeClick={(event, edge) =>
-          setSelectedSystemElementRelationID(edge.id)
+          setSelectedSystemElementRelationID(
+            SystemElementRelationIDSchema.parse(edge.id),
+          )
         }
+        onNodeClick={(event, node) => {
+          setSelectedSystemElementID(
+            SystemElementSchema.shape.id.parse(node.id),
+          );
+        }}
       />
-      <EditSystemElementRelationModal
-        key={selectedSystemElementRelationID ?? ""}
-        opened={selectedSystemElementRelationID != null}
-        systemElementRelation={systemElementRelations.data?.find(
-          (relation) => relation.id === selectedSystemElementRelationID,
-        )}
-        onClose={() => setSelectedSystemElementRelationID(null)}
-      />
+      {selectedSystemElementRelation != null && (
+        <EditSystemElementRelationModal
+          key={selectedSystemElementRelationID ?? ""}
+          opened={selectedSystemElementRelationID != null}
+          systemElementRelation={selectedSystemElementRelation}
+          onClose={() => setSelectedSystemElementRelationID(null)}
+        />
+      )}
     </>
   );
 }

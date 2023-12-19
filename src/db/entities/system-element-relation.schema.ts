@@ -22,7 +22,9 @@ export const SystemElementRelationEntity = createSQLiteBackedEntity({
   },
 
   entitySchema(table) {
-    return createSelectSchema(table);
+    return createSelectSchema(table, {
+      id: (schema) => schema.id.brand("SystemElementRelation"),
+    });
   },
 
   queries({ table, queryBuilder, schema }) {
@@ -76,6 +78,10 @@ export const SystemElementRelationEntity = createSQLiteBackedEntity({
     };
   },
 });
+
+export const SystemElementRelationSchema = SystemElementRelationEntity.schema;
+export const SystemElementRelationIDSchema =
+  SystemElementRelationSchema.shape.id;
 
 export type SystemElementRelation = z.infer<
   (typeof SystemElementRelationEntity)["schema"]

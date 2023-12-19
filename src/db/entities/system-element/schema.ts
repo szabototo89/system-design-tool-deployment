@@ -100,4 +100,7 @@ export const SystemElementEntity = createSQLiteBackedEntity({
   },
 });
 
-export type SystemElement = z.infer<typeof SystemElementEntity.schema>;
+export const SystemElementSchema = SystemElementEntity.schema;
+export const SystemElementIDSchema = SystemElementSchema.shape.id;
+
+export type SystemElement = z.infer<typeof SystemElementSchema>;

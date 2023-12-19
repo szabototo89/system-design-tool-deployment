@@ -1,3 +1,4 @@
+import { SystemElementIDSchema } from "@/db/entities/system-element/schema";
 import { systemElementQueryById } from "@/db/entities/system-element/server-actions";
 import { Badge, Card, Group, Text } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
@@ -8,7 +9,9 @@ export function SystemElementNode() {
   const systemElement = useQuery({
     queryKey: ["system-element", { id }],
     queryFn() {
-      return systemElementQueryById({ id });
+      return systemElementQueryById({
+        id: SystemElementIDSchema.parse(id),
+      });
     },
   });
 
