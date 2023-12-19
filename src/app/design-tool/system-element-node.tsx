@@ -21,19 +21,19 @@ export function SystemElementNode() {
 
   return (
     <>
-      <Card shadow="sm" padding="md" radius="md" withBorder>
+      <Card shadow="sm" padding="md" radius="md" withBorder maw={300}>
         <Card.Section inheritPadding>
           <Group justify="space-between" mt="md" mb="md">
-            <Text size="sm" fw={500}>
+            <Text size="xs" fw={500}>
               {systemElement.data?.name}
             </Text>
-            <Badge size="sm" variant="light">
+            <Badge size="xs" variant="light">
               {systemElement.data?.type}
             </Badge>
           </Group>
         </Card.Section>
 
-        <Text size="sm" c="dimmed">
+        <Text size="xs" c="dimmed" lineClamp={4}>
           {systemElement.data?.description}
         </Text>
       </Card>
