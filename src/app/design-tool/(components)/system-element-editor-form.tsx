@@ -1,6 +1,13 @@
 "use client";
 import { SystemElement } from "@/db/entities/system-element/schema";
-import { TextInput, Select, Button, Stack, Group } from "@mantine/core";
+import {
+  TextInput,
+  Select,
+  Button,
+  Stack,
+  Group,
+  Textarea,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 
 type FormData = Pick<SystemElement, "name" | "description" | "type">;
@@ -22,6 +29,10 @@ export function SystemElementEditorForm(props: Props) {
     },
   });
 
+  const doesSupportTechnologies = ["container", "component"].includes(
+    form.values.type ?? "",
+  );
+
   return (
     <form
       onSubmit={(ev) => {
@@ -42,7 +53,7 @@ export function SystemElementEditorForm(props: Props) {
             size="xs"
             {...form.getInputProps("name")}
           />
-          <TextInput
+          <Textarea
             name="description"
             label="Description"
             size="xs"
