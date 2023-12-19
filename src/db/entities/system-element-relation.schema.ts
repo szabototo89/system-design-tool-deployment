@@ -75,6 +75,17 @@ export const SystemElementRelationEntity = createSQLiteBackedEntity({
         },
         schema,
       ),
+      delete: new ActionBuilder(
+        "delete",
+        async (db, entity: Pick<Entity, "id">) => {
+          return db
+            .delete(table)
+            .where(eq(table.id, entity.id))
+            .returning()
+            .get();
+        },
+        schema,
+      ),
     };
   },
 });
