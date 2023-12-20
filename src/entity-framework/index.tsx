@@ -1,4 +1,4 @@
-import { SQLiteTableFn } from "drizzle-orm/sqlite-core";
+import { SQLiteTable, SQLiteTableFn } from "drizzle-orm/sqlite-core";
 import { z } from "zod";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { sql } from "drizzle-orm";
@@ -56,20 +56,26 @@ export function createSQLiteBackedEntity<
     >
   >,
   TSchema extends z.ZodTypeAny,
+  TEdgeDefinitions extends Record<string, ReturnType<SQLiteTableFn>>,
 >(schemaConfiguration: {
   table(): TSQLiteTableDefinition;
+  edges?(): TEdgeDefinitions;
   entitySchema(table: TSQLiteTableDefinition): TSchema;
   actions?(config: {
     table: TSQLiteTableDefinition;
     schema: TSchema;
+    edges: TEdgeDefinitions;
   }): TActionConfiguration;
   queries(config: {
     table: TSQLiteTableDefinition;
+    edges: TEdgeDefinitions;
     schema: TSchema;
     queryBuilder: EqlQueryBuilder<unknown, () => never, TSchema>;
   }): TQueryConfiguration;
 }) {
   const table = schemaConfiguration.table();
+  const edges =
+    schemaConfiguration.edges?.() ?? ({} as TEdgeDefinitions);
   const schema = schemaConfiguration.entitySchema(table);
   const queryBuilder = entityQueryBuilder.query().output(schema);
 
@@ -112,6 +118,7 @@ export function createSQLiteBackedEntity<
 
   const queryConfiguration = schemaConfiguration.queries({
     table,
+    edges,
     schema,
     queryBuilder,
   });
@@ -120,7 +127,9 @@ export function createSQLiteBackedEntity<
     table,
     schema,
     queries: createQueries(queryConfiguration),
-    actions: createActions(schemaConfiguration.actions?.({ table, schema })),
+    actions: createActions(
+      schemaConfiguration.actions?.({ table, schema, edges }),
+    ),
     configurations: {
       queryConfiguration,
     },
@@ -137,7 +146,7 @@ export const entityQueryBuilder = {
   },
 };
 
-type ActionType = "create" | "update" | "delete";
+type ActionType = "create" | "update" | "delete" | "upsert";
 
 export class ActionBuilder<
   TActionType extends ActionType,

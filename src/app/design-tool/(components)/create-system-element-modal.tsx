@@ -12,7 +12,7 @@ export function CreateSystemElementModal(props: Props) {
     <Modal {...props} title="Create an element" centered>
       <SystemElementEditorForm
         isSubmitting={createSystemElement.isPending}
-        onSubmit={async ({ name, description, type }) => {
+        onSubmit={async ({ name, description, type, technologies }) => {
           await createSystemElement.mutateAsync({
             name,
             description,

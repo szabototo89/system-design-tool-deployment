@@ -25,13 +25,18 @@ export function EditSystemElementModal(props: Props) {
           technologies: [],
         }}
         isSubmitting={updateSystemElement.isPending}
-        onSubmit={async ({ name, description, type }) => {
+        onSubmit={async ({ name, description, type, technologies }) => {
           await updateSystemElement.mutateAsync({
             entity: { id: props.systemElement.id },
             value: {
               name,
               description,
               type,
+              technologies: technologies.map((technologyName) => {
+                return {
+                  name: technologyName,
+                };
+              }),
             },
           });
 
