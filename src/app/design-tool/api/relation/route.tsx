@@ -1,4 +1,4 @@
-import { SystemElementRelationEntity } from "@/db/entities/system-element-relation.schema";
+import { SystemElementRelationEntity } from "@/db/entities/system-element-relation/schema";
 import { db } from "@/db/schema";
 import { NextRequest, NextResponse } from "next/server";
 

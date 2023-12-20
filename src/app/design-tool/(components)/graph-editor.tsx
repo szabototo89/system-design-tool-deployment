@@ -14,7 +14,7 @@ import ReactFlow, {
 
 import { useEffect, useTransition } from "react";
 import { SystemElementNode } from "../system-element-node";
-import { SystemElementRelation } from "@/db/entities/system-element-relation.schema";
+import { SystemElementRelation } from "@/db/entities/system-element-relation/schema";
 
 import "reactflow/dist/style.css";
 

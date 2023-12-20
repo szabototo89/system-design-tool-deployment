@@ -1,7 +1,7 @@
 import Database from "better-sqlite3";
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import { SystemElementEntity } from "./entities/system-element/schema";
-import { SystemElementRelationEntity } from "./entities/system-element-relation.schema";
+import { SystemElementRelationEntity } from "./entities/system-element-relation/schema";
 
 export * from "./entities/message-boards/table";
 export * from "./entities/message-boards/types";

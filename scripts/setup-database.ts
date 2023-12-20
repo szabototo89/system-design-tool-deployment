@@ -1,6 +1,6 @@
 import { db } from "@/db/schema";
 import { sql } from "drizzle-orm";
-import { SystemElementRelationEntity } from "@/db/entities/system-element-relation.schema";
+import { SystemElementRelationEntity } from "@/db/entities/system-element-relation/schema";
 import { getTableConfig } from "drizzle-orm/sqlite-core";
 
 const { name, columns } = getTableConfig(SystemElementRelationEntity.table);

@@ -6,7 +6,7 @@ import { AppShell, Button, Group, Text, TextInput, Title } from "@mantine/core";
 import {
   systemElementRelationCreate,
   queryAll as systemElementRelationQueryAll,
-} from "@/db/entities/system-element-relation.server-actions";
+} from "@/db/entities/system-element-relation/server-actions";
 import {
   SystemElement,
   SystemElementSchema,
@@ -19,7 +19,7 @@ import { EditSystemElementRelationModal } from "./(components)/edit-system-eleme
 import {
   SystemElementRelation,
   SystemElementRelationIDSchema,
-} from "@/db/entities/system-element-relation.schema";
+} from "@/db/entities/system-element-relation/schema";
 import { useQueryAllSystemElements } from "./(components)/system-element-hooks";
 
 export function DesignToolEditorPage() {

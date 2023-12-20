@@ -1,7 +1,7 @@
 "use server";
 
-import { db } from "../schema";
-import { SystemElementRelationEntity } from "./system-element-relation.schema";
+import { db } from "../../schema";
+import { SystemElementRelationEntity } from "./schema";
 
 export const queryAll = SystemElementRelationEntity.queries.queryAll.bind(
   null,

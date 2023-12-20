@@ -1,11 +1,11 @@
 import { Button, Group, Modal, Select, Stack, TextInput } from "@mantine/core";
 import React from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { SystemElementRelation } from "@/db/entities/system-element-relation.schema";
+import { SystemElementRelation } from "@/db/entities/system-element-relation/schema";
 import {
   SystemElementRelationDelete,
   SystemElementRelationUpdate,
-} from "@/db/entities/system-element-relation.server-actions";
+} from "@/db/entities/system-element-relation/server-actions";
 import { useForm } from "@mantine/form";
 
 type Props = {

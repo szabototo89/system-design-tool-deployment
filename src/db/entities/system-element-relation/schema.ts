@@ -1,9 +1,9 @@
 import {
   ActionBuilder,
   createSQLiteBackedEntity,
-} from "../../entity-framework";
+} from "../../../entity-framework";
 import { sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { createdAtPattern } from "../patterns/created-at-pattern";
+import { createdAtPattern } from "../../patterns/created-at-pattern";
 import { createSelectSchema } from "drizzle-zod";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { z } from "zod";
