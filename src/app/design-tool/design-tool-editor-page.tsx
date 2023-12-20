@@ -1,9 +1,8 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { systemElementQueryAll } from "@/db/entities/system-element/server-actions";
 import { GraphEditor } from "./(components)/graph-editor";
-import { Button, Text } from "@mantine/core";
+import { AppShell, Button, Group, Text, TextInput, Title } from "@mantine/core";
 import {
   systemElementRelationCreate,
   queryAll as systemElementRelationQueryAll,
@@ -64,65 +63,77 @@ export function DesignToolEditorPage() {
   }
 
   return (
-    <>
-      <Button.Group>
-        <ModalLauncher
-          variant="default"
-          renderModal={({ isOpened, close }) => (
-            <CreateSystemElementModal opened={isOpened} onClose={close} />
-          )}
-        >
-          Add element
-        </ModalLauncher>
-        <ModalLauncher
-          variant="default"
-          renderModal={({ isOpened, close }) => {
-            if (selectedSystemElement == null) {
-              return null;
-            }
+    <AppShell header={{ height: 70 }}>
+      <AppShell.Header px="md">
+        <Group justify="space-between" align="center" h="100%">
+          <Title>Software Design Tool</Title>
+          <TextInput placeholder="Search ..." />
+        </Group>
+      </AppShell.Header>
 
-            return (
-              <EditSystemElementModal
-                systemElement={selectedSystemElement}
-                opened={isOpened}
-                onClose={close}
-              />
+      <AppShell.Aside>
+        <Button.Group>
+          <ModalLauncher
+            variant="default"
+            renderModal={({ isOpened, close }) => (
+              <CreateSystemElementModal opened={isOpened} onClose={close} />
+            )}
+          >
+            Add element
+          </ModalLauncher>
+          <ModalLauncher
+            variant="default"
+            renderModal={({ isOpened, close }) => {
+              if (selectedSystemElement == null) {
+                return null;
+              }
+
+              return (
+                <EditSystemElementModal
+                  systemElement={selectedSystemElement}
+                  opened={isOpened}
+                  onClose={close}
+                />
+              );
+            }}
+            disabled={selectedSystemElement == null}
+          >
+            Edit element
+          </ModalLauncher>
+        </Button.Group>
+      </AppShell.Aside>
+
+      <AppShell.Main>
+        <GraphEditor
+          systemElements={systemElements.data ?? []}
+          systemElementRelations={systemElementRelations.data ?? []}
+          onConnect={({ source, target }) => {
+            createSystemElementRelation.mutate({
+              label: "this is a test",
+              sourceID: source,
+              targetID: target,
+            });
+          }}
+          onEdgeClick={(event, edge) =>
+            setSelectedSystemElementRelationID(
+              SystemElementRelationIDSchema.parse(edge.id),
+            )
+          }
+          onNodeClick={(event, node) => {
+            setSelectedSystemElementID(
+              SystemElementSchema.shape.id.parse(node.id),
             );
           }}
-          disabled={selectedSystemElement == null}
-        >
-          Edit element
-        </ModalLauncher>
-      </Button.Group>
-      <GraphEditor
-        systemElements={systemElements.data ?? []}
-        systemElementRelations={systemElementRelations.data ?? []}
-        onConnect={({ source, target }) => {
-          createSystemElementRelation.mutate({
-            label: "this is a test",
-            sourceID: source,
-            targetID: target,
-          });
-        }}
-        onEdgeClick={(event, edge) =>
-          setSelectedSystemElementRelationID(
-            SystemElementRelationIDSchema.parse(edge.id),
-          )
-        }
-        onNodeClick={(event, node) => {
-          setSelectedSystemElementID(
-            SystemElementSchema.shape.id.parse(node.id),
-          );
-        }}
-      />
-      {selectedSystemElementRelation != null && (
-        <EditSystemElementRelationModal
-          key={selectedSystemElementRelationID ?? ""}
-          opened={selectedSystemElementRelationID != null}
-          systemElementRelation={selectedSystemElementRelation}
-          onClose={() => setSelectedSystemElementRelationID(null)}
         />
-      )}
-    </>
+        {selectedSystemElementRelation != null && (
+          <EditSystemElementRelationModal
+            key={selectedSystemElementRelationID ?? ""}
+            opened={selectedSystemElementRelationID != null}
+            systemElementRelation={selectedSystemElementRelation}
+            onClose={() => setSelectedSystemElementRelationID(null)}
+          />
+        )}
+      </AppShell.Main>
+    </AppShell>
   );
 }
