@@ -21,9 +21,11 @@ import {
   SystemElementRelationIDSchema,
 } from "@/db/entities/system-element-relation/schema";
 import { useQueryAllSystemElements } from "./(components)/system-element-hooks";
+import { useDisclosure } from "@mantine/hooks";
 
 export function DesignToolEditorPage() {
   const queryClient = useQueryClient();
+  const [isEditElementModalOpened, { open, close }] = useDisclosure(false);
 
   const systemElements = useQueryAllSystemElements();
 
@@ -124,6 +126,7 @@ export function DesignToolEditorPage() {
               SystemElementSchema.shape.id.parse(node.id),
             );
           }}
+          onDoubleClick={(event, node) => {}}
         />
         {selectedSystemElementRelation != null && (
           <EditSystemElementRelationModal

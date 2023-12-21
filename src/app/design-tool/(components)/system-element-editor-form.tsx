@@ -55,6 +55,7 @@ export function SystemElementEditorForm(props: Props) {
           <Select
             name="type"
             label="Type"
+            description="Category of the element (e.g., container, component, person, system)."
             placeholder="Select element type ..."
             data={["system", "person", "container", "component"]}
             size="xs"
@@ -63,18 +64,21 @@ export function SystemElementEditorForm(props: Props) {
           <TextInput
             name="name"
             label="Name"
+            description="Unique label for the element."
             size="xs"
             {...form.getInputProps("name")}
           />
           <Textarea
             name="description"
             label="Description"
+            description="Brief info about the element's purpose or functionality."
             size="xs"
             {...form.getInputProps("description")}
           />
           {doesSupportTechnologies && (
             <TagsInput
               label="Technologies"
+              description="List of key associated technologies."
               size="xs"
               {...form.getInputProps("technologies")}
             />

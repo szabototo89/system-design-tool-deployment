@@ -23,7 +23,10 @@ type Props = {
   systemElementRelations: readonly SystemElementRelation[];
 
   onConnect?(options: { source: string; target: string }): void;
-} & Pick<React.ComponentProps<typeof ReactFlow>, "onEdgeClick" | "onNodeClick">;
+} & Pick<
+  React.ComponentProps<typeof ReactFlow>,
+  "onEdgeClick" | "onNodeClick" | "onDoubleClick"
+>;
 
 const nodeTypes = {
   SystemElementNode,
@@ -136,6 +139,7 @@ export function GraphEditor(props: Props) {
         nodeTypes={nodeTypes}
         onEdgeClick={props.onEdgeClick}
         onNodeClick={props.onNodeClick}
+        onDoubleClick={props.onDoubleClick}
       >
         <Background />
       </ReactFlow>
