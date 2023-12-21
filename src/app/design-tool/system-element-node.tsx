@@ -1,6 +1,7 @@
 import { SystemElementIDSchema } from "@/db/entities/system-element/schema";
 import { systemElementQueryById } from "@/db/entities/system-element/server-actions";
-import { Badge, Card, Group, Text } from "@mantine/core";
+import { systemTechnologyQueryAll } from "@/db/entities/system-technology/server-actions";
+import { Badge, Card, Group, HoverCard, Text } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { Handle, Position, useNodeId } from "reactflow";
 
@@ -36,6 +37,27 @@ export function SystemElementNode() {
         <Text size="xs" c="dimmed" lineClamp={4}>
           {systemElement.data?.description}
         </Text>
+
+        <Group mt="md" gap={2}>
+          {systemElement.data?.technologies.map((technology) => (
+            <HoverCard
+              width={280}
+              shadow="md"
+              key={technology.id}
+              openDelay={1000}
+            >
+              <HoverCard.Target>
+                <Badge size="xs" variant="white">
+                  {technology.name}
+                </Badge>
+              </HoverCard.Target>
+              <HoverCard.Dropdown>
+                <Text>{technology.name}</Text>
+                <Text size="xs">{technology.description}</Text>
+              </HoverCard.Dropdown>
+            </HoverCard>
+          ))}
+        </Group>
       </Card>
       <>
         <Handle position={Position.Top} type="target" />

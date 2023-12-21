@@ -8,7 +8,10 @@ import {
 } from "./system-element-hooks";
 
 type Props = {
-  systemElement: Pick<SystemElement, "id" | "name" | "description" | "type">;
+  systemElement: Pick<
+    SystemElement,
+    "id" | "name" | "description" | "type" | "technologies"
+  >;
 } & Pick<React.ComponentProps<typeof Modal>, "opened" | "onClose">;
 
 export function EditSystemElementModal(props: Props) {
@@ -22,7 +25,9 @@ export function EditSystemElementModal(props: Props) {
           name: props.systemElement.name,
           description: props.systemElement.description,
           type: props.systemElement.type,
-          technologies: [],
+          technologies: props.systemElement.technologies.map(
+            (technology) => technology.name,
+          ),
         }}
         isSubmitting={updateSystemElement.isPending}
         onSubmit={async ({ name, description, type, technologies }) => {

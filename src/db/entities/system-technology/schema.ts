@@ -90,7 +90,8 @@ export const SystemTechnologyEntity = createSQLiteBackedEntity({
               name: value.name,
               description: value.description,
             })
-            .returning();
+            .returning()
+            .get();
         },
         schema,
       ),

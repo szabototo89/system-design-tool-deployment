@@ -56,7 +56,7 @@ export function createSQLiteBackedEntity<
     >
   >,
   TSchema extends z.ZodTypeAny,
-  TEdgeDefinitions extends Record<string, ReturnType<SQLiteTableFn>>,
+  TEdgeDefinitions, //extends Record<string, ReturnType<SQLiteTableFn>>,
 >(schemaConfiguration: {
   table(): TSQLiteTableDefinition;
   edges?(): TEdgeDefinitions;
@@ -74,8 +74,7 @@ export function createSQLiteBackedEntity<
   }): TQueryConfiguration;
 }) {
   const table = schemaConfiguration.table();
-  const edges =
-    schemaConfiguration.edges?.() ?? ({} as TEdgeDefinitions);
+  const edges = schemaConfiguration.edges?.() ?? ({} as TEdgeDefinitions);
   const schema = schemaConfiguration.entitySchema(table);
   const queryBuilder = entityQueryBuilder.query().output(schema);
 

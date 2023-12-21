@@ -25,17 +25,37 @@ console.clear();
 //   `),
 // );
 
-db.run(
-  sql.raw(`
-    DROP TABLE IF EXISTS system_element__system_technology;
-  `),
-);
+// db.run(
+//   sql.raw(`
+//     DROP TABLE IF EXISTS system_element__system_technology;
+//   `),
+// );
+
+// db.run(
+//   sql.raw(`
+//     CREATE TABLE IF NOT EXISTS system_element__system_technology (
+//       system_element_id NOT NULL,
+//       system_technology_id TEXT NOT NULL
+//     );
+//   `),
+// );
 
 db.run(
   sql.raw(`
-    CREATE TABLE IF NOT EXISTS system_element__system_technology (
-      system_element_id NOT NULL,
-      system_technology_id TEXT NOT NULL
+    DROP TABLE IF EXISTS system_technology;
+  `),
+);
+
+// id: text("id").primaryKey(),
+// name: text("name").notNull(),
+// description: text("description").notNull().default(""),
+
+db.run(
+  sql.raw(`
+    CREATE TABLE IF NOT EXISTS system_technology (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      description TEXT NOT NULL DEFAULT ""
     );
   `),
 );

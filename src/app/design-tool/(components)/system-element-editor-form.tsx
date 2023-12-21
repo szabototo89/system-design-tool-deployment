@@ -29,7 +29,7 @@ export function SystemElementEditorForm(props: Props) {
       name: props.initialValue?.name ?? "",
       description: props.initialValue?.description ?? "",
       type: props.initialValue?.type ?? "system",
-      technologies: [],
+      technologies: props.initialValue?.technologies ?? [],
     },
   });
 
