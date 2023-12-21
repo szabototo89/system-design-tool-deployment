@@ -16,5 +16,5 @@ export * from "./entities/images/entity";
 export const SystemElementTable = SystemElementEntity.table;
 export const SystemElementRelationTable = SystemElementRelationEntity.table;
 
-const sqliteClient = new Database("./app.db");
+const sqliteClient = new Database("./app.db", { verbose: console.log });
 export const db = drizzle(sqliteClient);
