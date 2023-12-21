@@ -93,34 +93,42 @@ export function DesignToolEditorPage() {
         </Button.Group>
       </AppShell.Aside>
 
-      <AppShell.Main>
-        <GraphEditor
-          systemElements={systemElements.data ?? []}
-          systemElementRelations={systemElementRelations.data ?? []}
-          onConnect={({ source, target }) => {
-            createSystemElementRelation.mutate({
-              label: "this is a test",
-              sourceID: source,
-              targetID: target,
-            });
+      <AppShell.Main style={{ position: "relative" }}>
+        <div
+          style={{
+            height: "calc(100% - 70px)",
+            width: "100%",
+            position: "absolute",
           }}
-          onEdgeClick={(event, edge) =>
-            setSelectedSystemElementRelationID(
-              SystemElementRelationIDSchema.parse(edge.id),
-            )
-          }
-          onNodeClick={(event, node) => {
-            setSelectedSystemElementID(
-              SystemElementSchema.shape.id.parse(node.id),
-            );
-          }}
-          onNodeDoubleClick={(event, node) => {
-            setSelectedSystemElementID(
-              SystemElementSchema.shape.id.parse(node.id),
-            );
-            open();
-          }}
-        />
+        >
+          <GraphEditor
+            systemElements={systemElements.data ?? []}
+            systemElementRelations={systemElementRelations.data ?? []}
+            onConnect={({ source, target }) => {
+              createSystemElementRelation.mutate({
+                label: "this is a test",
+                sourceID: source,
+                targetID: target,
+              });
+            }}
+            onEdgeClick={(event, edge) =>
+              setSelectedSystemElementRelationID(
+                SystemElementRelationIDSchema.parse(edge.id),
+              )
+            }
+            onNodeClick={(event, node) => {
+              setSelectedSystemElementID(
+                SystemElementSchema.shape.id.parse(node.id),
+              );
+            }}
+            onNodeDoubleClick={(event, node) => {
+              setSelectedSystemElementID(
+                SystemElementSchema.shape.id.parse(node.id),
+              );
+              open();
+            }}
+          />
+        </div>
         {selectedSystemElementRelation != null && (
           <EditSystemElementRelationModal
             key={selectedSystemElementRelationID ?? ""}

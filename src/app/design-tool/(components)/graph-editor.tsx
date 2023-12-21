@@ -123,26 +123,24 @@ export function GraphEditor(props: Props) {
   }, [props.systemElementRelations]);
 
   return (
-    <div style={{ width: "100vw", height: "100vh" }}>
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        snapToGrid
-        onConnect={(connection) => {
-          props.onConnect?.({
-            source: connection.source ?? "",
-            target: connection.target ?? "",
-          });
-        }}
-        nodeTypes={nodeTypes}
-        onEdgeClick={props.onEdgeClick}
-        onNodeClick={props.onNodeClick}
-        onNodeDoubleClick={props.onNodeDoubleClick}
-      >
-        <Background />
-      </ReactFlow>
-    </div>
+    <ReactFlow
+      nodes={nodes}
+      edges={edges}
+      onNodesChange={onNodesChange}
+      onEdgesChange={onEdgesChange}
+      snapToGrid
+      onConnect={(connection) => {
+        props.onConnect?.({
+          source: connection.source ?? "",
+          target: connection.target ?? "",
+        });
+      }}
+      nodeTypes={nodeTypes}
+      onEdgeClick={props.onEdgeClick}
+      onNodeClick={props.onNodeClick}
+      onNodeDoubleClick={props.onNodeDoubleClick}
+    >
+      <Background />
+    </ReactFlow>
   );
 }
