@@ -106,7 +106,7 @@ export function DesignToolEditorPage() {
             systemElementRelations={systemElementRelations.data ?? []}
             onConnect={({ source, target }) => {
               createSystemElementRelation.mutate({
-                label: "this is a test",
+                label: "Give me a label",
                 sourceID: source,
                 targetID: target,
               });

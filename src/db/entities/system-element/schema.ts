@@ -22,6 +22,7 @@ export const SystemElementEntity = createSQLiteBackedEntity({
       name: text("name"),
       type: text("type"),
       description: text("description"),
+      parentID: text("parent_id"),
       ...createdAtPattern.forTable(),
     });
   },
@@ -38,6 +39,7 @@ export const SystemElementEntity = createSQLiteBackedEntity({
   entitySchema(table) {
     const baseSchema = createSelectSchema(table, {
       id: (schema) => schema.id.brand("SystemElementID"),
+      parentID: (schema) => schema.id.brand("SystemElementID"),
       type: z.enum(["system", "container", "component", "person"] as const),
       name: z.string().min(1, "System element name cannot be empty"),
     });

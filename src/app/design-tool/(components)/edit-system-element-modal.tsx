@@ -37,6 +37,7 @@ export function EditSystemElementModal(props: Props) {
               name,
               description,
               type,
+              parentID: null,
               technologies: technologies.map((technologyName) => {
                 return {
                   name: technologyName,
