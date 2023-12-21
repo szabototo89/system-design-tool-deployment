@@ -83,25 +83,13 @@ export function DesignToolEditorPage() {
           >
             Add element
           </ModalLauncher>
-          <ModalLauncher
+          <Button
             variant="default"
-            renderModal={({ isOpened, close }) => {
-              if (selectedSystemElement == null) {
-                return null;
-              }
-
-              return (
-                <EditSystemElementModal
-                  systemElement={selectedSystemElement}
-                  opened={isOpened}
-                  onClose={close}
-                />
-              );
-            }}
+            onClick={open}
             disabled={selectedSystemElement == null}
           >
             Edit element
-          </ModalLauncher>
+          </Button>
         </Button.Group>
       </AppShell.Aside>
 
@@ -126,7 +114,12 @@ export function DesignToolEditorPage() {
               SystemElementSchema.shape.id.parse(node.id),
             );
           }}
-          onDoubleClick={(event, node) => {}}
+          onNodeDoubleClick={(event, node) => {
+            setSelectedSystemElementID(
+              SystemElementSchema.shape.id.parse(node.id),
+            );
+            open();
+          }}
         />
         {selectedSystemElementRelation != null && (
           <EditSystemElementRelationModal
@@ -134,6 +127,13 @@ export function DesignToolEditorPage() {
             opened={selectedSystemElementRelationID != null}
             systemElementRelation={selectedSystemElementRelation}
             onClose={() => setSelectedSystemElementRelationID(null)}
+          />
+        )}
+        {selectedSystemElement != null && (
+          <EditSystemElementModal
+            systemElement={selectedSystemElement}
+            opened={isEditElementModalOpened}
+            onClose={close}
           />
         )}
       </AppShell.Main>
