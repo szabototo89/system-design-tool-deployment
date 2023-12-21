@@ -1,9 +1,21 @@
+import { ModalLauncher } from "@/components/modal-launcher";
 import { SystemElementIDSchema } from "@/db/entities/system-element/schema";
 import { systemElementQueryById } from "@/db/entities/system-element/server-actions";
 import { systemTechnologyQueryAll } from "@/db/entities/system-technology/server-actions";
-import { Badge, Card, Group, HoverCard, Text } from "@mantine/core";
+import {
+  Badge,
+  Button,
+  Card,
+  Group,
+  HoverCard,
+  ScrollArea,
+  Stack,
+  Text,
+} from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { Handle, Position, useNodeId } from "reactflow";
+import { EditSystemTechnologyModal } from "./(components)/edit-system-technology-modal";
+import { SystemTechnologyInfoHoverCard } from "./(components)/system-technology-info-hover-card";
 
 export function SystemElementNode() {
   const id = useNodeId();
@@ -40,22 +52,14 @@ export function SystemElementNode() {
 
         <Group mt="md" gap={2}>
           {systemElement.data?.technologies.map((technology) => (
-            <HoverCard
-              width={280}
-              shadow="md"
+            <SystemTechnologyInfoHoverCard
               key={technology.id}
-              openDelay={1000}
+              systemTechnology={technology}
             >
-              <HoverCard.Target>
-                <Badge size="xs" variant="white">
-                  {technology.name}
-                </Badge>
-              </HoverCard.Target>
-              <HoverCard.Dropdown>
-                <Text>{technology.name}</Text>
-                <Text size="xs">{technology.description}</Text>
-              </HoverCard.Dropdown>
-            </HoverCard>
+              <Badge size="xs" variant="white">
+                {technology.name}
+              </Badge>
+            </SystemTechnologyInfoHoverCard>
           ))}
         </Group>
       </Card>

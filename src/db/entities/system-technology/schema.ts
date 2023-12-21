@@ -67,6 +67,18 @@ export const SystemTechnologyEntity = createSQLiteBackedEntity({
         },
         schema,
       ),
+      update: new ActionBuilder(
+        "update",
+        async (db, value: Entity) => {
+          return db
+            .update(table)
+            .set(value)
+            .where(eq(table.id, value.id))
+            .returning()
+            .get();
+        },
+        schema,
+      ),
       upsert: new ActionBuilder(
         "upsert",
         async (

@@ -8,3 +8,6 @@ export const systemTechnologyQueryAll =
 
 export const systemTechnologyQueryByName =
   SystemTechnologyEntity.queries.queryByName.bind(null, db);
+
+export const systemTechnologyUpdate =
+  SystemTechnologyEntity.actions.update.bind(null, db);
