@@ -1,32 +1,14 @@
-import { ModalLauncher } from "@/components/modal-launcher";
 import { SystemElementIDSchema } from "@/db/entities/system-element/schema";
-import { systemElementQueryById } from "@/db/entities/system-element/server-actions";
-import { systemTechnologyQueryAll } from "@/db/entities/system-technology/server-actions";
-import {
-  Badge,
-  Button,
-  Card,
-  Group,
-  HoverCard,
-  ScrollArea,
-  Stack,
-  Text,
-} from "@mantine/core";
-import { useQuery } from "@tanstack/react-query";
+import { Badge, Card, Group, Text } from "@mantine/core";
 import { Handle, Position, useNodeId } from "reactflow";
-import { EditSystemTechnologyModal } from "./(components)/edit-system-technology-modal";
 import { SystemTechnologyInfoHoverCard } from "./(components)/system-technology-info-hover-card";
+import { useQuerySystemElementByID } from "./(components)/system-element-hooks";
 
 export function SystemElementNode() {
   const id = useNodeId();
-  const systemElement = useQuery({
-    queryKey: ["system-element", { id }],
-    queryFn() {
-      return systemElementQueryById({
-        id: SystemElementIDSchema.parse(id),
-      });
-    },
-  });
+  const systemElement = useQuerySystemElementByID(
+    SystemElementIDSchema.parse(id),
+  );
 
   if (systemElement.isLoading) {
     return null;

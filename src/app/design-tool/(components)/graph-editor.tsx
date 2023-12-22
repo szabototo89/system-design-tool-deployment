@@ -8,15 +8,17 @@ import ReactFlow, {
   useEdgesState,
   MarkerType,
   Edge,
-  useReactFlow,
   Background,
 } from "reactflow";
 
-import { useEffect, useTransition } from "react";
+import { useEffect, useMemo, useTransition } from "react";
 import { SystemElementNode } from "../system-element-node";
 import { SystemElementRelation } from "@/db/entities/system-element-relation/schema";
 
 import "reactflow/dist/style.css";
+import "../../../styles/app.reactflow.css";
+
+import { SystemElementParentNode } from "./system-element-parent-node";
 
 type Props = {
   systemElements: readonly SystemElement[];
@@ -30,19 +32,23 @@ type Props = {
 
 const nodeTypes = {
   SystemElementNode,
+  SystemElementParentNode,
 } satisfies NodeTypes;
 
 function makeReactFlowNodeFromSystemElement(
   systemElement: SystemElement,
+  isParentNode: boolean,
 ): Node {
   return {
     id: systemElement.id,
     width: 200,
     height: 200,
-    type: SystemElementNode.name,
+    type: !isParentNode ? SystemElementNode.name : SystemElementParentNode.name,
     selectable: true,
     data: {},
     position: { x: 0, y: 0 },
+    extent: systemElement.parentID != null ? "parent" : undefined,
+    parentNode: systemElement.parentID ?? undefined,
   };
 }
 
@@ -59,20 +65,33 @@ function makeReactFlowEdgeFromSystemElementRelation(
       type: MarkerType.ArrowClosed,
       width: 10,
       height: 10,
-      color: "black",
+      color: "#A9B0BF",
     },
     style: {
       strokeWidth: 2,
-      stroke: "black",
+      stroke: "#A9B0BF",
     },
   } satisfies Edge<unknown>;
 }
 
 export function GraphEditor(props: Props) {
+  const parentSystemElements = useMemo(
+    () =>
+      new Set(
+        props.systemElements
+          .map((systemElement) => systemElement.parentID)
+          .filter(Boolean),
+      ),
+    [props.systemElements],
+  );
+
   const [nodes, setNodes, onNodesChange] = useNodesState(
     props.systemElements.map((systemElement, index) => {
       return {
-        ...makeReactFlowNodeFromSystemElement(systemElement),
+        ...makeReactFlowNodeFromSystemElement(
+          systemElement,
+          parentSystemElements.has(systemElement.id),
+        ),
         position: { x: index * 210, y: 0 },
       } satisfies Node;
     }),
@@ -90,7 +109,12 @@ export function GraphEditor(props: Props) {
       );
 
       return props.systemElements
-        .map(makeReactFlowNodeFromSystemElement)
+        .map((systemElement) =>
+          makeReactFlowNodeFromSystemElement(
+            systemElement,
+            parentSystemElements.has(systemElement.id),
+          ),
+        )
         .map((systemElement) => {
           if (systemElement.id in previousNodesByID) {
             return previousNodesByID[systemElement.id];

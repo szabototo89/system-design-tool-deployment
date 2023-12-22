@@ -6,6 +6,7 @@
     "db:generate": "drizzle-kit generate:sqlite",
     "db:studio": "drizzle-kit studio",
     "dev": "next dev",
+    "dev:start": "pnpm run \"/sl|dev$/\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

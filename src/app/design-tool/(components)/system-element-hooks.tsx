@@ -1,7 +1,12 @@
 import {
+  SystemElement,
+  SystemElementIDSchema,
+} from "@/db/entities/system-element/schema";
+import {
   systemElementCreate,
   systemElementDelete,
   systemElementQueryAll,
+  systemElementQueryById,
   systemElementUpdate,
 } from "@/db/entities/system-element/server-actions";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -13,6 +18,17 @@ export const useQueryAllSystemElements = () => {
     queryKey: getSystemElementQueryKey(),
     async queryFn() {
       return await systemElementQueryAll();
+    },
+  });
+};
+
+export const useQuerySystemElementByID = (id: SystemElement["id"]) => {
+  return useQuery({
+    queryKey: ["system-element", { id }],
+    queryFn() {
+      return systemElementQueryById({
+        id: SystemElementIDSchema.parse(id),
+      });
     },
   });
 };
