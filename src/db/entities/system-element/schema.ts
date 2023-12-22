@@ -215,7 +215,7 @@ export const SystemElementEntity = createSQLiteBackedEntity({
             .returning()
             .get();
         },
-        schema,
+        schema.omit({ technologies: true }),
       ),
     };
   },
