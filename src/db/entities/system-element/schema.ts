@@ -37,15 +37,11 @@ export const SystemElementEntity = createSQLiteBackedEntity({
   },
 
   entitySchema(table) {
-    const baseSchema = createSelectSchema(table, {
+    return createSelectSchema(table, {
       id: (schema) => schema.id.brand("SystemElementID"),
       parentID: (schema) => schema.id.brand("SystemElementID"),
       type: z.enum(["system", "container", "component", "person"] as const),
       name: z.string().min(1, "System element name cannot be empty"),
-    });
-
-    return baseSchema.extend({
-      technologies: z.array(SystemTechnologySchema),
     });
   },
 
@@ -116,7 +112,13 @@ export const SystemElementEntity = createSQLiteBackedEntity({
         .implementation(async (db: BetterSQLite3Database) => {
           return queryEntityWithTechnologies(db, await db.select().from(table));
         })
-        .output(z.array(schema)),
+        .output(
+          z.array(
+            schema.extend({
+              technologies: z.array(SystemTechnologySchema),
+            }),
+          ),
+        ),
 
       queryById: queryBuilder
         .implementation(
@@ -131,7 +133,13 @@ export const SystemElementEntity = createSQLiteBackedEntity({
             return result;
           },
         )
-        .output(z.nullable(schema)),
+        .output(
+          z.nullable(
+            schema.extend({
+              technologies: z.array(SystemTechnologySchema),
+            }),
+          ),
+        ),
     };
   },
 
@@ -154,7 +162,7 @@ export const SystemElementEntity = createSQLiteBackedEntity({
             .returning()
             .get();
         },
-        schema.omit({ technologies: true }),
+        schema,
       ),
 
       updateParent: new ActionBuilder(
@@ -175,7 +183,7 @@ export const SystemElementEntity = createSQLiteBackedEntity({
             .returning()
             .get();
         },
-        schema.omit({ technologies: true }),
+        schema,
       ),
 
       update: new ActionBuilder(
@@ -224,7 +232,7 @@ export const SystemElementEntity = createSQLiteBackedEntity({
             .returning()
             .get();
         },
-        schema.omit({ technologies: true }),
+        schema,
       ),
 
       delete: new ActionBuilder(
@@ -236,7 +244,7 @@ export const SystemElementEntity = createSQLiteBackedEntity({
             .returning()
             .get();
         },
-        schema.omit({ technologies: true }),
+        schema,
       ),
     };
   },
