@@ -1,4 +1,4 @@
-import { Badge, Card, Group, Text } from "@mantine/core";
+import { Badge, Card, Group, Text, Tooltip } from "@mantine/core";
 import { NodeProps, NodeResizer, useNodeId } from "reactflow";
 import { useQuerySystemElementByID } from "./system-element-hooks";
 import { SystemElementIDSchema } from "@/db/entities/system-element/schema";
@@ -12,6 +12,8 @@ export function SystemElementParentNode(props: NodeProps) {
   if (systemElement.isLoading) {
     return null;
   }
+
+  const childrenCount = systemElement.data?.children.length ?? 0;
 
   return (
     <>
@@ -31,9 +33,18 @@ export function SystemElementParentNode(props: NodeProps) {
         }}
       >
         <Group gap="sm" align="flex-end" justify="flex-start" h={"100%"}>
-          <Text size="xs" fw={500}>
-            {systemElement.data?.name}
-          </Text>
+          <Group gap={4} align="baseline">
+            <Text size="xs" fw={500}>
+              {systemElement.data?.name}
+            </Text>
+            {childrenCount > 0 && (
+              <Tooltip label="Number of children" openDelay={1000}>
+                <Text size="xs" c="dimmed">
+                  ({childrenCount})
+                </Text>
+              </Tooltip>
+            )}
+          </Group>
           <Badge size="xs" variant="light">
             {systemElement.data?.type}
           </Badge>

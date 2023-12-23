@@ -14,14 +14,24 @@ export function SystemElementNode() {
     return null;
   }
 
+  const childrenCount = systemElement.data?.children.length ?? 0;
+
   return (
     <>
       <Card shadow="sm" padding="md" radius="md" withBorder maw={300}>
         <Card.Section inheritPadding>
           <Group justify="space-between" mt="md" mb="md">
-            <Text size="xs" fw={500}>
-              {systemElement.data?.name}
-            </Text>
+            <Group gap={4} align="baseline">
+              <Text size="xs" fw={500} inline>
+                {systemElement.data?.name}
+              </Text>
+              {childrenCount > 0 && (
+                <Text size="xs" c="dimmed" inline>
+                  ({childrenCount})
+                </Text>
+              )}
+            </Group>
+
             <Badge size="xs" variant="light">
               {systemElement.data?.type}
             </Badge>

@@ -130,13 +130,25 @@ export const SystemElementEntity = createSQLiteBackedEntity({
               db,
               await db.select().from(table).where(eq(table.id, id)),
             );
-            return result;
+
+            const children = db
+              .select({ id: table.id })
+              .from(table)
+              .where(eq(table.parentID, id))
+              .all()
+              .map(({ id }) => id);
+
+            return {
+              ...result,
+              children,
+            };
           },
         )
         .output(
           z.nullable(
             schema.extend({
               technologies: z.array(SystemTechnologySchema),
+              children: z.array(schema.shape.id),
             }),
           ),
         ),

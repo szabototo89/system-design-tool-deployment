@@ -50,8 +50,10 @@ export function SystemTechnologyInfoHoverCard(props: Props) {
               </Button>
             </Group>
             {!!props.systemTechnology.description && (
-              <ScrollArea h={150} scrollHideDelay={500}>
-                <Text size="xs">{props.systemTechnology.description}</Text>
+              <ScrollArea h={100} scrollHideDelay={500}>
+                <Text size="xs" c="dimmed">
+                  {props.systemTechnology.description}
+                </Text>
               </ScrollArea>
             )}
           </Stack>
