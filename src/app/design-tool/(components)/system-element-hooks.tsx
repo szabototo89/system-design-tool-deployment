@@ -8,6 +8,7 @@ import {
   systemElementQueryAll,
   systemElementQueryById,
   systemElementUpdate,
+  systemElementUpdateParent,
 } from "@/db/entities/system-element/server-actions";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -50,6 +51,18 @@ export const useUpdateSystemElement = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: systemElementUpdate,
+    onSuccess() {
+      queryClient.invalidateQueries({
+        queryKey: getSystemElementQueryKey(),
+      });
+    },
+  });
+};
+
+export const useUpdateSystemElementParent = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: systemElementUpdateParent,
     onSuccess() {
       queryClient.invalidateQueries({
         queryKey: getSystemElementQueryKey(),

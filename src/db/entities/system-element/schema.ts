@@ -157,6 +157,27 @@ export const SystemElementEntity = createSQLiteBackedEntity({
         schema.omit({ technologies: true }),
       ),
 
+      updateParent: new ActionBuilder(
+        "update",
+        async (
+          db,
+          options: {
+            entity: Pick<Entity, "id">;
+            parentEntity: Pick<Entity, "id"> | null;
+          },
+        ) => {
+          return db
+            .update(table)
+            .set({
+              parentID: options.parentEntity?.id ?? null,
+            })
+            .where(eq(table.id, options.entity.id))
+            .returning()
+            .get();
+        },
+        schema.omit({ technologies: true }),
+      ),
+
       update: new ActionBuilder(
         "update",
         async (

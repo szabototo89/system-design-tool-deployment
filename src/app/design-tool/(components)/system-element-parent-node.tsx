@@ -1,9 +1,9 @@
 import { Badge, Card, Group, Text } from "@mantine/core";
-import { NodeResizer, useNodeId } from "reactflow";
+import { NodeProps, NodeResizer, useNodeId } from "reactflow";
 import { useQuerySystemElementByID } from "./system-element-hooks";
 import { SystemElementIDSchema } from "@/db/entities/system-element/schema";
 
-export function SystemElementParentNode(props: { selected: boolean }) {
+export function SystemElementParentNode(props: NodeProps) {
   const id = useNodeId();
   const systemElement = useQuerySystemElementByID(
     SystemElementIDSchema.parse(id),
@@ -15,12 +15,14 @@ export function SystemElementParentNode(props: { selected: boolean }) {
 
   return (
     <>
-      <NodeResizer isVisible={props.selected} minWidth={100} minHeight={30} />
+      <NodeResizer isVisible={props.selected} minWidth={300} minHeight={300} />
       <Card
         padding="md"
         radius="md"
         w={"100%"}
         h={"100%"}
+        miw={300}
+        mih={300}
         withBorder
         style={{
           borderStyle: "dashed",

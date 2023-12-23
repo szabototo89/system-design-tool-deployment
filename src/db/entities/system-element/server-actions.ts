@@ -21,6 +21,9 @@ export const systemElementUpdate = SystemElementEntity.actions.update.bind(
   db,
 );
 
+export const systemElementUpdateParent =
+  SystemElementEntity.actions.updateParent.bind(null, db);
+
 export const systemElementDelete = SystemElementEntity.actions.delete.bind(
   null,
   db,

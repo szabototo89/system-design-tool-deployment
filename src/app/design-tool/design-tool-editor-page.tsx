@@ -20,7 +20,10 @@ import {
   SystemElementRelation,
   SystemElementRelationIDSchema,
 } from "@/db/entities/system-element-relation/schema";
-import { useQueryAllSystemElements } from "./(components)/system-element-hooks";
+import {
+  useQueryAllSystemElements,
+  useUpdateSystemElementParent,
+} from "./(components)/system-element-hooks";
 import { useDisclosure } from "@mantine/hooks";
 
 export function DesignToolEditorPage() {
@@ -44,6 +47,8 @@ export function DesignToolEditorPage() {
       });
     },
   });
+
+  const updateSystemElementParent = useUpdateSystemElementParent();
 
   const [selectedSystemElementID, setSelectedSystemElementID] = useState<
     SystemElement["id"] | null
@@ -126,6 +131,26 @@ export function DesignToolEditorPage() {
                 SystemElementSchema.shape.id.parse(node.id),
               );
               open();
+            }}
+            onNodeDrop={(sourceNode, targetNode) => {
+              if (sourceNode.id === targetNode?.id) {
+                return;
+              }
+
+              if (sourceNode.parentNode === targetNode?.id) {
+                return;
+              }
+
+              if (targetNode?.parentNode === sourceNode.id) {
+                return;
+              }
+
+              updateSystemElementParent.mutate({
+                entity: {
+                  id: sourceNode.id,
+                },
+                parentEntity: targetNode != null ? { id: targetNode.id } : null,
+              });
             }}
           />
         </div>

@@ -9,9 +9,10 @@ import ReactFlow, {
   MarkerType,
   Edge,
   Background,
+  ConnectionMode,
 } from "reactflow";
 
-import { useEffect, useMemo, useTransition } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { SystemElementNode } from "../system-element-node";
 import { SystemElementRelation } from "@/db/entities/system-element-relation/schema";
 
@@ -23,6 +24,8 @@ import { SystemElementParentNode } from "./system-element-parent-node";
 type Props = {
   systemElements: readonly SystemElement[];
   systemElementRelations: readonly SystemElementRelation[];
+
+  onNodeDrop?(source: Node, target: Node | null): void;
 
   onConnect?(options: { source: string; target: string }): void;
 } & Pick<
@@ -47,8 +50,9 @@ function makeReactFlowNodeFromSystemElement(
     selectable: true,
     data: {},
     position: { x: 0, y: 0 },
-    extent: systemElement.parentID != null ? "parent" : undefined,
+    // extent: systemElement.parentID != null ? "parent" : undefined,
     parentNode: systemElement.parentID ?? undefined,
+    expandParent: false,
   };
 }
 
@@ -84,7 +88,6 @@ export function GraphEditor(props: Props) {
       ),
     [props.systemElements],
   );
-
   const [nodes, setNodes, onNodesChange] = useNodesState(
     props.systemElements.map((systemElement, index) => {
       return {
@@ -116,14 +119,27 @@ export function GraphEditor(props: Props) {
           ),
         )
         .map((systemElement) => {
-          if (systemElement.id in previousNodesByID) {
-            return previousNodesByID[systemElement.id];
+          const previousSystemElement = previousNodesByID[systemElement.id];
+
+          if (
+            previousSystemElement &&
+            previousSystemElement.type === systemElement.type &&
+            previousSystemElement.parentNode === systemElement.parentNode
+          ) {
+            return previousSystemElement;
+          }
+
+          if (previousSystemElement) {
+            return {
+              ...systemElement,
+              positionAbsolute: previousSystemElement.positionAbsolute,
+            };
           }
 
           return systemElement;
         });
     });
-  }, [props.systemElements]);
+  }, [props.systemElements, parentSystemElements]);
 
   useEffect(() => {
     setEdges((previousEdges) => {
@@ -146,6 +162,9 @@ export function GraphEditor(props: Props) {
     });
   }, [props.systemElementRelations]);
 
+  const draggedNodeRef = useRef<Node | null>(null);
+  const [targetNode, setTargetNode] = useState<Node | null>(null);
+
   return (
     <ReactFlow
       nodes={nodes}
@@ -163,6 +182,39 @@ export function GraphEditor(props: Props) {
       onEdgeClick={props.onEdgeClick}
       onNodeClick={props.onNodeClick}
       onNodeDoubleClick={props.onNodeDoubleClick}
+      connectionMode={ConnectionMode.Loose}
+      onNodeDragStart={(event, node) => {
+        draggedNodeRef.current = node;
+      }}
+      onNodeDrag={(event, draggedNode) => {
+        if (draggedNode.width == null || draggedNode.height == null) {
+          return;
+        }
+
+        const centerX =
+          (draggedNode.positionAbsolute?.x ?? 0) + draggedNode.width / 2;
+        const centerY =
+          (draggedNode.positionAbsolute?.y ?? 0) + draggedNode.height / 2;
+
+        const targetNode =
+          nodes.find(
+            (node) =>
+              node.width != null &&
+              node.height != null &&
+              centerX > (node.positionAbsolute?.x ?? 0) &&
+              centerX < (node.positionAbsolute?.x ?? 0) + node.width &&
+              centerY > (node.positionAbsolute?.y ?? 0) &&
+              centerY < (node.positionAbsolute?.y ?? 0) + node.height &&
+              node.id !== draggedNode.id,
+          ) ?? null;
+
+        setTargetNode(targetNode);
+      }}
+      onNodeDragStop={(event, node) => {
+        props.onNodeDrop?.(node, targetNode);
+
+        draggedNodeRef.current = null;
+      }}
     >
       <Background />
     </ReactFlow>
