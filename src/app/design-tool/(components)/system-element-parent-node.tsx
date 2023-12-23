@@ -1,13 +1,13 @@
-import { Badge, Card, Group, Text, Tooltip } from "@mantine/core";
+import { Badge, Button, Card, Group, Text, Tooltip } from "@mantine/core";
 import { NodeProps, NodeResizer, useNodeId } from "reactflow";
 import { useQuerySystemElementByID } from "./system-element-hooks";
 import { SystemElementIDSchema } from "@/db/entities/system-element/schema";
+import { useExpandedGraphElements } from "../app-state";
 
 export function SystemElementParentNode(props: NodeProps) {
-  const id = useNodeId();
-  const systemElement = useQuerySystemElementByID(
-    SystemElementIDSchema.parse(id),
-  );
+  const id = SystemElementIDSchema.parse(useNodeId());
+  const systemElement = useQuerySystemElementByID(id);
+  const setExpanded = useExpandedGraphElements();
 
   if (systemElement.isLoading) {
     return null;
@@ -49,6 +49,17 @@ export function SystemElementParentNode(props: NodeProps) {
             {systemElement.data?.type}
           </Badge>
         </Group>
+        <Card.Section>
+          <Group justify="end">
+            <Button
+              size="compact-xs"
+              variant="transparent"
+              onClick={() => setExpanded(id, false)}
+            >
+              Collapse
+            </Button>
+          </Group>
+        </Card.Section>
       </Card>
     </>
   );

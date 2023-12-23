@@ -20,6 +20,12 @@ import "reactflow/dist/style.css";
 import "../../../styles/app.reactflow.css";
 
 import { SystemElementParentNode } from "./system-element-parent-node";
+import { useAtom, useAtomValue } from "jotai";
+import {
+  expandedGraphElementAtom,
+  expandedGraphElementsAtom,
+  useIsGraphElementExpanded,
+} from "../app-state";
 
 type Props = {
   systemElements: readonly SystemElement[];
@@ -41,12 +47,16 @@ const nodeTypes = {
 function makeReactFlowNodeFromSystemElement(
   systemElement: SystemElement,
   isParentNode: boolean,
+  isExpanded: boolean,
 ): Node {
   return {
     id: systemElement.id,
     width: 200,
     height: 200,
-    type: !isParentNode ? SystemElementNode.name : SystemElementParentNode.name,
+    type:
+      isParentNode && isExpanded
+        ? SystemElementParentNode.name
+        : SystemElementNode.name,
     selectable: true,
     data: {},
     position: { x: 0, y: 0 },
@@ -79,6 +89,8 @@ function makeReactFlowEdgeFromSystemElementRelation(
 }
 
 export function GraphEditor(props: Props) {
+  const expandedGraphElements = useAtomValue(expandedGraphElementsAtom);
+  const isGraphElementExpanded = useIsGraphElementExpanded();
   const parentSystemElements = useMemo(
     () =>
       new Set(
@@ -88,21 +100,53 @@ export function GraphEditor(props: Props) {
       ),
     [props.systemElements],
   );
+
+  const systemElements = useMemo(
+    () =>
+      props.systemElements.filter((systemElement) => {
+        if (systemElement.parentID == null) {
+          return true;
+        }
+
+        return isGraphElementExpanded(systemElement.parentID);
+      }),
+    [props.systemElements, isGraphElementExpanded],
+  );
+
+  const systemElementRelations = useMemo(
+    () =>
+      props.systemElementRelations.filter((relation) => {
+        const collapsedSystemElements = systemElements.filter(
+          (systemElement) => !isGraphElementExpanded(systemElement.id),
+        );
+
+        const isSourceElementVisible = collapsedSystemElements.some(
+          (systemElement) => systemElement.id === relation.sourceID,
+        );
+
+        const isTargetElementVisible = collapsedSystemElements.some(
+          (systemElement) => systemElement.id === relation.targetID,
+        );
+
+        return isSourceElementVisible && isTargetElementVisible;
+      }),
+    [systemElements, props.systemElementRelations, isGraphElementExpanded],
+  );
+
   const [nodes, setNodes, onNodesChange] = useNodesState(
-    props.systemElements.map((systemElement, index) => {
+    systemElements.map((systemElement, index) => {
       return {
         ...makeReactFlowNodeFromSystemElement(
           systemElement,
           parentSystemElements.has(systemElement.id),
+          expandedGraphElements.includes(systemElement.id),
         ),
         position: { x: index * 210, y: 0 },
       } satisfies Node;
     }),
   );
   const [edges, setEdges, onEdgesChange] = useEdgesState(
-    props.systemElementRelations.map(
-      makeReactFlowEdgeFromSystemElementRelation,
-    ),
+    systemElementRelations.map(makeReactFlowEdgeFromSystemElementRelation),
   );
 
   useEffect(() => {
@@ -111,11 +155,12 @@ export function GraphEditor(props: Props) {
         previousNodes.map((node) => [node.id, node]),
       );
 
-      return props.systemElements
+      return systemElements
         .map((systemElement) =>
           makeReactFlowNodeFromSystemElement(
             systemElement,
             parentSystemElements.has(systemElement.id),
+            expandedGraphElements.includes(systemElement.id),
           ),
         )
         .map((systemElement) => {
@@ -132,6 +177,7 @@ export function GraphEditor(props: Props) {
           if (previousSystemElement) {
             return {
               ...systemElement,
+              position: previousSystemElement.position,
               positionAbsolute: previousSystemElement.positionAbsolute,
             };
           }
@@ -139,7 +185,7 @@ export function GraphEditor(props: Props) {
           return systemElement;
         });
     });
-  }, [props.systemElements, parentSystemElements]);
+  }, [systemElements, parentSystemElements, expandedGraphElements]);
 
   useEffect(() => {
     setEdges((previousEdges) => {
@@ -147,7 +193,7 @@ export function GraphEditor(props: Props) {
         previousEdges.map((edge) => [edge.id, edge]),
       );
 
-      return props.systemElementRelations
+      return systemElementRelations
         .map(makeReactFlowEdgeFromSystemElementRelation)
         .map((systemElementRelation) => {
           if (systemElementRelation.id in previousEdgesByID) {
@@ -160,7 +206,7 @@ export function GraphEditor(props: Props) {
           return systemElementRelation;
         });
     });
-  }, [props.systemElementRelations]);
+  }, [systemElementRelations]);
 
   const draggedNodeRef = useRef<Node | null>(null);
   const [targetNode, setTargetNode] = useState<Node | null>(null);
