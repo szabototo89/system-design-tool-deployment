@@ -177,7 +177,7 @@ export function GraphEditor(props: Props) {
           if (previousSystemElement) {
             return {
               ...systemElement,
-              position: previousSystemElement.position,
+              // position: previousSystemElement.position,
               positionAbsolute: previousSystemElement.positionAbsolute,
             };
           }
@@ -253,6 +253,19 @@ export function GraphEditor(props: Props) {
               centerY < (node.positionAbsolute?.y ?? 0) + node.height &&
               node.id !== draggedNode.id,
           ) ?? null;
+
+        console.log(
+          nodes.filter(
+            (node) =>
+              node.width != null &&
+              node.height != null &&
+              centerX > (node.positionAbsolute?.x ?? 0) &&
+              centerX < (node.positionAbsolute?.x ?? 0) + node.width &&
+              centerY > (node.positionAbsolute?.y ?? 0) &&
+              centerY < (node.positionAbsolute?.y ?? 0) + node.height &&
+              node.id !== draggedNode.id,
+          ),
+        );
 
         setTargetNode(targetNode);
       }}

@@ -1,8 +1,10 @@
 import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
 
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ColorSchemeScript, Container, MantineProvider } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
 import { theme } from "@/mantine/theme";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -23,7 +25,10 @@ export default function RootLayout(props: Props) {
         <ColorSchemeScript />
       </head>
       <body className={inter.className}>
-        <MantineProvider theme={theme}>{props.children}</MantineProvider>
+        <MantineProvider theme={theme}>
+          <Notifications />
+          {props.children}
+        </MantineProvider>
       </body>
     </html>
   );

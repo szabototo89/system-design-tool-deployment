@@ -11,6 +11,7 @@ import {
   systemElementUpdateParent,
 } from "@/db/entities/system-element/server-actions";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { notifications } from "@mantine/notifications";
 
 export const getSystemElementQueryKey = () => ["system-element"] as const;
 
@@ -63,9 +64,14 @@ export const useUpdateSystemElementParent = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: systemElementUpdateParent,
-    onSuccess() {
+    onSuccess(systemElement) {
       queryClient.invalidateQueries({
         queryKey: getSystemElementQueryKey(),
+      });
+
+      notifications.show({
+        title: `${systemElement.name} updated successfully`,
+        message: "Element parent was updated.",
       });
     },
   });
