@@ -1,11 +1,11 @@
 import { SystemElementIDSchema } from "@/db/entities/system-element/schema";
 import { Badge, Button, Card, Group, Text } from "@mantine/core";
-import { Handle, Position, useNodeId } from "reactflow";
+import { Handle, NodeProps, Position, useNodeId } from "reactflow";
 import { SystemTechnologyInfoHoverCard } from "./(components)/system-technology-info-hover-card";
 import { useQuerySystemElementByID } from "./(components)/system-element-hooks";
 import { useExpandedGraphElements } from "./app-state";
 
-export function SystemElementNode() {
+export function SystemElementNode(props: NodeProps) {
   const id = SystemElementIDSchema.parse(useNodeId());
   const systemElement = useQuerySystemElementByID(id);
   const setExpanded = useExpandedGraphElements();
@@ -55,7 +55,7 @@ export function SystemElementNode() {
             </SystemTechnologyInfoHoverCard>
           ))}
         </Group>
-        {hasChildren && (
+        {hasChildren && props.selected && (
           <Card.Section>
             <Group justify="end">
               <Button

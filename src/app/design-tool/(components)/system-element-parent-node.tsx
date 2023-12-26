@@ -49,17 +49,19 @@ export function SystemElementParentNode(props: NodeProps) {
             {systemElement.data?.type}
           </Badge>
         </Group>
-        <Card.Section>
-          <Group justify="end">
-            <Button
-              size="compact-xs"
-              variant="transparent"
-              onClick={() => setExpanded(id, false)}
-            >
-              Collapse
-            </Button>
-          </Group>
-        </Card.Section>
+        {props.selected && (
+          <Card.Section>
+            <Group justify="end">
+              <Button
+                size="compact-xs"
+                variant="transparent"
+                onClick={() => setExpanded(id, false)}
+              >
+                Collapse
+              </Button>
+            </Group>
+          </Card.Section>
+        )}
       </Card>
     </>
   );

@@ -26,6 +26,7 @@ import {
   expandedGraphElementsAtom,
   useIsGraphElementExpanded,
 } from "../app-state";
+import { maximumBy } from "@/utils/maximumBy";
 
 type Props = {
   systemElements: readonly SystemElement[];
@@ -48,6 +49,7 @@ function makeReactFlowNodeFromSystemElement(
   systemElement: SystemElement,
   isParentNode: boolean,
   isExpanded: boolean,
+  zIndex: number = 0,
 ): Node {
   return {
     id: systemElement.id,
@@ -63,6 +65,7 @@ function makeReactFlowNodeFromSystemElement(
     // extent: systemElement.parentID != null ? "parent" : undefined,
     parentNode: systemElement.parentID ?? undefined,
     expandParent: false,
+    zIndex,
   };
 }
 
@@ -101,6 +104,27 @@ export function GraphEditor(props: Props) {
     [props.systemElements],
   );
 
+  const systemElementsById = useMemo(() => {
+    return Object.fromEntries(
+      props.systemElements.map((systemElement) => [
+        systemElement.id,
+        systemElement,
+      ]),
+    );
+  }, [props.systemElements]);
+
+  function getSystemElementChildrenLevel(systemElement: SystemElement) {
+    let currentSystemElement = systemElement;
+    let level = 0;
+
+    while (currentSystemElement.parentID != null) {
+      level = level + 1;
+      currentSystemElement = systemElementsById[currentSystemElement.parentID];
+    }
+
+    return level;
+  }
+
   const systemElements = useMemo(
     () =>
       props.systemElements.filter((systemElement) => {
@@ -117,7 +141,11 @@ export function GraphEditor(props: Props) {
     () =>
       props.systemElementRelations.filter((relation) => {
         const collapsedSystemElements = systemElements.filter(
-          (systemElement) => !isGraphElementExpanded(systemElement.id),
+          (systemElement) =>
+            !(
+              isGraphElementExpanded(systemElement.id) &&
+              parentSystemElements.has(systemElement.id)
+            ),
         );
 
         const isSourceElementVisible = collapsedSystemElements.some(
@@ -161,6 +189,7 @@ export function GraphEditor(props: Props) {
             systemElement,
             parentSystemElements.has(systemElement.id),
             expandedGraphElements.includes(systemElement.id),
+            getSystemElementChildrenLevel(systemElement),
           ),
         )
         .map((systemElement) => {
@@ -174,10 +203,29 @@ export function GraphEditor(props: Props) {
             return previousSystemElement;
           }
 
+          if (
+            previousSystemElement &&
+            previousSystemElement.type === systemElement.type
+          ) {
+            if (systemElement.parentNode) {
+              return {
+                ...systemElement,
+                position: { x: 0, y: 0 },
+              };
+            } else {
+              return {
+                ...systemElement,
+                position:
+                  previousSystemElement.positionAbsolute ??
+                  previousSystemElement.position,
+              };
+            }
+          }
+
           if (previousSystemElement) {
             return {
               ...systemElement,
-              // position: previousSystemElement.position,
+              position: previousSystemElement.position,
               positionAbsolute: previousSystemElement.positionAbsolute,
             };
           }
@@ -232,7 +280,7 @@ export function GraphEditor(props: Props) {
       onNodeDragStart={(event, node) => {
         draggedNodeRef.current = node;
       }}
-      onNodeDrag={(event, draggedNode) => {
+      onNodeDrag={(event, draggedNode, ...args) => {
         if (draggedNode.width == null || draggedNode.height == null) {
           return;
         }
@@ -242,30 +290,22 @@ export function GraphEditor(props: Props) {
         const centerY =
           (draggedNode.positionAbsolute?.y ?? 0) + draggedNode.height / 2;
 
-        const targetNode =
-          nodes.find(
-            (node) =>
-              node.width != null &&
-              node.height != null &&
-              centerX > (node.positionAbsolute?.x ?? 0) &&
-              centerX < (node.positionAbsolute?.x ?? 0) + node.width &&
-              centerY > (node.positionAbsolute?.y ?? 0) &&
-              centerY < (node.positionAbsolute?.y ?? 0) + node.height &&
-              node.id !== draggedNode.id,
-          ) ?? null;
-
-        console.log(
-          nodes.filter(
-            (node) =>
-              node.width != null &&
-              node.height != null &&
-              centerX > (node.positionAbsolute?.x ?? 0) &&
-              centerX < (node.positionAbsolute?.x ?? 0) + node.width &&
-              centerY > (node.positionAbsolute?.y ?? 0) &&
-              centerY < (node.positionAbsolute?.y ?? 0) + node.height &&
-              node.id !== draggedNode.id,
-          ),
+        const targetNodes = nodes.filter(
+          (node) =>
+            node.width != null &&
+            node.height != null &&
+            centerX > (node.positionAbsolute?.x ?? 0) &&
+            centerX < (node.positionAbsolute?.x ?? 0) + node.width &&
+            centerY > (node.positionAbsolute?.y ?? 0) &&
+            centerY < (node.positionAbsolute?.y ?? 0) + node.height &&
+            node.id !== draggedNode.id,
         );
+
+        const targetNode =
+          maximumBy(
+            targetNodes,
+            (left, right) => (left.zIndex ?? 0) - (right.zIndex ?? 0),
+          ) ?? null;
 
         setTargetNode(targetNode);
       }}
