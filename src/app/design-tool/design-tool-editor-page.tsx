@@ -7,6 +7,7 @@ import {
   systemElementRelationCreate,
   queryAll as systemElementRelationQueryAll,
 } from "@/db/entities/system-element-relation/server-actions";
+import { Node } from "reactflow";
 import {
   SystemElement,
   SystemElementSchema,
@@ -25,6 +26,7 @@ import {
   useUpdateSystemElementParent,
 } from "./(components)/system-element-hooks";
 import { useDisclosure } from "@mantine/hooks";
+import { modals } from "@mantine/modals";
 
 export function DesignToolEditorPage() {
   const queryClient = useQueryClient();
@@ -68,6 +70,30 @@ export function DesignToolEditorPage() {
   if (systemElements.isLoading || systemElementRelations.isLoading) {
     return <Text>Loading ...</Text>;
   }
+
+  const openConfirmModalOnParentUpdate = (
+    sourceNode: Node,
+    targetNode: Node | null,
+  ) =>
+    modals.openConfirmModal({
+      title: "Please confirm your action",
+      children: (
+        <Text size="sm">
+          Are you sure that you want to add the selected element to this element
+          as a parent?
+        </Text>
+      ),
+      labels: { confirm: "Confirm", cancel: "Cancel" },
+      // onCancel: () => console.log("Cancel"),
+      onConfirm: () => {
+        updateSystemElementParent.mutate({
+          entity: {
+            id: sourceNode.id,
+          },
+          parentEntity: targetNode != null ? { id: targetNode.id } : null,
+        });
+      },
+    });
 
   return (
     <AppShell header={{ height: 70 }}>
@@ -145,12 +171,7 @@ export function DesignToolEditorPage() {
                 return;
               }
 
-              updateSystemElementParent.mutate({
-                entity: {
-                  id: sourceNode.id,
-                },
-                parentEntity: targetNode != null ? { id: targetNode.id } : null,
-              });
+              openConfirmModalOnParentUpdate(sourceNode, targetNode);
             }}
           />
         </div>
