@@ -4,17 +4,18 @@ import { Handle, NodeProps, Position, useNodeId } from "reactflow";
 import { SystemTechnologyInfoHoverCard } from "./(components)/system-technology-info-hover-card";
 import { useQuerySystemElementByID } from "./(components)/system-element-hooks";
 import { useExpandedGraphElements } from "./app-state";
+import { SystemElementTypeBadge } from "./(components)/system-element-type-badge";
 
 export function SystemElementNode(props: NodeProps) {
   const id = SystemElementIDSchema.parse(useNodeId());
   const systemElement = useQuerySystemElementByID(id);
   const setExpanded = useExpandedGraphElements();
 
-  if (systemElement.isLoading) {
+  if (systemElement.isLoading || systemElement.data == null) {
     return null;
   }
 
-  const childrenCount = systemElement.data?.children.length ?? 0;
+  const childrenCount = systemElement.data.children.length ?? 0;
   const hasChildren = childrenCount > 0;
 
   return (
@@ -24,7 +25,7 @@ export function SystemElementNode(props: NodeProps) {
           <Group justify="space-between" mt="md" mb="md">
             <Group gap={4} align="baseline">
               <Text size="xs" fw={500} inline>
-                {systemElement.data?.name}
+                {systemElement.data.name}
               </Text>
               {hasChildren && (
                 <Text size="xs" c="dimmed" inline>
@@ -33,18 +34,16 @@ export function SystemElementNode(props: NodeProps) {
               )}
             </Group>
 
-            <Badge size="xs" variant="light">
-              {systemElement.data?.type}
-            </Badge>
+            <SystemElementTypeBadge systemElement={systemElement.data} />
           </Group>
         </Card.Section>
 
         <Text size="xs" c="dimmed" lineClamp={4}>
-          {systemElement.data?.description}
+          {systemElement.data.description}
         </Text>
 
         <Group mt="md" gap={2}>
-          {systemElement.data?.technologies.map((technology) => (
+          {systemElement.data.technologies.map((technology) => (
             <SystemTechnologyInfoHoverCard
               key={technology.id}
               systemTechnology={technology}
