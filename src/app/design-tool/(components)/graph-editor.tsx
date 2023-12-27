@@ -10,6 +10,7 @@ import ReactFlow, {
   Edge,
   Background,
   ConnectionMode,
+  useReactFlow,
 } from "reactflow";
 
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
@@ -98,6 +99,7 @@ function makeReactFlowEdgeFromSystemElementRelation(
 }
 
 export function GraphEditor(props: Props) {
+  const instance = useReactFlow();
   const expandedGraphElements = useAtomValue(expandedGraphElementsAtom);
   const isGraphElementExpanded = useIsGraphElementExpanded();
   const parentSystemElements = useMemo(
@@ -262,7 +264,6 @@ export function GraphEditor(props: Props) {
     });
   }, [systemElementRelations]);
 
-  const draggedNodeRef = useRef<Node | null>(null);
   const [targetNode, setTargetNode] = useState<Node | null>(null);
 
   return (
@@ -283,29 +284,8 @@ export function GraphEditor(props: Props) {
       onNodeClick={props.onNodeClick}
       onNodeDoubleClick={props.onNodeDoubleClick}
       connectionMode={ConnectionMode.Loose}
-      onNodeDragStart={(event, node) => {
-        draggedNodeRef.current = node;
-      }}
       onNodeDrag={(event, draggedNode, ...args) => {
-        if (draggedNode.width == null || draggedNode.height == null) {
-          return;
-        }
-
-        const centerX =
-          (draggedNode.positionAbsolute?.x ?? 0) + draggedNode.width / 2;
-        const centerY =
-          (draggedNode.positionAbsolute?.y ?? 0) + draggedNode.height / 2;
-
-        const targetNodes = nodes.filter(
-          (node) =>
-            node.width != null &&
-            node.height != null &&
-            centerX > (node.positionAbsolute?.x ?? 0) &&
-            centerX < (node.positionAbsolute?.x ?? 0) + node.width &&
-            centerY > (node.positionAbsolute?.y ?? 0) &&
-            centerY < (node.positionAbsolute?.y ?? 0) + node.height &&
-            node.id !== draggedNode.id,
-        );
+        const targetNodes = instance.getIntersectingNodes(draggedNode);
 
         const targetNode =
           maximumBy(
@@ -317,8 +297,6 @@ export function GraphEditor(props: Props) {
       }}
       onNodeDragStop={(event, node) => {
         props.onNodeDrop?.(node, targetNode);
-
-        draggedNodeRef.current = null;
       }}
     >
       <Background />
