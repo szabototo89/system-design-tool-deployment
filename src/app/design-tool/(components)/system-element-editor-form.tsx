@@ -8,10 +8,15 @@ import {
   Group,
   Textarea,
   TagsInput,
+  Checkbox,
+  Fieldset,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
-type FormData = Pick<SystemElement, "name" | "description" | "type"> & {
+type FormData = Pick<
+  SystemElement,
+  "name" | "description" | "type" | "isExternal"
+> & {
   technologies: readonly string[];
 };
 
@@ -30,6 +35,7 @@ export function SystemElementEditorForm(props: Props) {
       description: props.initialValue?.description ?? "",
       type: props.initialValue?.type ?? "system",
       technologies: props.initialValue?.technologies ?? [],
+      isExternal: props.initialValue?.isExternal ?? false,
     },
   });
 
@@ -47,6 +53,7 @@ export function SystemElementEditorForm(props: Props) {
           description: form.values.description,
           type: form.values.type,
           technologies: form.values.technologies,
+          isExternal: form.values.isExternal,
         });
       }}
     >
@@ -83,6 +90,14 @@ export function SystemElementEditorForm(props: Props) {
               {...form.getInputProps("technologies")}
             />
           )}
+          <Fieldset variant="unstyled" legend="Modifiers">
+            <Checkbox
+              label="Is external?"
+              description="Mark as external if system element is not part of this organization"
+              size="xs"
+              {...form.getInputProps("isExternal", { type: "checkbox" })}
+            />
+          </Fieldset>
         </Stack>
         <Group justify="flex-end">
           {props.startContent}

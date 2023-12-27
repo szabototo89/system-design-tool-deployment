@@ -10,7 +10,7 @@ import {
 type Props = {
   systemElement: Pick<
     SystemElement,
-    "id" | "name" | "description" | "type" | "technologies"
+    "id" | "name" | "description" | "type" | "technologies" | "isExternal"
   >;
 } & Pick<React.ComponentProps<typeof Modal>, "opened" | "onClose">;
 
@@ -25,12 +25,19 @@ export function EditSystemElementModal(props: Props) {
           name: props.systemElement.name,
           description: props.systemElement.description,
           type: props.systemElement.type,
+          isExternal: props.systemElement.isExternal,
           technologies: props.systemElement.technologies.map(
             (technology) => technology.name,
           ),
         }}
         isSubmitting={updateSystemElement.isPending}
-        onSubmit={async ({ name, description, type, technologies }) => {
+        onSubmit={async ({
+          name,
+          description,
+          type,
+          technologies,
+          isExternal,
+        }) => {
           await updateSystemElement.mutateAsync({
             entity: { id: props.systemElement.id },
             value: {
@@ -38,6 +45,7 @@ export function EditSystemElementModal(props: Props) {
               description,
               type,
               parentID: null,
+              isExternal,
               technologies: technologies.map((technologyName) => {
                 return {
                   name: technologyName,

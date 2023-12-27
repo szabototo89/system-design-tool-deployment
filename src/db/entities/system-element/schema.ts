@@ -2,7 +2,7 @@ import {
   ActionBuilder,
   createSQLiteBackedEntity,
 } from "../../../entity-framework";
-import { sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { createdAtPattern } from "../../patterns/created-at-pattern";
 import { createSelectSchema } from "drizzle-zod";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
@@ -23,6 +23,7 @@ export const SystemElementEntity = createSQLiteBackedEntity({
       type: text("type"),
       description: text("description"),
       parentID: text("parent_id"),
+      isExternal: integer("is_external").default(0).notNull(),
       ...createdAtPattern.forTable(),
     });
   },
@@ -42,6 +43,8 @@ export const SystemElementEntity = createSQLiteBackedEntity({
       parentID: (schema) => schema.id.brand("SystemElementID"),
       type: z.enum(["system", "container", "component", "person"] as const),
       name: z.string().min(1, "System element name cannot be empty"),
+      isExternal: (schema) =>
+        schema.isExternal.transform((value) => (value === 1 ? true : false)),
     });
   },
 
@@ -165,10 +168,13 @@ export const SystemElementEntity = createSQLiteBackedEntity({
           db,
           value: Omit<Entity, "id" | "createdAt" | "technologies">,
         ) => {
+          const { isExternal, ...restValue } = value;
+
           return db
             .insert(table)
             .values({
-              ...value,
+              ...restValue,
+              isExternal: isExternal ? 1 : 0,
               id: randomUUID(),
             })
             .returning()
@@ -209,8 +215,11 @@ export const SystemElementEntity = createSQLiteBackedEntity({
             };
           },
         ) => {
-          const { technologies: technologiesValue, ...newValue } =
-            options.value;
+          const {
+            technologies: technologiesValue,
+            isExternal,
+            ...newValue
+          } = options.value;
 
           const technologies = await Promise.all(
             technologiesValue.map((technology) =>
@@ -239,7 +248,10 @@ export const SystemElementEntity = createSQLiteBackedEntity({
 
           return db
             .update(table)
-            .set(newValue)
+            .set({
+              ...newValue,
+              isExternal: isExternal ? 1 : 0,
+            })
             .where(eq(table.id, options.entity.id))
             .returning()
             .get();
