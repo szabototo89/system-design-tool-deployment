@@ -6,7 +6,7 @@ import { sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { randomUUID } from "crypto";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 
 export const SystemTechnologyEntity = createSQLiteBackedEntity({
@@ -88,7 +88,7 @@ export const SystemTechnologyEntity = createSQLiteBackedEntity({
           const systemTechnology = db
             .select()
             .from(table)
-            .where(eq(table.name, value.name))
+            .where(sql`${table.name} = ${value.name} COLLATE NOCASE`)
             .get();
 
           if (systemTechnology) {

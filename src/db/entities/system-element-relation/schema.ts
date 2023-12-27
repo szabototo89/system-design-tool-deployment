@@ -97,6 +97,10 @@ export const SystemElementRelationEntity = createSQLiteBackedEntity({
                     eq(table.systemElementRelationID, systemElementRelation.id),
                   );
 
+                if (technologies.length === 0) {
+                  return [];
+                }
+
                 return db
                   .insert(table)
                   .values(
