@@ -1,4 +1,12 @@
-import { Button, Group, Modal, Select, Stack, TextInput } from "@mantine/core";
+import {
+  Button,
+  Group,
+  Modal,
+  Select,
+  Stack,
+  TagsInput,
+  TextInput,
+} from "@mantine/core";
 import React from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { SystemElementRelation } from "@/db/entities/system-element-relation/schema";
@@ -9,13 +17,24 @@ import {
 import { useForm } from "@mantine/form";
 
 type Props = {
-  systemElementRelation: Pick<SystemElementRelation, "id" | "label"> | null;
+  systemElementRelation: Pick<
+    SystemElementRelation,
+    "id" | "label" | "technologies"
+  > | null;
 } & Pick<React.ComponentProps<typeof Modal>, "opened" | "onClose">;
 
 export function EditSystemElementRelationModal(props: Props) {
-  const form = useForm<Pick<SystemElementRelation, "label">>({
+  const form = useForm<
+    Pick<SystemElementRelation, "label"> & {
+      technologies: readonly SystemElementRelation["technologies"][number]["name"][];
+    }
+  >({
     initialValues: {
       label: props.systemElementRelation?.label ?? "",
+      technologies:
+        props.systemElementRelation?.technologies.map(
+          (technology) => technology.name,
+        ) ?? [],
     },
   });
 
@@ -51,6 +70,7 @@ export function EditSystemElementRelationModal(props: Props) {
             entity: props.systemElementRelation,
             params: {
               label: form.values.label,
+              technologies: form.values.technologies,
             },
           });
 
@@ -63,6 +83,12 @@ export function EditSystemElementRelationModal(props: Props) {
               label="Label"
               size="xs"
               {...form.getInputProps("label")}
+            />
+            <TagsInput
+              label="Technologies"
+              description="List of key associated technologies."
+              size="xs"
+              {...form.getInputProps("technologies")}
             />
           </Stack>
           <Group justify="space-between">

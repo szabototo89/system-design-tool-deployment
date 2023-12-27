@@ -59,7 +59,10 @@ export function createSQLiteBackedEntity<
   TEdgeDefinitions, //extends Record<string, ReturnType<SQLiteTableFn>>,
 >(schemaConfiguration: {
   table(): TSQLiteTableDefinition;
-  edges?(): TEdgeDefinitions;
+  edges?(config: {
+    sourceTable: TSQLiteTableDefinition;
+    sourceSchema: TSchema;
+  }): TEdgeDefinitions;
   entitySchema(table: TSQLiteTableDefinition): TSchema;
   actions?(config: {
     table: TSQLiteTableDefinition;
@@ -74,8 +77,10 @@ export function createSQLiteBackedEntity<
   }): TQueryConfiguration;
 }) {
   const table = schemaConfiguration.table();
-  const edges = schemaConfiguration.edges?.() ?? ({} as TEdgeDefinitions);
   const schema = schemaConfiguration.entitySchema(table);
+  const edges =
+    schemaConfiguration.edges?.({ sourceTable: table, sourceSchema: schema }) ??
+    ({} as TEdgeDefinitions);
   const queryBuilder = entityQueryBuilder.query().output(schema);
 
   function createQueries(configuration: TQueryConfiguration): {

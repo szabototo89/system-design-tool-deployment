@@ -76,7 +76,13 @@ function makeReactFlowEdgeFromSystemElementRelation(
     id: systemElementRelation.id,
     source: systemElementRelation.sourceID,
     target: systemElementRelation.targetID,
-    label: systemElementRelation.label,
+    label: `${systemElementRelation.label} ${
+      systemElementRelation.technologies.length
+        ? `(${systemElementRelation.technologies
+            .map((technology) => technology.name)
+            .join(", ")})`
+        : ""
+    }`,
     type: "smoothstep",
     markerEnd: {
       type: MarkerType.ArrowClosed,
