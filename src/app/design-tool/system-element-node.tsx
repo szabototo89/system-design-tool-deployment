@@ -1,5 +1,13 @@
 import { SystemElementIDSchema } from "@/db/entities/system-element/schema";
-import { Badge, Button, Card, Group, Text } from "@mantine/core";
+import {
+  Badge,
+  Button,
+  Card,
+  Group,
+  MantineStyleProp,
+  Text,
+  useMantineTheme,
+} from "@mantine/core";
 import { Handle, NodeProps, Position, useNodeId } from "reactflow";
 import { SystemTechnologyInfoHoverCard } from "./(components)/system-technology-info-hover-card";
 import { useQuerySystemElementByID } from "./(components)/system-element-hooks";
@@ -11,6 +19,8 @@ export function SystemElementNode(props: NodeProps) {
   const systemElement = useQuerySystemElementByID(id);
   const setExpanded = useExpandedGraphElements();
 
+  const theme = useMantineTheme();
+
   if (systemElement.isLoading || systemElement.data == null) {
     return null;
   }
@@ -18,13 +28,33 @@ export function SystemElementNode(props: NodeProps) {
   const childrenCount = systemElement.data.children.length ?? 0;
   const hasChildren = childrenCount > 0;
 
+  const selectionColor = theme.colors.blue["7"];
+  const style = props.selected
+    ? ({
+        borderColor: selectionColor,
+        borderWidth: "1px",
+      } satisfies MantineStyleProp)
+    : {};
+
   return (
     <>
-      <Card shadow="sm" padding="md" radius="md" withBorder maw={300}>
+      <Card
+        shadow="sm"
+        padding="md"
+        radius="md"
+        withBorder
+        style={style}
+        maw={300}
+      >
         <Card.Section inheritPadding>
           <Group justify="space-between" mt="md" mb="md">
             <Group gap={4} align="baseline">
-              <Text size="xs" fw={500} inline>
+              <Text
+                size="xs"
+                fw={500}
+                inline
+                c={props.selected ? selectionColor : undefined}
+              >
                 {systemElement.data.name}
               </Text>
               {hasChildren && (
