@@ -152,7 +152,10 @@ export const SystemElementRelationEntity = createSQLiteBackedEntity({
     return {
       create: new ActionBuilder(
         "create",
-        async (db, params: Omit<Entity, "id" | "createdAt">) => {
+        async (
+          db,
+          params: Omit<Entity, "id" | "createdAt", "technologies">,
+        ) => {
           return db
             .insert(table)
             .values({
