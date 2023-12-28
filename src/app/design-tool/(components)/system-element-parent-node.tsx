@@ -1,5 +1,13 @@
-import { Badge, Button, Card, Group, Text, Tooltip } from "@mantine/core";
-import { NodeProps, NodeResizer, useNodeId } from "reactflow";
+import {
+  Badge,
+  Button,
+  Card,
+  Group,
+  MantineSize,
+  Text,
+  Tooltip,
+} from "@mantine/core";
+import { NodeProps, NodeResizer, useNodeId, useStore } from "reactflow";
 import { useQuerySystemElementByID } from "./system-element-hooks";
 import { SystemElementIDSchema } from "@/db/entities/system-element/schema";
 import { useExpandedGraphElements } from "../app-state";
@@ -9,6 +17,10 @@ export function SystemElementParentNode(props: NodeProps<{}>) {
   const id = SystemElementIDSchema.parse(useNodeId());
   const systemElement = useQuerySystemElementByID(id);
   const setExpanded = useExpandedGraphElements();
+
+  const showLessDetails = useStore((state) => state.transform["2"] < 0.75);
+
+  const textSize: MantineSize = showLessDetails ? "xl" : "xs";
 
   if (systemElement.isLoading || systemElement.data == null) {
     return null;
@@ -35,18 +47,21 @@ export function SystemElementParentNode(props: NodeProps<{}>) {
       >
         <Group gap="sm" align="flex-end" justify="flex-start" h={"100%"}>
           <Group gap={4} align="baseline">
-            <Text size="xs" fw={500}>
+            <Text size={textSize} fw={500}>
               {systemElement.data.name}
             </Text>
             {childrenCount > 0 && (
               <Tooltip label="Number of children" openDelay={1000}>
-                <Text size="xs" c="dimmed">
+                <Text size={textSize} c="dimmed">
                   ({childrenCount})
                 </Text>
               </Tooltip>
             )}
           </Group>
-          <SystemElementTypeBadge systemElement={systemElement.data} />
+          <SystemElementTypeBadge
+            size={textSize}
+            systemElement={systemElement.data}
+          />
         </Group>
         {props.selected && (
           <Card.Section>

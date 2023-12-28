@@ -3,7 +3,7 @@ import { Badge, MantineColor } from "@mantine/core";
 
 type Props = {
   systemElement: SystemElement;
-};
+} & Pick<React.ComponentProps<typeof Badge<"div">>, "size">;
 
 const badgeColors = {
   system: "dark",
@@ -19,7 +19,7 @@ export function SystemElementTypeBadge(props: Props) {
       : "";
 
   return (
-    <Badge size="xs" variant="light" color={badgeColor}>
+    <Badge size={props.size ?? "xs"} variant="light" color={badgeColor}>
       {props.systemElement.isExternal && <>External </>}
       {props.systemElement.type}
     </Badge>

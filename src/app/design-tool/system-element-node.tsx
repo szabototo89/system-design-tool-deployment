@@ -8,7 +8,7 @@ import {
   Text,
   useMantineTheme,
 } from "@mantine/core";
-import { Handle, NodeProps, Position, useNodeId } from "reactflow";
+import { Handle, NodeProps, Position, useNodeId, useStore } from "reactflow";
 import { SystemTechnologyInfoHoverCard } from "./(components)/system-technology-info-hover-card";
 import { useQuerySystemElementByID } from "./(components)/system-element-hooks";
 import { useExpandedGraphElements } from "./app-state";
@@ -18,6 +18,8 @@ export function SystemElementNode(props: NodeProps) {
   const id = SystemElementIDSchema.parse(useNodeId());
   const systemElement = useQuerySystemElementByID(id);
   const setExpanded = useExpandedGraphElements();
+
+  const showLessDetails = useStore((state) => state.transform["2"] < 0.75);
 
   const theme = useMantineTheme();
 
@@ -47,43 +49,72 @@ export function SystemElementNode(props: NodeProps) {
         maw={300}
       >
         <Card.Section inheritPadding>
-          <Group justify="space-between" mt="md" mb="md">
-            <Group gap={4} align="baseline">
-              <Text
-                size="xs"
-                fw={500}
-                inline
-                c={props.selected ? selectionColor : undefined}
-              >
-                {systemElement.data.name}
-              </Text>
-              {hasChildren && (
-                <Text size="xs" c="dimmed" inline>
-                  ({childrenCount})
+          {showLessDetails ? (
+            <Group justify="center" mt="md" mb="md">
+              <Group gap={4} align="baseline">
+                <Text
+                  size="xl"
+                  fw={500}
+                  inline
+                  c={props.selected ? selectionColor : undefined}
+                >
+                  {systemElement.data.name}
                 </Text>
-              )}
-            </Group>
+                {hasChildren && (
+                  <Text size="xl" c="dimmed" inline>
+                    ({childrenCount})
+                  </Text>
+                )}
+              </Group>
 
-            <SystemElementTypeBadge systemElement={systemElement.data} />
-          </Group>
+              <SystemElementTypeBadge
+                size="xl"
+                systemElement={systemElement.data}
+              />
+            </Group>
+          ) : (
+            <Group justify="space-between" mt="md" mb="md">
+              <Group gap={4} align="baseline">
+                <Text
+                  size="xs"
+                  fw={500}
+                  inline
+                  c={props.selected ? selectionColor : undefined}
+                >
+                  {systemElement.data.name}
+                </Text>
+                {hasChildren && (
+                  <Text size="xs" c="dimmed" inline>
+                    ({childrenCount})
+                  </Text>
+                )}
+              </Group>
+
+              <SystemElementTypeBadge systemElement={systemElement.data} />
+            </Group>
+          )}
         </Card.Section>
 
-        <Text size="xs" c="dimmed" lineClamp={4}>
-          {systemElement.data.description}
-        </Text>
+        {!showLessDetails && (
+          <>
+            <Text size="xs" c="dimmed" lineClamp={4}>
+              {systemElement.data.description}
+            </Text>
 
-        <Group mt="md" gap={2}>
-          {systemElement.data.technologies.map((technology) => (
-            <SystemTechnologyInfoHoverCard
-              key={technology.id}
-              systemTechnology={technology}
-            >
-              <Badge size="xs" variant="white">
-                {technology.name}
-              </Badge>
-            </SystemTechnologyInfoHoverCard>
-          ))}
-        </Group>
+            <Group mt="md" gap={2}>
+              {systemElement.data.technologies.map((technology) => (
+                <SystemTechnologyInfoHoverCard
+                  key={technology.id}
+                  systemTechnology={technology}
+                >
+                  <Badge size="xs" variant="white">
+                    {technology.name}
+                  </Badge>
+                </SystemTechnologyInfoHoverCard>
+              ))}
+            </Group>
+          </>
+        )}
         {hasChildren && props.selected && (
           <Card.Section>
             <Group justify="end">
