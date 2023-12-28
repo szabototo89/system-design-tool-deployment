@@ -5,7 +5,7 @@ import { SystemElementIDSchema } from "@/db/entities/system-element/schema";
 import { useExpandedGraphElements } from "../app-state";
 import { SystemElementTypeBadge } from "./system-element-type-badge";
 
-export function SystemElementParentNode(props: NodeProps) {
+export function SystemElementParentNode(props: NodeProps<{}>) {
   const id = SystemElementIDSchema.parse(useNodeId());
   const systemElement = useQuerySystemElementByID(id);
   const setExpanded = useExpandedGraphElements();

@@ -287,13 +287,13 @@ export function GraphEditor(props: Props) {
       onNodeDrag={(event, draggedNode, ...args) => {
         const targetNodes = instance.getIntersectingNodes(draggedNode);
 
-        const targetNode =
+        const newTargetNode =
           maximumBy(
             targetNodes,
             (left, right) => (left.zIndex ?? 0) - (right.zIndex ?? 0),
           ) ?? null;
 
-        setTargetNode(targetNode);
+        setTargetNode(newTargetNode);
       }}
       onNodeDragStop={(event, node) => {
         props.onNodeDrop?.(node, targetNode);
