@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { GraphEditor } from "./(components)/graph-editor";
+import { GraphEditor } from "./graph-editor";
 import {
   AppShell,
   Box,
@@ -24,10 +24,10 @@ import {
   SystemElementSchema,
 } from "@/db/entities/system-element/schema";
 import { useState } from "react";
-import { CreateSystemElementModal } from "./(components)/create-system-element-modal";
-import { EditSystemElementModal } from "./(components)/edit-system-element-modal";
+import { CreateSystemElementModal } from "./create-system-element-modal";
+import { EditSystemElementModal } from "./edit-system-element-modal";
 import { ModalLauncher } from "@/components/modal-launcher";
-import { EditSystemElementRelationModal } from "./(components)/edit-system-element-relation-modal";
+import { EditSystemElementRelationModal } from "./edit-system-element-relation-modal";
 import {
   SystemElementRelation,
   SystemElementRelationIDSchema,
@@ -35,7 +35,7 @@ import {
 import {
   useQueryAllSystemElements,
   useUpdateSystemElementParent,
-} from "./(components)/system-element-hooks";
+} from "./system-element-hooks";
 import { useDisclosure } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import Link from "next/link";

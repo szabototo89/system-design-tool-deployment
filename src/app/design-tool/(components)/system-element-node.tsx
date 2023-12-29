@@ -9,10 +9,10 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { Handle, NodeProps, Position, useNodeId, useStore } from "reactflow";
-import { SystemTechnologyInfoHoverCard } from "./(components)/system-technology-info-hover-card";
-import { useQuerySystemElementByID } from "./(components)/system-element-hooks";
-import { useExpandedGraphElements } from "./app-state";
-import { SystemElementTypeBadge } from "./(components)/system-element-type-badge";
+import { SystemTechnologyInfoHoverCard } from "./system-technology-info-hover-card";
+import { useQuerySystemElementByID } from "./system-element-hooks";
+import { useExpandedGraphElements } from "../app-state";
+import { SystemElementTypeBadge } from "./system-element-type-badge";
 
 export function SystemElementNode(props: NodeProps) {
   const id = SystemElementIDSchema.parse(useNodeId());
