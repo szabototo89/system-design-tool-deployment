@@ -2,18 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { GraphEditor } from "./graph-editor";
-import {
-  AppShell,
-  Box,
-  Burger,
-  Button,
-  Group,
-  Skeleton,
-  Stack,
-  Text,
-  TextInput,
-  Title,
-} from "@mantine/core";
+import { AppShell, Box, Button, Text } from "@mantine/core";
 import {
   systemElementRelationCreate,
   queryAll as systemElementRelationQueryAll,
@@ -38,12 +27,10 @@ import {
 } from "./system-element-hooks";
 import { useDisclosure } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
-import Link from "next/link";
 
 export function DesignToolEditorPage() {
   const queryClient = useQueryClient();
   const [isEditElementModalOpened, { open, close }] = useDisclosure(false);
-  const [isNavbarOpened, { toggle: toggleNavbar }] = useDisclosure(true);
 
   const systemElements = useQueryAllSystemElements();
 
@@ -109,68 +96,7 @@ export function DesignToolEditorPage() {
     });
 
   return (
-    <AppShell
-      layout="alt"
-      header={{ height: 70 }}
-      navbar={{
-        width: 300,
-        breakpoint: "sm",
-        collapsed: { desktop: !isNavbarOpened, mobile: !isNavbarOpened },
-      }}
-    >
-      <AppShell.Navbar p="md">
-        <Stack>
-          <Group justify="space-between">
-            <Text>System Design Tool</Text>
-            <Burger opened={isNavbarOpened} onClick={toggleNavbar} size="sm" />
-          </Group>
-
-          <Box pl={0} mb="md">
-            <Text tt="uppercase" size="xs" fw={500} mb="sm">
-              Dashboard
-            </Text>
-
-            <Text
-              component={Link}
-              href="#"
-              size="sm"
-              py="xs"
-              px="md"
-              display="block"
-              fw={500}
-            >
-              Canvas
-            </Text>
-            <Text
-              component={Link}
-              href="#"
-              size="sm"
-              py="xs"
-              px="md"
-              display="block"
-              fw={500}
-            >
-              Elements
-            </Text>
-          </Box>
-
-          <Box pl={0} mb="md">
-            <Text tt="uppercase" size="xs" fw={500} mb="sm">
-              Settings
-            </Text>
-          </Box>
-        </Stack>
-      </AppShell.Navbar>
-
-      <AppShell.Header px="md">
-        <Group align="center" h="100%">
-          {!isNavbarOpened && (
-            <Burger opened={isNavbarOpened} onClick={toggleNavbar} size="sm" />
-          )}
-          <TextInput placeholder="Search ..." />
-        </Group>
-      </AppShell.Header>
-
+    <>
       <AppShell.Aside>
         <Button.Group>
           <ModalLauncher
@@ -191,13 +117,15 @@ export function DesignToolEditorPage() {
         </Button.Group>
       </AppShell.Aside>
 
-      <AppShell.Main style={{ position: "relative" }}>
-        <div
-          style={{
-            height: "calc(100% - 70px)",
-            width: "100%",
-            position: "absolute",
-          }}
+      <AppShell.Main
+        style={{ position: "relative" }}
+        pos="relative"
+        h="calc(100vh - var(--app-shell-header-height, 0px) - var(--app-shell-footer-height, 0px))"
+      >
+        <Box
+          pos="absolute"
+          w="calc(100vw - var(--app-shell-navbar-width, 0px)"
+          h="calc(100vh - var(--app-shell-header-height, 0px) - var(--app-shell-footer-height, 0px))"
         >
           <GraphEditor
             systemElements={systemElements.data ?? []}
@@ -241,7 +169,7 @@ export function DesignToolEditorPage() {
               openConfirmModalOnParentUpdate(sourceNode, targetNode);
             }}
           />
-        </div>
+        </Box>
         {selectedSystemElementRelation != null && (
           <EditSystemElementRelationModal
             key={selectedSystemElementRelationID ?? ""}
@@ -258,6 +186,6 @@ export function DesignToolEditorPage() {
           />
         )}
       </AppShell.Main>
-    </AppShell>
+    </>
   );
 }

@@ -42,7 +42,7 @@ export const SystemElementEntity = createSQLiteBackedEntity({
       id: (schema) => schema.id.brand("SystemElementID"),
       parentID: (schema) => schema.id.brand("SystemElementID"),
       type: z.enum(["system", "container", "component", "person"] as const),
-      name: z.string().min(1, "System element name cannot be empty"),
+      name: z.string().trim().min(1, "System element name cannot be empty"),
       isExternal: (schema) =>
         schema.isExternal.transform((value) => (value === 1 ? true : false)),
     });
