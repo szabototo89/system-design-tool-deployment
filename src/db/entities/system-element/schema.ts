@@ -155,6 +155,16 @@ export const SystemElementEntity = createSQLiteBackedEntity({
             }),
           ),
         ),
+      queryChildrenFrom: queryBuilder
+        .implementation(
+          async (
+            db: BetterSQLite3Database,
+            entity: Pick<z.infer<typeof schema>, "id">,
+          ) => {
+            return db.select().from(table).where(eq(table.parentID, entity.id));
+          },
+        )
+        .output(z.array(schema)),
     };
   },
 

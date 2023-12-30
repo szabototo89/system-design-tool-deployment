@@ -1,4 +1,5 @@
-import { ModalLauncher } from "@/components/modal-launcher";
+"use client";
+
 import {
   Badge,
   Button,

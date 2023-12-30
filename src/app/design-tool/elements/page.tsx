@@ -6,6 +6,9 @@ import { AppShellMainContent } from "../(components)/app-shell-main-content";
 
 export default async function DesignToolElementsPage() {
   const systemElements = await SystemElementEntity.queries.queryAll(db);
+  const systemElementsSortedByName = systemElements.toSorted((left, right) =>
+    (left.name ?? "") < (right.name ?? "") ? -1 : 1,
+  );
 
   return (
     <AppShellMainContent
@@ -13,7 +16,7 @@ export default async function DesignToolElementsPage() {
       subtitle="Browse among workspace elements"
     >
       <SimpleGrid cols={{ sm: 2, md: 3 }}>
-        {systemElements.map((systemElement) => (
+        {systemElementsSortedByName.map((systemElement) => (
           <SystemElementCardItem
             key={systemElement.id}
             systemElement={systemElement}

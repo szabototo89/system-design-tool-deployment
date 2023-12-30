@@ -7,17 +7,18 @@ type Props = React.PropsWithChildren<{
 
 export function AppShellMainContent(props: Props) {
   return (
-    <AppShellMain h="calc(100vh - var(--app-shell-header-height, 0px) - var(--app-shell-footer-height, 0px))">
-      <Flex h="100%">
-        <Box px="xl" py="md" bg="gray.2" pos="relative" h="100%">
-          <Title order={3}>{props.title}</Title>
-          <Text>{props.subtitle}</Text>
+    <AppShellMain
+      mih="calc(100vh - var(--app-shell-header-height, 0px) - var(--app-shell-footer-height, 0px))"
+      pos="relative"
+    >
+      <Box px="xl" py="md" bg="gray.2" pos="relative" h="100%">
+        <Title order={3}>{props.title}</Title>
+        <Text>{props.subtitle}</Text>
 
-          <Divider my="md" />
+        <Divider my="md" />
 
-          {props.children}
-        </Box>
-      </Flex>
+        {props.children}
+      </Box>
     </AppShellMain>
   );
 }

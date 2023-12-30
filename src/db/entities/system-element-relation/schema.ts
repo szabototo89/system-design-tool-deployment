@@ -1,18 +1,16 @@
+import { randomUUID } from "crypto";
+import { eq } from "drizzle-orm";
+import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
+import { getTableConfig, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { createSelectSchema } from "drizzle-zod";
+import { z } from "zod";
 import {
   ActionBuilder,
   createSQLiteBackedEntity,
 } from "../../../entity-framework";
-import { getTableConfig, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { createdAtPattern } from "../../patterns/created-at-pattern";
-import { createSelectSchema } from "drizzle-zod";
-import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
-import { z } from "zod";
-import { randomUUID } from "crypto";
-import { eq } from "drizzle-orm";
-import {
-  SystemTechnologyEntity,
-  SystemTechnologySchema,
-} from "../system-technology/schema";
+import { SystemElement, SystemElementIDSchema } from "../system-element/schema";
+import { SystemTechnologyEntity } from "../system-technology/schema";
 
 export const SystemElementRelationEntity = createSQLiteBackedEntity({
   table() {
@@ -28,6 +26,8 @@ export const SystemElementRelationEntity = createSQLiteBackedEntity({
   entitySchema(table) {
     const baseSchema = createSelectSchema(table, {
       id: (schema) => schema.id.brand("SystemElementRelation"),
+      sourceID: SystemElementIDSchema,
+      targetID: SystemElementIDSchema,
     });
 
     return baseSchema.extend({
@@ -143,6 +143,33 @@ export const SystemElementRelationEntity = createSQLiteBackedEntity({
           );
         })
         .output(z.array(schema)),
+      queryFromSystemElementSource: queryBuilder
+        .implementation(
+          (
+            db: BetterSQLite3Database,
+            systemElement: Pick<SystemElement, "id">,
+          ) => {
+            return db
+              .select()
+              .from(table)
+              .where(eq(table.sourceID, systemElement.id));
+          },
+        )
+        .output(z.array(schema.omit({ technologies: true }))),
+
+      queryFromSystemElementTarget: queryBuilder
+        .implementation(
+          (
+            db: BetterSQLite3Database,
+            systemElement: Pick<SystemElement, "id">,
+          ) => {
+            return db
+              .select()
+              .from(table)
+              .where(eq(table.targetID, systemElement.id));
+          },
+        )
+        .output(z.array(schema.omit({ technologies: true }))),
     };
   },
 
@@ -154,7 +181,7 @@ export const SystemElementRelationEntity = createSQLiteBackedEntity({
         "create",
         async (
           db,
-          params: Omit<Entity, "id" | "createdAt", "technologies">,
+          params: Omit<Entity, "id" | "createdAt" | "technologies">,
         ) => {
           return db
             .insert(table)
