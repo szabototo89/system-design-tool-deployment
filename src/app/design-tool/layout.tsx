@@ -81,8 +81,8 @@ export default function DesignToolIndexPageLayout(
               <AppShellNavbarItem href="/design-tool/canvas">
                 Canvas
               </AppShellNavbarItem>
-              <AppShellNavbarItem href="/design-tool/elements">
-                Elements
+              <AppShellNavbarItem href="/design-tool/library">
+                Library
               </AppShellNavbarItem>
             </Box>
 

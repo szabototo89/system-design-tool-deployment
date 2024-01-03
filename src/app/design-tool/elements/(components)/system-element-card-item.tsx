@@ -7,7 +7,15 @@ type Props = { systemElement: SystemElement };
 
 export function SystemElementCardItem(props: Props) {
   return (
-    <Card shadow="sm" padding="md" radius="md" withBorder>
+    <Card
+      component={Link}
+      href={"/design-tool/elements/" + props.systemElement.id}
+      target="_blank"
+      shadow="sm"
+      padding="md"
+      radius="md"
+      withBorder
+    >
       <CardSection inheritPadding>
         <Group justify="space-between" mb="md">
           <Group gap={4} align="baseline">
@@ -24,19 +32,9 @@ export function SystemElementCardItem(props: Props) {
       </CardSection>
 
       <Stack h="100%" justify="space-between">
-        <Text c="dimmed" lineClamp={4}>
+        <Text size="sm" c="dimmed" lineClamp={4}>
           {props.systemElement.description}
         </Text>
-
-        <Button
-          component={Link}
-          href={"/design-tool/elements/" + props.systemElement.id}
-          target="_blank"
-          size="xs"
-          variant="outline"
-        >
-          Details
-        </Button>
       </Stack>
     </Card>
   );

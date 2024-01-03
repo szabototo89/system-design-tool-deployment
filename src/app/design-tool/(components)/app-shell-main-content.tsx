@@ -15,8 +15,6 @@ export function AppShellMainContent(props: Props) {
         <Title order={3}>{props.title}</Title>
         <Text>{props.subtitle}</Text>
 
-        <Divider my="md" />
-
         {props.children}
       </Box>
     </AppShellMain>

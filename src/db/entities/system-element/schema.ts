@@ -1,14 +1,14 @@
+import { randomUUID } from "crypto";
+import { InferSelectModel, eq, inArray } from "drizzle-orm";
+import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { createSelectSchema } from "drizzle-zod";
+import { z } from "zod";
 import {
   ActionBuilder,
   createSQLiteBackedEntity,
 } from "../../../entity-framework";
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { createdAtPattern } from "../../patterns/created-at-pattern";
-import { createSelectSchema } from "drizzle-zod";
-import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
-import { z } from "zod";
-import { randomUUID } from "crypto";
-import { eq, inArray, InferSelectModel } from "drizzle-orm";
 import {
   SystemTechnology,
   SystemTechnologyEntity,
@@ -54,6 +54,10 @@ export const SystemElementEntity = createSQLiteBackedEntity({
       db: BetterSQLite3Database,
       entities: Array<InferSelectModel<typeof table>>,
     ) => {
+      if (!entities.length) {
+        return [];
+      }
+
       const technologies = await db
         .select()
         .from(SystemTechnologyEntity.table)

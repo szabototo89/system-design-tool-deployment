@@ -13,14 +13,20 @@ import {
   Anchor,
   SimpleGrid,
   Badge,
+  ThemeIcon,
 } from "@mantine/core";
+import {
+  IconArrowMoveLeft,
+  IconArrowMoveRight,
+  IconCaretRight,
+} from "@tabler/icons-react";
+
 import { AppShellMainContent } from "../../(components)/app-shell-main-content";
 import React from "react";
 import { RelativeTimestamp } from "@/components/relative-timestamp";
 import Link from "next/link";
 import { SystemTechnologyInfoHoverCard } from "../../(components)/system-technology-info-hover-card";
 import { SystemElementRelationEntity } from "@/db/entities/system-element-relation/schema";
-import { useQuerySystemElementByID } from "../../(components)/system-element-hooks";
 
 type Props = {
   params: { systemElementID: SystemElement["id"] };
@@ -146,13 +152,25 @@ export default async function SystemElementDetailsPage(props: Props) {
               <Text fw={500}>Children</Text>
             </Group>
 
-            <Stack gap="xs">
+            <List
+              size="xs"
+              icon={
+                <ThemeIcon variant="light">
+                  <IconCaretRight />
+                </ThemeIcon>
+              }
+            >
               {children.map((child) => {
                 return (
-                  <SystemElementAnchor key={child.id} systemElement={child} />
+                  <ListItem key={child.id}>
+                    <SystemElementAnchor systemElement={child} />
+                    <Text size="xs" c="dimmed">
+                      {child.description}
+                    </Text>
+                  </ListItem>
                 );
               })}
-            </Stack>
+            </List>
           </Card>
         )}
 
@@ -163,7 +181,14 @@ export default async function SystemElementDetailsPage(props: Props) {
                 <Text fw={500}>Incoming relations</Text>
               </Group>
 
-              <List size="xs">
+              <List
+                size="xs"
+                icon={
+                  <ThemeIcon variant="light">
+                    <IconArrowMoveLeft />
+                  </ThemeIcon>
+                }
+              >
                 {incomingRelations.map((relation) => {
                   return (
                     <ListItem key={relation.id}>
@@ -186,7 +211,14 @@ export default async function SystemElementDetailsPage(props: Props) {
                 <Text fw={500}>Outgoing relations</Text>
               </Group>
 
-              <List size="xs">
+              <List
+                size="xs"
+                icon={
+                  <ThemeIcon variant="light">
+                    <IconArrowMoveRight />
+                  </ThemeIcon>
+                }
+              >
                 {outgoingRelations.map((relation) => {
                   return (
                     <ListItem key={relation.id}>
