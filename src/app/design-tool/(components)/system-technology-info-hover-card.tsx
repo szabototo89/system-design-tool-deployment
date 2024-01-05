@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ActionIcon,
   Badge,
   Button,
   Group,
@@ -8,10 +9,12 @@ import {
   ScrollArea,
   Stack,
   Text,
+  rem,
 } from "@mantine/core";
 import { EditSystemTechnologyModal } from "./edit-system-technology-modal";
 import { SystemTechnology } from "@/db/entities/system-technology/schema";
 import React, { useState } from "react";
+import { IconPencil } from "@tabler/icons-react";
 
 type Props = React.PropsWithChildren<{
   systemTechnology: SystemTechnology;
@@ -36,19 +39,24 @@ export function SystemTechnologyInfoHoverCard(props: Props) {
         <HoverCard.Dropdown>
           <Stack gap="md">
             <Group justify="space-between">
-              <Text size="xs" fw={500}>
-                {props.systemTechnology.name}
-              </Text>
-              <Button
+              <Stack gap={0}>
+                <Text size="xs" fw={500}>
+                  {props.systemTechnology.name}
+                </Text>
+                <Text c="dimmed" size="xs">
+                  technology
+                </Text>
+              </Stack>
+              <ActionIcon
                 variant="light"
-                size="compact-xs"
+                size={24}
                 onClick={() => {
                   setHoverCardShown(false);
                   setModalOpened(true);
                 }}
               >
-                Edit
-              </Button>
+                <IconPencil style={{ width: rem(16), height: rem(16) }} />
+              </ActionIcon>
             </Group>
             {!!props.systemTechnology.description && (
               <ScrollArea h={100} scrollHideDelay={500}>
