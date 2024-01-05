@@ -6,11 +6,11 @@ import ReactFlow, {
   type Node,
   type NodeTypes,
   useEdgesState,
-  MarkerType,
   Edge,
   Background,
   ConnectionMode,
   useReactFlow,
+  EdgeTypes,
 } from "reactflow";
 
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
@@ -21,30 +21,32 @@ import "reactflow/dist/style.css";
 import "../../../styles/app.reactflow.css";
 
 import { SystemElementParentNode } from "./system-element-parent-node";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 import {
-  expandedGraphElementAtom,
   expandedGraphElementsAtom,
   useIsGraphElementExpanded,
 } from "../app-state";
 import { maximumBy } from "@/utils/maximumBy";
+import { SystemElementRelationEdgeRenderer } from "./system-element-relation-edge-renderer";
 
 type Props = {
   systemElements: readonly SystemElement[];
   systemElementRelations: readonly SystemElementRelation[];
-
   onNodeDrop?(source: Node, target: Node | null): void;
-
   onConnect?(options: { source: string; target: string }): void;
 } & Pick<
   React.ComponentProps<typeof ReactFlow>,
-  "onEdgeClick" | "onNodeClick" | "onNodeDoubleClick"
+  "onEdgeClick" | "onNodeClick" | "onNodeDoubleClick" | "onPaneClick"
 >;
 
 const nodeTypes = {
   SystemElementNode,
   SystemElementParentNode,
 } satisfies NodeTypes;
+
+const edgeTypes = {
+  SystemElementRelationEdgeRenderer,
+} satisfies EdgeTypes;
 
 function makeReactFlowNodeFromSystemElement(
   systemElement: SystemElement,
@@ -63,7 +65,6 @@ function makeReactFlowNodeFromSystemElement(
     selectable: true,
     data: {},
     position: { x: 0, y: 0 },
-    // extent: systemElement.parentID != null ? "parent" : undefined,
     parentNode: systemElement.parentID ?? undefined,
     expandParent: false,
     zIndex,
@@ -77,25 +78,8 @@ function makeReactFlowEdgeFromSystemElementRelation(
     id: systemElementRelation.id,
     source: systemElementRelation.sourceID,
     target: systemElementRelation.targetID,
-    label: `${systemElementRelation.label} ${
-      systemElementRelation.technologies.length
-        ? `(${systemElementRelation.technologies
-            .map((technology) => technology.name)
-            .join(", ")})`
-        : ""
-    }`,
-    type: "smoothstep",
-    markerEnd: {
-      type: MarkerType.ArrowClosed,
-      width: 10,
-      height: 10,
-      color: "#A9B0BF",
-    },
-    style: {
-      strokeWidth: 2,
-      stroke: "#A9B0BF",
-    },
-  } satisfies Edge<unknown>;
+    type: SystemElementRelationEdgeRenderer.name,
+  } satisfies Edge<{}>;
 }
 
 export function GraphEditor(props: Props) {
@@ -244,23 +228,10 @@ export function GraphEditor(props: Props) {
   }, [systemElements, parentSystemElements, expandedGraphElements]);
 
   useEffect(() => {
-    setEdges((previousEdges) => {
-      const previousEdgesByID = Object.fromEntries(
-        previousEdges.map((edge) => [edge.id, edge]),
+    setEdges(() => {
+      return systemElementRelations.map(
+        makeReactFlowEdgeFromSystemElementRelation,
       );
-
-      return systemElementRelations
-        .map(makeReactFlowEdgeFromSystemElementRelation)
-        .map((systemElementRelation) => {
-          if (systemElementRelation.id in previousEdgesByID) {
-            return {
-              ...previousEdgesByID[systemElementRelation.id],
-              label: systemElementRelation.label,
-            };
-          }
-
-          return systemElementRelation;
-        });
     });
   }, [systemElementRelations]);
 
@@ -279,7 +250,10 @@ export function GraphEditor(props: Props) {
           target: connection.target ?? "",
         });
       }}
+      selectNodesOnDrag={false}
       nodeTypes={nodeTypes}
+      edgeTypes={edgeTypes}
+      onPaneClick={props.onPaneClick}
       onEdgeClick={props.onEdgeClick}
       onNodeClick={props.onNodeClick}
       onNodeDoubleClick={props.onNodeDoubleClick}

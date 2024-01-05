@@ -27,6 +27,7 @@ import {
 } from "./system-element-hooks";
 import { useDisclosure } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
+import { useSystemElementSelectionState } from "../app-state";
 
 export function DesignToolEditorPage() {
   const queryClient = useQueryClient();
@@ -52,9 +53,8 @@ export function DesignToolEditorPage() {
 
   const updateSystemElementParent = useUpdateSystemElementParent();
 
-  const [selectedSystemElementID, setSelectedSystemElementID] = useState<
-    SystemElement["id"] | null
-  >(null);
+  const [selectedSystemElementID, setSelectedSystemElementID] =
+    useSystemElementSelectionState();
 
   const [selectedSystemElementRelationID, setSelectedSystemElementRelationID] =
     useState<SystemElementRelation["id"] | null>(null);
@@ -84,7 +84,6 @@ export function DesignToolEditorPage() {
         </Text>
       ),
       labels: { confirm: "Confirm", cancel: "Cancel" },
-      // onCancel: () => console.log("Cancel"),
       onConfirm: () => {
         updateSystemElementParent.mutate({
           entity: {
@@ -130,6 +129,7 @@ export function DesignToolEditorPage() {
           <GraphEditor
             systemElements={systemElements.data ?? []}
             systemElementRelations={systemElementRelations.data ?? []}
+            onPaneClick={() => setSelectedSystemElementID(null)}
             onConnect={({ source, target }) => {
               createSystemElementRelation.mutate({
                 label: "Give me a label",

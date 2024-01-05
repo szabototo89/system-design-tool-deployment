@@ -8,6 +8,11 @@ export const queryAll = SystemElementRelationEntity.queries.queryAll.bind(
   db,
 );
 
+export const systemElementRelationQueryByID = SystemElementRelationEntity.queries.queryByID.bind(
+  null,
+  db,
+);
+
 export const SystemElementRelationUpdate =
   SystemElementRelationEntity.actions.update.bind(null, db);
 

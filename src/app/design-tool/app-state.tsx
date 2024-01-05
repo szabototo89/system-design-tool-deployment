@@ -1,9 +1,13 @@
 import { SystemElement } from "@/db/entities/system-element/schema";
 import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
-import { useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 
 export const expandedGraphElementsAtom = atom<SystemElement["id"][]>([]);
+const selectedSystemElementAtom = atom<SystemElement["id"] | null>(null);
+
+export function useSystemElementSelectionState() {
+  return useAtom(selectedSystemElementAtom);
+}
 
 export function useIsGraphElementExpanded() {
   const expandedGraphElements = useAtomValue(expandedGraphElementsAtom);

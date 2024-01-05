@@ -6,6 +6,7 @@ import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import {
   ActionBuilder,
+  EntityQueryConfiguration,
   createSQLiteBackedEntity,
 } from "../../../entity-framework";
 import { createdAtPattern } from "../../patterns/created-at-pattern";
@@ -122,6 +123,8 @@ export const SystemElementRelationEntity = createSQLiteBackedEntity({
   },
 
   queries({ table, queryBuilder, schema, edges }) {
+    type Entity = z.infer<typeof schema>;
+
     return {
       queryAll: queryBuilder
         .implementation(async (db: BetterSQLite3Database) => {
@@ -143,6 +146,30 @@ export const SystemElementRelationEntity = createSQLiteBackedEntity({
           );
         })
         .output(z.array(schema)),
+      queryByID: queryBuilder
+        .implementation(async (db: BetterSQLite3Database, id: Entity["id"]) => {
+          const relation = db
+            .select()
+            .from(table)
+            .where(eq(table.id, id))
+            .get();
+
+          if (relation == null) {
+            return null;
+          }
+
+          const technologies =
+            await edges.technologies.queries.queryTechnologiesBySystemElementRelationID(
+              db,
+              relation.id,
+            );
+
+          return {
+            ...relation,
+            technologies,
+          };
+        })
+        .output(schema),
       queryFromSystemElementSource: queryBuilder
         .implementation(
           (

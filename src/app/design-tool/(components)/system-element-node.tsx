@@ -38,7 +38,7 @@ export function SystemElementNode(props: NodeProps) {
       } satisfies MantineStyleProp)
     : {};
 
-  return (
+return (
     <>
       <Card
         shadow="sm"
