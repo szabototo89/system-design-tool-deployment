@@ -11,6 +11,7 @@ import ReactFlow, {
   ConnectionMode,
   useReactFlow,
   EdgeTypes,
+  Controls,
 } from "reactflow";
 
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
@@ -274,6 +275,8 @@ export function GraphEditor(props: Props) {
       }}
     >
       <Background />
+      <Controls />
+      <CanvasLayout />
     </ReactFlow>
   );
 }

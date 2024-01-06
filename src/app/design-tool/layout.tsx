@@ -6,12 +6,15 @@ import {
   Group,
   Burger,
   Box,
+  Button,
   TextInput,
   Text,
 } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Link from "next/link";
 import React, { useMemo, useState } from "react";
+import { useAsideState } from "./app-state";
 
 function AppShellNavbarItem({
   children,
@@ -50,6 +53,7 @@ export default function DesignToolIndexPageLayout(
     [],
   );
   const [isNavbarOpened, setNavbarOpened] = useState(false);
+  const [, setAsideOpened] = useAsideState();
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -95,15 +99,20 @@ export default function DesignToolIndexPageLayout(
         </AppShell.Navbar>
 
         <AppShell.Header px="md">
-          <Group align="center" h="100%">
-            {!isNavbarOpened && (
-              <Burger
-                opened={isNavbarOpened}
-                onClick={() => setNavbarOpened((previous) => !previous)}
-                size="sm"
-              />
-            )}
-            <TextInput placeholder="Search ..." />
+          <Group align="center" justify="space-between" h="100%">
+            <Group align="center">
+              {!isNavbarOpened && (
+                <Burger
+                  opened={isNavbarOpened}
+                  onClick={() => setNavbarOpened((previous) => !previous)}
+                  size="sm"
+                />
+              )}
+              <TextInput placeholder="Search ..." />
+            </Group>
+            <Button onClick={() => setAsideOpened((previous) => !previous)}>
+              Toggle
+            </Button>
           </Group>
         </AppShell.Header>
 

@@ -2,7 +2,15 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { GraphEditor } from "./graph-editor";
-import { AppShell, Box, Button, Text } from "@mantine/core";
+import {
+  ActionIcon,
+  AppShell,
+  Box,
+  Button,
+  Group,
+  Stack,
+  Text,
+} from "@mantine/core";
 import {
   systemElementRelationCreate,
   queryAll as systemElementRelationQueryAll,
@@ -27,10 +35,12 @@ import {
 } from "./system-element-hooks";
 import { useDisclosure } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
-import { useSystemElementSelectionState } from "../app-state";
+import { useAsideState, useSystemElementSelectionState } from "../app-state";
+import { IconX } from "@tabler/icons-react";
 
 export function DesignToolEditorPage() {
   const queryClient = useQueryClient();
+  const [isAsideOpened, setAsideOpened] = useAsideState();
   const [isEditElementModalOpened, { open, close }] = useDisclosure(false);
 
   const systemElements = useQueryAllSystemElements();
@@ -96,25 +106,38 @@ export function DesignToolEditorPage() {
 
   return (
     <>
-      <AppShell.Aside>
-        <Button.Group>
-          <ModalLauncher
-            variant="default"
-            renderModal={({ isOpened, close }) => (
-              <CreateSystemElementModal opened={isOpened} onClose={close} />
-            )}
-          >
-            Add element
-          </ModalLauncher>
-          <Button
-            variant="default"
-            onClick={open}
-            disabled={selectedSystemElement == null}
-          >
-            Edit element
-          </Button>
-        </Button.Group>
-      </AppShell.Aside>
+      {isAsideOpened && (
+        <AppShell.Aside>
+          <Stack p="xs">
+            <Group justify="end">
+              <ActionIcon
+                variant="white"
+                size="sm"
+                onClick={() => setAsideOpened(false)}
+              >
+                <IconX />
+              </ActionIcon>
+            </Group>
+            <Button.Group>
+              <ModalLauncher
+                variant="default"
+                renderModal={({ isOpened, close }) => (
+                  <CreateSystemElementModal opened={isOpened} onClose={close} />
+                )}
+              >
+                Add element
+              </ModalLauncher>
+              <Button
+                variant="default"
+                onClick={open}
+                disabled={selectedSystemElement == null}
+              >
+                Edit element
+              </Button>
+            </Button.Group>
+          </Stack>
+        </AppShell.Aside>
+      )}
 
       <AppShell.Main
         style={{ position: "relative" }}
@@ -123,7 +146,8 @@ export function DesignToolEditorPage() {
       >
         <Box
           pos="absolute"
-          w="calc(100vw - var(--app-shell-navbar-width, 0px)"
+          w2="calc(100% - var(--app-shell-navbar-width, 0px))"
+          w="100%"
           h="calc(100vh - var(--app-shell-header-height, 0px) - var(--app-shell-footer-height, 0px))"
         >
           <GraphEditor

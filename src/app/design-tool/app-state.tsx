@@ -5,6 +5,12 @@ import { useCallback } from "react";
 export const expandedGraphElementsAtom = atom<SystemElement["id"][]>([]);
 const selectedSystemElementAtom = atom<SystemElement["id"] | null>(null);
 
+const isAsideOpenedAtom = atom<boolean>(false);
+
+export function useAsideState() {
+  return useAtom(isAsideOpenedAtom);
+}
+
 export function useSystemElementSelectionState() {
   return useAtom(selectedSystemElementAtom);
 }
