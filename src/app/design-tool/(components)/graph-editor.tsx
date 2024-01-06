@@ -29,6 +29,7 @@ import {
 } from "../app-state";
 import { maximumBy } from "@/utils/maximumBy";
 import { SystemElementRelationEdgeRenderer } from "./system-element-relation-edge-renderer";
+import { CanvasLayout } from "./canvas-layout";
 
 type Props = {
   systemElements: readonly SystemElement[];
