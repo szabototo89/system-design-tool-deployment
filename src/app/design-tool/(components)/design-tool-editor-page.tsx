@@ -18,6 +18,7 @@ import {
 import { Node } from "reactflow";
 import {
   SystemElement,
+  SystemElementIDSchema,
   SystemElementSchema,
 } from "@/db/entities/system-element/schema";
 import { useState } from "react";
@@ -97,9 +98,12 @@ export function DesignToolEditorPage() {
       onConfirm: () => {
         updateSystemElementParent.mutate({
           entity: {
-            id: sourceNode.id,
+            id: SystemElementIDSchema.parse(sourceNode.id),
           },
-          parentEntity: targetNode != null ? { id: targetNode.id } : null,
+          parentEntity:
+            targetNode != null
+              ? { id: SystemElementIDSchema.parse(targetNode.id) }
+              : null,
         });
       },
     });
@@ -144,9 +148,9 @@ export function DesignToolEditorPage() {
         pos="relative"
         h="calc(100vh - var(--app-shell-header-height, 0px) - var(--app-shell-footer-height, 0px))"
       >
+        {/* w="calc(100% - var(--app-shell-navbar-width, 0px))" */}
         <Box
           pos="absolute"
-          w2="calc(100% - var(--app-shell-navbar-width, 0px))"
           w="100%"
           h="calc(100vh - var(--app-shell-header-height, 0px) - var(--app-shell-footer-height, 0px))"
         >
@@ -157,8 +161,8 @@ export function DesignToolEditorPage() {
             onConnect={({ source, target }) => {
               createSystemElementRelation.mutate({
                 label: "Give me a label",
-                sourceID: source,
-                targetID: target,
+                sourceID: SystemElementIDSchema.parse(source),
+                targetID: SystemElementIDSchema.parse(target),
               });
             }}
             onEdgeClick={(event, edge) =>

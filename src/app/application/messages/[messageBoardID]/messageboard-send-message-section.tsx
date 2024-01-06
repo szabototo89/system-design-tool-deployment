@@ -49,7 +49,6 @@ export async function MessageboardSendMessageSection(props: Props) {
           name="image"
           label="Upload Picture"
           description="You can include a picture along with your message. Accepted file types: .jpg, .png, .jpeg. Max file size: 5MB."
-          placeholder="Choose file ..."
           accept="image/png,image/jpg,image/jpeg"
         />
         <Stack align="end">

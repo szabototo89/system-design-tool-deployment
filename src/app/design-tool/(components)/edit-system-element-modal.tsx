@@ -6,12 +6,13 @@ import {
   useDeleteSystemElement,
   useUpdateSystemElement,
 } from "./system-element-hooks";
+import { SystemTechnology } from "@/db/entities/system-technology/schema";
 
 type Props = {
   systemElement: Pick<
     SystemElement,
-    "id" | "name" | "description" | "type" | "technologies" | "isExternal"
-  >;
+    "id" | "name" | "description" | "type" | "isExternal"
+  > & { technologies: SystemTechnology[] };
 } & Pick<React.ComponentProps<typeof Modal>, "opened" | "onClose">;
 
 export function EditSystemElementModal(props: Props) {

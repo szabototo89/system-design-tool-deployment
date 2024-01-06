@@ -55,7 +55,7 @@ export const SystemElementEntity = createSQLiteBackedEntity({
       entities: Array<InferSelectModel<typeof table>>,
     ) => {
       if (!entities.length) {
-        return [];
+        return new Map<Entity["id"], typeof technologies>();
       }
 
       const technologies = await db

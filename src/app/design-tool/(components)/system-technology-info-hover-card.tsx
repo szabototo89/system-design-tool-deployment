@@ -29,7 +29,7 @@ export function SystemTechnologyInfoHoverCard(props: Props) {
       <HoverCard
         width={280}
         shadow="md"
-        opened={isHoverCardShown}
+        initiallyOpened={isHoverCardShown}
         openDelay={1000}
         closeDelay={100}
         onOpen={() => setHoverCardShown(true)}
