@@ -21,7 +21,7 @@ import {
   SystemElementIDSchema,
   SystemElementSchema,
 } from "@/db/entities/system-element/schema";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { CreateSystemElementModal } from "./create-system-element-modal";
 import { EditSystemElementModal } from "./edit-system-element-modal";
 import { ModalLauncher } from "@/components/modal-launcher";
@@ -45,6 +45,14 @@ export function DesignToolEditorPage() {
   const [isEditElementModalOpened, { open, close }] = useDisclosure(false);
 
   const systemElements = useQueryAllSystemElements();
+
+  const systemElementsById = useMemo(() => {
+    return Object.fromEntries(
+      systemElements.data?.map(
+        (systemElement) => [systemElement.id, systemElement] as const,
+      ) ?? [],
+    );
+  }, [systemElements.data]);
 
   const systemElementRelations = useQuery({
     queryKey: ["system-element-relation"],
@@ -192,6 +200,36 @@ export function DesignToolEditorPage() {
 
               if (targetNode?.parentNode === sourceNode.id) {
                 return;
+              }
+
+              const sourceElement = systemElementsById[sourceNode.id];
+              const targetElement =
+                targetNode != null ? systemElementsById[targetNode.id] : null;
+
+              const typesSupportHavingChildren = ["system", "container"];
+
+              const typeRanks = ["person", "system", "container", "component"];
+
+              if (targetElement != null) {
+                if (
+                  targetElement.type != null &&
+                  !typesSupportHavingChildren.includes(targetElement.type)
+                ) {
+                  return;
+                }
+
+                if (targetElement.type === sourceElement.type) {
+                  return;
+                }
+
+                if (
+                  targetElement.type != null &&
+                  sourceElement.type != null &&
+                  typeRanks.indexOf(targetElement.type) >
+                    typeRanks.indexOf(sourceElement.type)
+                ) {
+                  return;
+                }
               }
 
               openConfirmModalOnParentUpdate(sourceNode, targetNode);
