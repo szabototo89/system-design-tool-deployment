@@ -38,14 +38,17 @@ export function SystemElementNode(props: NodeProps) {
       } satisfies MantineStyleProp)
     : {};
 
-return (
+  return (
     <>
       <Card
         shadow="sm"
         padding="md"
         radius="md"
         withBorder
-        style={style}
+        style={{
+          ...style,
+          zIndex: props.dragging ? Number.MAX_VALUE : 0,
+        }}
         maw={300}
       >
         <Card.Section inheritPadding>

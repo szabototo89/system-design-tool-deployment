@@ -70,7 +70,7 @@ export function SystemElementRelationEdgeRenderer(props: Props) {
           pos="absolute"
           style={{
             transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
-            zIndex: isHighlighted ? 100000 : 0,
+            zIndex: isHighlighted ? 1000 : 0,
           }}
           p="xs"
           bg={`rgba(255, 255, 255, ${isHighlighted ? 0.95 : 0.75})`}
