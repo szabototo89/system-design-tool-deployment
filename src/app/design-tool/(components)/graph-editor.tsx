@@ -38,7 +38,11 @@ type Props = {
   onConnect?(options: { source: string; target: string }): void;
 } & Pick<
   React.ComponentProps<typeof ReactFlow>,
-  "onEdgeClick" | "onNodeClick" | "onNodeDoubleClick" | "onPaneClick"
+  | "onEdgeClick"
+  | "onEdgeDoubleClick"
+  | "onNodeClick"
+  | "onNodeDoubleClick"
+  | "onPaneClick"
 >;
 
 const nodeTypes = {
@@ -257,6 +261,7 @@ export function GraphEditor(props: Props) {
       edgeTypes={edgeTypes}
       onPaneClick={props.onPaneClick}
       onEdgeClick={props.onEdgeClick}
+      onEdgeDoubleClick={props.onEdgeDoubleClick}
       onNodeClick={props.onNodeClick}
       onNodeDoubleClick={props.onNodeDoubleClick}
       connectionMode={ConnectionMode.Loose}

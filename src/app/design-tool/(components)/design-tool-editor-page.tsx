@@ -165,7 +165,7 @@ export function DesignToolEditorPage() {
                 targetID: SystemElementIDSchema.parse(target),
               });
             }}
-            onEdgeClick={(event, edge) =>
+            onEdgeDoubleClick={(event, edge) =>
               setSelectedSystemElementRelationID(
                 SystemElementRelationIDSchema.parse(edge.id),
               )
