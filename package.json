@@ -27,6 +27,7 @@
     "drizzle-orm": "^0.28.6",
     "drizzle-zod": "^0.5.1",
     "jotai": "^2.6.0",
+    "jotai-location": "^0.5.2",
     "next": "latest",
     "next-auth": "^4.24.4",
     "react": "latest",

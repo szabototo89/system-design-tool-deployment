@@ -1,9 +1,13 @@
 import { SystemElement } from "@/db/entities/system-element/schema";
 import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
+import { atomWithHash } from "jotai-location";
 import { useCallback } from "react";
 
-export const expandedGraphElementsAtom = atom<SystemElement["id"][]>([]);
-const selectedSystemElementAtom = atom<SystemElement["id"] | null>(null);
+export const expandedGraphElementsAtom = atomWithHash<SystemElement["id"][]>('expanded', []);
+const selectedSystemElementAtom = atomWithHash<SystemElement["id"] | null>(
+  "selected",
+  null,
+);
 
 const isAsideOpenedAtom = atom<boolean>(false);
 

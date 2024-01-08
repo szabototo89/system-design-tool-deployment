@@ -11,13 +11,17 @@ import {
 import { Handle, NodeProps, Position, useNodeId, useStore } from "reactflow";
 import { SystemTechnologyInfoHoverCard } from "./system-technology-info-hover-card";
 import { useQuerySystemElementByID } from "./system-element-hooks";
-import { useExpandedGraphElements } from "../app-state";
+import {
+  useExpandedGraphElements,
+  useSystemElementSelectionState,
+} from "../app-state";
 import { SystemElementTypeBadge } from "./system-element-type-badge";
 
 export function SystemElementNode(props: NodeProps) {
   const id = SystemElementIDSchema.parse(useNodeId());
   const systemElement = useQuerySystemElementByID(id);
   const setExpanded = useExpandedGraphElements();
+  const [selectedElementID] = useSystemElementSelectionState();
 
   const showLessDetails = useStore((state) => state.transform["2"] < 0.75);
 
@@ -29,9 +33,10 @@ export function SystemElementNode(props: NodeProps) {
 
   const childrenCount = systemElement.data.children.length ?? 0;
   const hasChildren = childrenCount > 0;
+  const isSelected = selectedElementID === systemElement.data.id;
 
   const selectionColor = theme.colors.blue["7"];
-  const style = props.selected
+  const style = isSelected
     ? ({
         borderColor: selectionColor,
         borderWidth: "1px",
@@ -59,7 +64,7 @@ export function SystemElementNode(props: NodeProps) {
                   size="xl"
                   fw={500}
                   inline
-                  c={props.selected ? selectionColor : undefined}
+                  c={isSelected ? selectionColor : undefined}
                 >
                   {systemElement.data.name}
                 </Text>
@@ -82,7 +87,7 @@ export function SystemElementNode(props: NodeProps) {
                   size="xs"
                   fw={500}
                   inline
-                  c={props.selected ? selectionColor : undefined}
+                  c={isSelected ? selectionColor : undefined}
                 >
                   {systemElement.data.name}
                 </Text>
@@ -118,7 +123,7 @@ export function SystemElementNode(props: NodeProps) {
             </Group>
           </>
         )}
-        {hasChildren && props.selected && (
+        {hasChildren && isSelected && (
           <Card.Section>
             <Group justify="end">
               <Button

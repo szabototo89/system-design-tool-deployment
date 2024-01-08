@@ -47,6 +47,9 @@ dependencies:
   jotai:
     specifier: ^2.6.0
     version: 2.6.0(@types/react@18.2.47)(react@18.2.0)
+  jotai-location:
+    specifier: ^0.5.2
+    version: 0.5.2(jotai@2.6.0)
   next:
     specifier: latest
     version: 14.0.4(react-dom@18.2.0)(react@18.2.0)
@@ -1744,7 +1747,7 @@ packages:
   /dom-helpers@5.2.1:
     resolution: {integrity: sha512-nRCa7CK3VTrM2NmGkIy4cbK7IZlgBE/PYMn55rrXefr5xXDP0LdtfPnblFDoVdcAfslJ7or6iqAUnx0CCGIWQA==}
     dependencies:
-      '@babel/runtime': 7.23.1
+      '@babel/runtime': 7.23.6
       csstype: 3.1.3
     dev: false
 
@@ -2877,6 +2880,14 @@ packages:
 
   /jose@4.15.4:
     resolution: {integrity: sha512-W+oqK4H+r5sITxfxpSU+MMdr/YSWGvgZMQDIsNoBDGGy4i7GBPTtvFKibQzW06n3U3TqHjhvBJsirShsEJ6eeQ==}
+    dev: false
+
+  /jotai-location@0.5.2(jotai@2.6.0):
+    resolution: {integrity: sha512-4S9hDh1wYp4SG4Laq3+Xd0GdW7jwnWlbEuL8U22kv3wUZW892n6gXlNhwU0LaoXnWoGG0gtjSLBuFm5iodFKLg==}
+    peerDependencies:
+      jotai: '>=1.11.0'
+    dependencies:
+      jotai: 2.6.0(@types/react@18.2.47)(react@18.2.0)
     dev: false
 
   /jotai@2.6.0(@types/react@18.2.47)(react@18.2.0):
