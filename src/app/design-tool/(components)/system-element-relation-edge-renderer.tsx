@@ -12,7 +12,7 @@ import { Box, Stack, Text, useMantineTheme } from "@mantine/core";
 import { SystemElementRelationIDSchema } from "@/db/entities/system-element-relation/schema";
 import { useQuery } from "@tanstack/react-query";
 import { systemElementRelationQueryByID } from "@/db/entities/system-element-relation/server-actions";
-import { useSystemElementSelectionState } from "../app-state";
+import { useSystemElementSelectionState } from "../workspace/app-state";
 
 type Props = EdgeProps<{}>;
 

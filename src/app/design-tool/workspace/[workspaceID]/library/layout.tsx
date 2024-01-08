@@ -1,6 +1,6 @@
 import { Tabs, TabsList, TabsTab } from "@mantine/core";
 import { IconHierarchy2, IconLine, IconCodeCircle2 } from "@tabler/icons-react";
-import { AppShellMainContent } from "../(components)/app-shell-main-content";
+import { AppShellMainContent } from "../../../(components)/app-shell-main-content";
 
 export default function DesignToolLibraryPageLayout(
   props: React.PropsWithChildren<{}>,

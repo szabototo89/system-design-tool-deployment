@@ -21,11 +21,11 @@ import {
   IconCaretRight,
 } from "@tabler/icons-react";
 
-import { AppShellMainContent } from "../../(components)/app-shell-main-content";
+import { AppShellMainContent } from "../../../../(components)/app-shell-main-content";
 import React from "react";
 import { RelativeTimestamp } from "@/components/relative-timestamp";
 import Link from "next/link";
-import { SystemTechnologyInfoHoverCard } from "../../(components)/system-technology-info-hover-card";
+import { SystemTechnologyInfoHoverCard } from "../../../../(components)/system-technology-info-hover-card";
 import { SystemElementRelationEntity } from "@/db/entities/system-element-relation/schema";
 
 type Props = {

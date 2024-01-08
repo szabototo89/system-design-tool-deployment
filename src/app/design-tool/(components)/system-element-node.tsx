@@ -14,7 +14,7 @@ import { useQuerySystemElementByID } from "./system-element-hooks";
 import {
   useExpandedGraphElements,
   useSystemElementSelectionState,
-} from "../app-state";
+} from "../workspace/app-state";
 import { SystemElementTypeBadge } from "./system-element-type-badge";
 
 export function SystemElementNode(props: NodeProps) {

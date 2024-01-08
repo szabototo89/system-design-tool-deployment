@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { DesignToolEditorPage } from "../(components)/design-tool-editor-page";
+import { DesignToolEditorPage } from "../../../(components)/design-tool-editor-page";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactFlowProvider } from "reactflow";
 

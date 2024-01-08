@@ -10,7 +10,7 @@ import {
 import { NodeProps, NodeResizer, useNodeId, useStore } from "reactflow";
 import { useQuerySystemElementByID } from "./system-element-hooks";
 import { SystemElementIDSchema } from "@/db/entities/system-element/schema";
-import { useExpandedGraphElements } from "../app-state";
+import { useExpandedGraphElements } from "../workspace/app-state";
 import { SystemElementTypeBadge } from "./system-element-type-badge";
 
 export function SystemElementParentNode(props: NodeProps<{}>) {

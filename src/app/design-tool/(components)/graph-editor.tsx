@@ -26,7 +26,7 @@ import { useAtomValue } from "jotai";
 import {
   expandedGraphElementsAtom,
   useIsGraphElementExpanded,
-} from "../app-state";
+} from "../workspace/app-state";
 import { maximumBy } from "@/utils/maximumBy";
 import { SystemElementRelationEdgeRenderer } from "./system-element-relation-edge-renderer";
 import { CanvasLayout } from "./canvas-layout";

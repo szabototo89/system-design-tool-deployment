@@ -1,6 +1,6 @@
 import { SystemElement } from "@/db/entities/system-element/schema";
 import { Card, Group, Text, CardSection, Button, Stack } from "@mantine/core";
-import { SystemElementTypeBadge } from "../../(components)/system-element-type-badge";
+import { SystemElementTypeBadge } from "../../../../(components)/system-element-type-badge";
 import Link from "next/link";
 
 type Props = { systemElement: SystemElement };

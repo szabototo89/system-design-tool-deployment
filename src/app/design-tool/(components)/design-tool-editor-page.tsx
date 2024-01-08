@@ -36,7 +36,10 @@ import {
 } from "./system-element-hooks";
 import { useDisclosure } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
-import { useAsideState, useSystemElementSelectionState } from "../app-state";
+import {
+  useAsideState,
+  useSystemElementSelectionState,
+} from "../workspace/app-state";
 import { IconX } from "@tabler/icons-react";
 
 export function DesignToolEditorPage() {
