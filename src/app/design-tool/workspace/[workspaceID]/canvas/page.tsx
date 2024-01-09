@@ -4,8 +4,15 @@ import { useMemo } from "react";
 import { DesignToolEditorPage } from "../../../(components)/design-tool-editor-page";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactFlowProvider } from "reactflow";
+import { Workspace } from "@/db/entities/workspace/schema";
 
-export default function DesignToolCanvasPage() {
+type Props = {
+  params: {
+    workspaceID: Workspace["id"];
+  };
+};
+
+export default function DesignToolCanvasPage(props: Props) {
   const queryClient = useMemo(
     () =>
       new QueryClient({
@@ -24,7 +31,7 @@ export default function DesignToolCanvasPage() {
   return (
     <QueryClientProvider client={queryClient}>
       <ReactFlowProvider>
-        <DesignToolEditorPage />
+        <DesignToolEditorPage workspace={{ id: props.params.workspaceID }} />
       </ReactFlowProvider>
     </QueryClientProvider>
   );

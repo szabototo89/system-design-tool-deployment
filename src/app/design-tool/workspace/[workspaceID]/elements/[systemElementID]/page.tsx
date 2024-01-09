@@ -48,7 +48,7 @@ async function SystemElementAnchor(props: {
     <Anchor
       component={Link}
       key={systemElement.id}
-      href={"/design-tool/elements/" + systemElement.id}
+      href={systemElement.id}
       target="_blank"
     >
       {systemElement.name}

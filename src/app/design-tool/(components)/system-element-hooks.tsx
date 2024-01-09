@@ -5,21 +5,24 @@ import {
 import {
   systemElementCreate,
   systemElementDelete,
-  systemElementQueryAll,
+  systemElementQueryFromWorkspace,
   systemElementQueryById,
   systemElementUpdate,
   systemElementUpdateParent,
 } from "@/db/entities/system-element/server-actions";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { notifications } from "@mantine/notifications";
+import { Workspace } from "@/db/entities/workspace/schema";
 
 export const getSystemElementQueryKey = () => ["system-element"] as const;
 
-export const useQueryAllSystemElements = () => {
+export const useSystemElementQueryFromWorkspace = (
+  workspace: Pick<Workspace, "id">,
+) => {
   return useQuery({
     queryKey: getSystemElementQueryKey(),
     async queryFn() {
-      return await systemElementQueryAll();
+      return await systemElementQueryFromWorkspace(workspace);
     },
   });
 };

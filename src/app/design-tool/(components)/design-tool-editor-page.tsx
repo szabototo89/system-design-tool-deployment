@@ -31,7 +31,7 @@ import {
   SystemElementRelationIDSchema,
 } from "@/db/entities/system-element-relation/schema";
 import {
-  useQueryAllSystemElements,
+  useSystemElementQueryFromWorkspace,
   useUpdateSystemElementParent,
 } from "./system-element-hooks";
 import { useDisclosure } from "@mantine/hooks";
@@ -41,13 +41,18 @@ import {
   useSystemElementSelectionState,
 } from "../workspace/app-state";
 import { IconX } from "@tabler/icons-react";
+import { Workspace } from "@/db/entities/workspace/schema";
 
-export function DesignToolEditorPage() {
+type Props = {
+  workspace: Pick<Workspace, "id">;
+};
+
+export function DesignToolEditorPage(props: Props) {
   const queryClient = useQueryClient();
   const [isAsideOpened, setAsideOpened] = useAsideState();
   const [isEditElementModalOpened, { open, close }] = useDisclosure(false);
 
-  const systemElements = useQueryAllSystemElements();
+  const systemElements = useSystemElementQueryFromWorkspace(props.workspace);
 
   const systemElementsById = useMemo(() => {
     return Object.fromEntries(
@@ -137,7 +142,11 @@ export function DesignToolEditorPage() {
               <ModalLauncher
                 variant="default"
                 renderModal={({ isOpened, close }) => (
-                  <CreateSystemElementModal opened={isOpened} onClose={close} />
+                  <CreateSystemElementModal
+                    opened={isOpened}
+                    onClose={close}
+                    workspace={props.workspace}
+                  />
                 )}
               >
                 Add element
@@ -174,6 +183,7 @@ export function DesignToolEditorPage() {
                 label: "Give me a label",
                 sourceID: SystemElementIDSchema.parse(source),
                 targetID: SystemElementIDSchema.parse(target),
+                workspaceID: props.workspace.id,
               });
             }}
             onEdgeDoubleClick={(event, edge) =>

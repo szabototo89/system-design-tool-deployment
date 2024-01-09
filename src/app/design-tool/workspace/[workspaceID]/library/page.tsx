@@ -15,6 +15,7 @@ import { SystemElementCardItem } from "../elements/(components)/system-element-c
 import { SystemTechnologyEntity } from "@/db/entities/system-technology/schema";
 import { SystemElementRelationEntity } from "@/db/entities/system-element-relation/schema";
 import { IconArrowNarrowRight } from "@tabler/icons-react";
+import { Workspace } from "@/db/entities/workspace/schema";
 
 function sortBy<TValue>(
   elements: Iterable<TValue>,
@@ -25,8 +26,15 @@ function sortBy<TValue>(
   });
 }
 
-export default async function DesignToolElementsPage() {
-  const systemElements = await SystemElementEntity.queries.queryAll(db);
+type Props = {
+  params: { workspaceID: Workspace["id"] };
+};
+
+export default async function DesignToolElementsPage(props: Props) {
+  const systemElements = await SystemElementEntity.queries.queryFromWorkspace(
+    db,
+    { id: props.params.workspaceID },
+  );
   const systemElementsSortedByName = sortBy(
     systemElements,
     (element) => element?.name ?? "",

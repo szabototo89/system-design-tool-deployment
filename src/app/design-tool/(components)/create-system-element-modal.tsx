@@ -2,8 +2,11 @@ import { Modal } from "@mantine/core";
 import React from "react";
 import { SystemElementEditorForm } from "./system-element-editor-form";
 import { useCreateSystemElement } from "./system-element-hooks";
+import { Workspace } from "@/db/entities/workspace/schema";
 
-type Props = Pick<React.ComponentProps<typeof Modal>, "opened" | "onClose">;
+type Props = Pick<React.ComponentProps<typeof Modal>, "opened" | "onClose"> & {
+  workspace: Pick<Workspace, "id">;
+};
 
 export function CreateSystemElementModal(props: Props) {
   const createSystemElement = useCreateSystemElement();
@@ -19,6 +22,7 @@ export function CreateSystemElementModal(props: Props) {
             type,
             isExternal,
             parentID: null,
+            workspaceID: props.workspace.id,
           });
 
           props.onClose();

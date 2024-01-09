@@ -14,7 +14,8 @@ import { useDisclosure } from "@mantine/hooks";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Link from "next/link";
 import React, { useMemo, useState } from "react";
-import { useAsideState } from "./app-state";
+import { useAsideState } from "../app-state";
+import { Workspace } from "@/db/entities/workspace/schema";
 
 function AppShellNavbarItem({
   children,
@@ -36,7 +37,11 @@ function AppShellNavbarItem({
 }
 
 export default function DesignToolIndexPageLayout(
-  props: React.PropsWithChildren<{}>,
+  props: React.PropsWithChildren<{
+    params: {
+      workspaceID: Workspace["id"];
+    };
+  }>,
 ) {
   const queryClient = useMemo(
     () =>
@@ -79,13 +84,17 @@ export default function DesignToolIndexPageLayout(
 
             <Box pl={0} mb="md">
               <Text tt="uppercase" size="xs" fw={500} mb="sm">
-                Dashboard
+                Workspace
               </Text>
 
-              <AppShellNavbarItem href="/design-tool/canvas">
+              <AppShellNavbarItem
+                href={`/design-tool/workspace/${props.params.workspaceID}/canvas`}
+              >
                 Canvas
               </AppShellNavbarItem>
-              <AppShellNavbarItem href="/design-tool/library">
+              <AppShellNavbarItem
+                href={`/design-tool/workspace/${props.params.workspaceID}/library`}
+              >
                 Library
               </AppShellNavbarItem>
             </Box>

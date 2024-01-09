@@ -3,10 +3,8 @@
 import { db } from "@/db/schema";
 import { SystemElementEntity } from "./schema";
 
-export const systemElementQueryAll = SystemElementEntity.queries.queryAll.bind(
-  null,
-  db,
-);
+export const systemElementQueryFromWorkspace =
+  SystemElementEntity.queries.queryFromWorkspace.bind(null, db);
 
 export const systemElementQueryById =
   SystemElementEntity.queries.queryById.bind(null, db);

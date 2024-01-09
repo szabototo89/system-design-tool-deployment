@@ -9,8 +9,7 @@ export function SystemElementCardItem(props: Props) {
   return (
     <Card
       component={Link}
-      href={"/design-tool/elements/" + props.systemElement.id}
-      target="_blank"
+      href={"elements/" + props.systemElement.id}
       shadow="sm"
       padding="md"
       radius="md"

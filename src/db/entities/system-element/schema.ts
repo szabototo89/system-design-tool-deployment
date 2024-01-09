@@ -14,7 +14,7 @@ import {
   SystemTechnologyEntity,
   SystemTechnologySchema,
 } from "../system-technology/schema";
-import { WorkspaceIDSchema } from "../workspace/schema";
+import { Workspace, WorkspaceIDSchema } from "../workspace/schema";
 
 export const SystemElementEntity = createSQLiteBackedEntity({
   table() {
@@ -118,10 +118,21 @@ export const SystemElementEntity = createSQLiteBackedEntity({
     };
 
     return {
-      queryAll: queryBuilder
-        .implementation(async (db: BetterSQLite3Database) => {
-          return queryEntityWithTechnologies(db, await db.select().from(table));
-        })
+      queryFromWorkspace: queryBuilder
+        .implementation(
+          async (
+            db: BetterSQLite3Database,
+            workspace: Pick<Workspace, "id">,
+          ) => {
+            return queryEntityWithTechnologies(
+              db,
+              await db
+                .select()
+                .from(table)
+                .where(eq(table.workspaceID, workspace.id)),
+            );
+          },
+        )
         .output(
           z.array(
             schema.extend({

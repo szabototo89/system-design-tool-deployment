@@ -11,7 +11,7 @@ import { SystemTechnology } from "@/db/entities/system-technology/schema";
 type Props = {
   systemElement: Pick<
     SystemElement,
-    "id" | "name" | "description" | "type" | "isExternal"
+    "id" | "name" | "description" | "type" | "isExternal" | "workspaceID"
   > & { technologies: SystemTechnology[] };
 } & Pick<React.ComponentProps<typeof Modal>, "opened" | "onClose">;
 
@@ -52,6 +52,7 @@ export function EditSystemElementModal(props: Props) {
                   name: technologyName,
                 };
               }),
+              workspaceID: props.systemElement.workspaceID,
             },
           });
 
