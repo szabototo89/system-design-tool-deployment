@@ -14,6 +14,7 @@ import {
   SystemTechnologyEntity,
   SystemTechnologySchema,
 } from "../system-technology/schema";
+import { WorkspaceIDSchema } from "../workspace/schema";
 
 export const SystemElementEntity = createSQLiteBackedEntity({
   table() {
@@ -24,6 +25,7 @@ export const SystemElementEntity = createSQLiteBackedEntity({
       description: text("description"),
       parentID: text("parent_id"),
       isExternal: integer("is_external").default(0).notNull(),
+      workspaceID: text("workspace_id"),
       ...createdAtPattern.forTable(),
     });
   },
@@ -45,6 +47,7 @@ export const SystemElementEntity = createSQLiteBackedEntity({
       name: z.string().trim().min(1, "System element name cannot be empty"),
       isExternal: (schema) =>
         schema.isExternal.transform((value) => (value === 1 ? true : false)),
+      workspaceID: z.nullable(WorkspaceIDSchema),
     });
   },
 

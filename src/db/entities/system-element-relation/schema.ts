@@ -12,6 +12,7 @@ import {
 import { createdAtPattern } from "../../patterns/created-at-pattern";
 import { SystemElement, SystemElementIDSchema } from "../system-element/schema";
 import { SystemTechnologyEntity } from "../system-technology/schema";
+import { WorkspaceIDSchema } from "../workspace/schema";
 
 export const SystemElementRelationEntity = createSQLiteBackedEntity({
   table() {
@@ -20,6 +21,7 @@ export const SystemElementRelationEntity = createSQLiteBackedEntity({
       label: text("label"),
       sourceID: text("source_id").notNull(),
       targetID: text("target_id").notNull(),
+      workspaceID: text("workspace_id"),
       ...createdAtPattern.forTable(),
     });
   },
@@ -29,6 +31,7 @@ export const SystemElementRelationEntity = createSQLiteBackedEntity({
       id: (schema) => schema.id.brand("SystemElementRelation"),
       sourceID: SystemElementIDSchema,
       targetID: SystemElementIDSchema,
+      workspaceID: z.nullable(WorkspaceIDSchema),
     });
 
     return baseSchema.extend({

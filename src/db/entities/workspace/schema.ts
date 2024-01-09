@@ -8,7 +8,6 @@ import { z } from "zod";
 import { randomUUID } from "crypto";
 import { eq, sql } from "drizzle-orm";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
-import { SystemElement, SystemElementIDSchema } from "../system-element/schema";
 import { createdAtPattern } from "@/db/patterns/created-at-pattern";
 
 export const WorkspaceEntity = createSQLiteBackedEntity({
@@ -25,71 +24,6 @@ export const WorkspaceEntity = createSQLiteBackedEntity({
     return createSelectSchema(table, {
       id: (schema) => schema.id.brand("WorkspaceID"),
     });
-  },
-
-  edges({ sourceSchema }) {
-    return {
-      systemElements: createSQLiteBackedEntity({
-        table() {
-          return sqliteTable("workspace__system_element", {
-            systemElementID: text("system_element_id").notNull(),
-            workspaceID: text("workspace_id").notNull(),
-            ...createdAtPattern.forTable(),
-          });
-        },
-
-        entitySchema(table) {
-          return createSelectSchema(table, {
-            workspaceID: sourceSchema.shape.id,
-            systemElementID: SystemElementIDSchema,
-          });
-        },
-
-        queries({ schema, table, queryBuilder }) {
-          return {
-            queryAll: queryBuilder
-              .implementation((db: BetterSQLite3Database) => {
-                return db.select().from(table);
-              })
-              .output(z.array(schema)),
-
-            queryFromSystemElement: queryBuilder
-              .implementation(
-                (
-                  db: BetterSQLite3Database,
-                  systemElement: Pick<SystemElement, "id">,
-                ) => {
-                  return db
-                    .select()
-                    .from(table)
-                    .where(eq(table.systemElementID, systemElement.id));
-                },
-              )
-              .output(z.array(schema)),
-
-            queryFromWorkspace: queryBuilder
-              .implementation(
-                (
-                  db: BetterSQLite3Database,
-                  workspace: Pick<z.infer<typeof sourceSchema>, "id">,
-                ) => {
-                  return db
-                    .select()
-                    .from(table)
-                    .where(eq(table.workspaceID, workspace.id));
-                },
-              )
-              .output(z.array(schema)),
-          };
-        },
-
-        actions({ schema, table }) {
-          type Entity = z.infer<typeof schema>;
-
-          return {};
-        },
-      }),
-    };
   },
 
   queries({ schema, table, queryBuilder }) {
@@ -131,11 +65,11 @@ export const WorkspaceEntity = createSQLiteBackedEntity({
       ),
       update: new ActionBuilder(
         "update",
-        async (db, value: Entity) => {
+        async (db, entity: Pick<Entity, "id">, value: Omit<Entity, "id">) => {
           return db
             .update(table)
             .set(value)
-            .where(eq(table.id, value.id))
+            .where(eq(table.id, entity.id))
             .returning()
             .get();
         },
