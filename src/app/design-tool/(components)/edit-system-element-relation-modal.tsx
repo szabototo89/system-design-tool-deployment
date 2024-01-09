@@ -2,8 +2,8 @@ import {
   Button,
   Group,
   Modal,
-  Select,
   Stack,
+  Text,
   TagsInput,
   TextInput,
 } from "@mantine/core";
@@ -15,6 +15,7 @@ import {
   SystemElementRelationUpdate,
 } from "@/db/entities/system-element-relation/server-actions";
 import { useForm } from "@mantine/form";
+import { openConfirmModal } from "@mantine/modals";
 
 type Props = {
   systemElementRelation: Pick<
@@ -98,14 +99,26 @@ export function EditSystemElementRelationModal(props: Props) {
               loading={deleteSystemElementRelation.isPending}
               disabled={deleteSystemElementRelation.isPending}
               onClick={async () => {
-                if (props.systemElementRelation == null) {
+                const { systemElementRelation } = props;
+
+                if (systemElementRelation == null) {
                   return;
                 }
 
-                await deleteSystemElementRelation.mutate(
-                  props.systemElementRelation,
-                );
-                props.onClose();
+                openConfirmModal({
+                  title: "Please confirm your action",
+                  children: (
+                    <Text size="sm">Are you sure to delete this relation?</Text>
+                  ),
+                  labels: { confirm: "Confirm", cancel: "Cancel" },
+                  onCancel: props.onClose,
+                  onConfirm: async () => {
+                    await deleteSystemElementRelation.mutateAsync(
+                      systemElementRelation,
+                    );
+                    props.onClose();
+                  },
+                });
               }}
             >
               Delete
