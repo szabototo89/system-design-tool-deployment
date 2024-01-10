@@ -8,6 +8,7 @@ import { z } from "zod";
 import { randomUUID } from "crypto";
 import { eq, sql } from "drizzle-orm";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
+import { EntityCard } from "@/components/entity-card";
 
 export const SystemTechnologyEntity = createSQLiteBackedEntity({
   table() {
@@ -74,6 +75,17 @@ export const SystemTechnologyEntity = createSQLiteBackedEntity({
             .update(table)
             .set(value)
             .where(eq(table.id, value.id))
+            .returning()
+            .get();
+        },
+        schema,
+      ),
+      delete: new ActionBuilder(
+        "delete",
+        async (db, entity: Pick<Entity, "id">) => {
+          return db
+            .delete(table)
+            .where(eq(table.id, entity.id))
             .returning()
             .get();
         },

@@ -11,3 +11,6 @@ export const systemTechnologyQueryByName =
 
 export const systemTechnologyUpdate =
   SystemTechnologyEntity.actions.update.bind(null, db);
+
+export const systemTechnologyDelete =
+  SystemTechnologyEntity.actions.delete.bind(null, db);

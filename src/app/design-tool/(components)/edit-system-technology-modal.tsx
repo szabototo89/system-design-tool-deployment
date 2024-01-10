@@ -13,6 +13,7 @@ import { useForm } from "@mantine/form";
 import { SystemTechnology } from "@/db/entities/system-technology/schema";
 import { systemTechnologyUpdate } from "@/db/entities/system-technology/server-actions";
 import { getSystemElementQueryKey } from "./system-element-hooks";
+import { DeleteSystemTechnologyButton } from "./delete-system-technology-button";
 
 type Props = {
   systemTechnology: Pick<
@@ -71,6 +72,15 @@ export function EditSystemTechnologyModal(props: Props) {
             />
           </Stack>
           <Group justify="flex-end">
+            {props.systemTechnology != null && (
+              <DeleteSystemTechnologyButton
+                variant="outline"
+                color="red"
+                systemTechnology={props.systemTechnology}
+              >
+                Delete
+              </DeleteSystemTechnologyButton>
+            )}
             <Button
               disabled={updateSystemTechnology.isPending}
               loading={updateSystemTechnology.isPending}
