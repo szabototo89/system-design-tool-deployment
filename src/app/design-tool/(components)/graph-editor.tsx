@@ -12,6 +12,7 @@ import ReactFlow, {
   useReactFlow,
   EdgeTypes,
   Controls,
+  Panel,
 } from "reactflow";
 
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
@@ -30,6 +31,7 @@ import {
 import { maximumBy } from "@/utils/maximumBy";
 import { SystemElementRelationEdgeRenderer } from "./system-element-relation-edge-renderer";
 import { CanvasLayout } from "./canvas-layout";
+import { CanvasToolbar } from "../workspace/[workspaceID]/canvas/(components)/canvas-toolbar";
 
 type Props = {
   systemElements: readonly SystemElement[];
@@ -283,6 +285,9 @@ export function GraphEditor(props: Props) {
       <Background />
       <Controls />
       <CanvasLayout />
+      <Panel position="bottom-center">
+        <CanvasToolbar />
+      </Panel>
     </ReactFlow>
   );
 }
