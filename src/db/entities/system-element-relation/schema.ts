@@ -3,15 +3,20 @@ import { eq } from "drizzle-orm";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { getTableConfig, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { createSelectSchema } from "drizzle-zod";
-import { z } from "zod";
+import { unknown, z } from "zod";
 import {
   ActionBuilder,
   EntityQueryConfiguration,
   createSQLiteBackedEntity,
+  onDeletionAction,
 } from "../../../entity-framework";
 import { createdAtPattern } from "../../patterns/created-at-pattern";
 import { SystemElement, SystemElementIDSchema } from "../system-element/schema";
-import { SystemTechnologyEntity } from "../system-technology/schema";
+import {
+  SystemTechnology,
+  SystemTechnologyEntity,
+  SystemTechnologySchema,
+} from "../system-technology/schema";
 import { WorkspaceIDSchema } from "../workspace/schema";
 
 export const SystemElementRelationEntity = createSQLiteBackedEntity({
@@ -40,88 +45,107 @@ export const SystemElementRelationEntity = createSQLiteBackedEntity({
   },
 
   edges({ sourceTable, sourceSchema }) {
-    return {
-      technologies: createSQLiteBackedEntity({
-        table() {
-          const { name: sourceName } = getTableConfig(sourceTable);
-          const { name: targetName } = getTableConfig(
-            SystemTechnologyEntity.table,
-          );
+    const technologies = createSQLiteBackedEntity({
+      table() {
+        const { name: sourceName } = getTableConfig(sourceTable);
+        const { name: targetName } = getTableConfig(
+          SystemTechnologyEntity.table,
+        );
 
-          return sqliteTable(`${sourceName}__${targetName}`, {
-            systemElementRelationID: text(`${sourceName}_id`),
-            systemTechnologyID: text(`${targetName}_id`),
-          });
-        },
-        entitySchema(targetTable) {
-          return createSelectSchema(targetTable);
-        },
-        queries({ table: junctionTable, queryBuilder }) {
-          return {
-            queryTechnologiesBySystemElementRelationID: queryBuilder
-              .implementation(async (db: BetterSQLite3Database, id: string) => {
-                const results = await db
-                  .select()
-                  .from(junctionTable)
-                  .leftJoin(
-                    SystemTechnologyEntity.table,
-                    eq(
-                      junctionTable.systemTechnologyID,
-                      SystemTechnologyEntity.table.id,
-                    ),
-                  )
-                  .where(eq(junctionTable.systemElementRelationID, id));
+        return sqliteTable(`${sourceName}__${targetName}`, {
+          systemElementRelationID: text(`${sourceName}_id`),
+          systemTechnologyID: text(`${targetName}_id`),
+        });
+      },
+      entitySchema(targetTable) {
+        return createSelectSchema(targetTable);
+      },
+      queries({ table: junctionTable, queryBuilder }) {
+        return {
+          queryTechnologiesBySystemElementRelationID: queryBuilder
+            .implementation(async (db: BetterSQLite3Database, id: string) => {
+              const results = await db
+                .select()
+                .from(junctionTable)
+                .leftJoin(
+                  SystemTechnologyEntity.table,
+                  eq(
+                    junctionTable.systemTechnologyID,
+                    SystemTechnologyEntity.table.id,
+                  ),
+                )
+                .where(eq(junctionTable.systemElementRelationID, id));
 
-                return results.map((result) => result.system_technology);
-              })
-              .output(z.array(SystemTechnologyEntity.schema)),
-          };
-        },
-        actions({ table, schema }) {
-          return {
-            update: new ActionBuilder(
-              "update",
-              async (
-                db,
-                systemElementRelation: Pick<z.infer<typeof sourceSchema>, "id">,
-                technologyNames: readonly string[],
-              ) => {
-                const technologies = await Promise.all(
-                  technologyNames.map((technologyName) => {
-                    return SystemTechnologyEntity.actions.upsert(db, {
-                      name: technologyName,
-                      description: "",
-                    });
-                  }),
+              return results.map((result) => result.system_technology);
+            })
+            .output(z.array(SystemTechnologyEntity.schema)),
+        };
+      },
+      actions({ table, schema }) {
+        return {
+          delete: new ActionBuilder(
+            "delete",
+            (db, technology: Pick<SystemTechnology, "id">) => {
+              return db
+                .delete(table)
+                .where(eq(table.systemTechnologyID, technology.id))
+                .returning();
+            },
+            z.array(schema),
+          ),
+
+          update: new ActionBuilder(
+            "update",
+            async (
+              db,
+              systemElementRelation: Pick<z.infer<typeof sourceSchema>, "id">,
+              technologyNames: readonly string[],
+            ) => {
+              const technologies = await Promise.all(
+                technologyNames.map((technologyName) => {
+                  return SystemTechnologyEntity.actions.upsert(db, {
+                    name: technologyName,
+                    description: "",
+                  });
+                }),
+              );
+
+              await db
+                .delete(table)
+                .where(
+                  eq(table.systemElementRelationID, systemElementRelation.id),
                 );
 
-                await db
-                  .delete(table)
-                  .where(
-                    eq(table.systemElementRelationID, systemElementRelation.id),
-                  );
+              if (technologies.length === 0) {
+                return [];
+              }
 
-                if (technologies.length === 0) {
-                  return [];
-                }
+              return db
+                .insert(table)
+                .values(
+                  technologies.map((technology) => {
+                    return {
+                      systemTechnologyID: technology.id,
+                      systemElementRelationID: systemElementRelation.id,
+                    };
+                  }),
+                )
+                .returning();
+            },
+            z.array(schema),
+          ),
+        };
+      },
+    });
 
-                return db
-                  .insert(table)
-                  .values(
-                    technologies.map((technology) => {
-                      return {
-                        systemTechnologyID: technology.id,
-                        systemElementRelationID: systemElementRelation.id,
-                      };
-                    }),
-                  )
-                  .returning();
-              },
-              z.array(schema),
-            ),
-          };
-        },
+    SystemTechnologyEntity.registerActionListener(
+      onDeletionAction(SystemTechnologySchema, async (db, systemTechnology) => {
+        await technologies.actions.delete(db, systemTechnology);
       }),
+    );
+
+    return {
+      technologies,
     };
   },
 

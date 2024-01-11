@@ -8,7 +8,6 @@ import { z } from "zod";
 import { randomUUID } from "crypto";
 import { eq, sql } from "drizzle-orm";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
-import { EntityCard } from "@/components/entity-card";
 
 export const SystemTechnologyEntity = createSQLiteBackedEntity({
   table() {
@@ -64,7 +63,8 @@ export const SystemTechnologyEntity = createSQLiteBackedEntity({
               name: value.name,
               description: value.description,
             })
-            .returning();
+            .returning()
+            .get();
         },
         schema,
       ),

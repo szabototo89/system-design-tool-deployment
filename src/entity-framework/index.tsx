@@ -2,12 +2,39 @@ import { SQLiteTable, SQLiteTableFn } from "drizzle-orm/sqlite-core";
 import { z } from "zod";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { sql } from "drizzle-orm";
-import { SystemElementEntity } from "@/db/entities/system-element/schema";
+
+export type ActionType = "create" | "update" | "delete" | "upsert";
 
 export type EntityQueryConfiguration = Record<
   string,
   EqlQueryBuilder<any, any, z.ZodTypeAny>
 >;
+
+export const onDeletionAction = <TSchema extends z.ZodTypeAny>(
+  entitySchema: TSchema,
+  listener: (
+    db: BetterSQLite3Database,
+    entity: z.infer<TSchema>,
+  ) => Promise<void>,
+) => {
+  return async (
+    actionType: ActionType,
+    db: BetterSQLite3Database,
+    entity: unknown,
+  ) => {
+    if (actionType !== "delete") {
+      return;
+    }
+
+    const parsedEntity = entitySchema.safeParse(entity);
+
+    if (!parsedEntity.success) {
+      return;
+    }
+
+    await listener(db, entity);
+  };
+};
 
 export class EqlQueryBuilder<
   TImplementationResult,
@@ -110,7 +137,18 @@ export function createSQLiteBackedEntity<
 
         return [
           actionName satisfies keyof TActionConfiguration,
-          buildResult,
+          (async (db, ...args) => {
+            const result = await buildResult(db, ...args);
+            await Promise.all(
+              actionListeners.map(
+                async (listener) =>
+                  await listener(action.actionType, db, result),
+              ),
+            );
+            return result;
+          }) as ReturnType<
+            TActionConfiguration[keyof TActionConfiguration]["build"]
+          >,
         ] as const;
       }),
     ) as {
@@ -127,6 +165,24 @@ export function createSQLiteBackedEntity<
     queryBuilder,
   });
 
+  const actionListeners: Array<
+    (actionType: ActionType, db: BetterSQLite3Database, entity: unknown) => void
+  > = [];
+
+  function registerActionListener<
+    TListener extends (
+      actionType: ActionType,
+      db: BetterSQLite3Database,
+      deletionResult: unknown,
+    ) => void,
+  >(listener: TListener) {
+    actionListeners.push(listener);
+
+    return () => {
+      actionListeners.splice(actionListeners.indexOf(listener));
+    };
+  }
+
   const result = {
     table,
     schema,
@@ -137,6 +193,7 @@ export function createSQLiteBackedEntity<
     configurations: {
       queryConfiguration,
     },
+    registerActionListener,
   };
 
   return result;
@@ -149,8 +206,6 @@ export const entityQueryBuilder = {
     }, z.never());
   },
 };
-
-type ActionType = "create" | "update" | "delete" | "upsert";
 
 export class ActionBuilder<
   TActionType extends ActionType,

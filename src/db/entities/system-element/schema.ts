@@ -6,7 +6,9 @@ import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import {
   ActionBuilder,
+  ActionType,
   createSQLiteBackedEntity,
+  onDeletionAction,
 } from "../../../entity-framework";
 import { createdAtPattern } from "../../patterns/created-at-pattern";
 import {
@@ -31,11 +33,21 @@ export const SystemElementEntity = createSQLiteBackedEntity({
   },
 
   edges() {
-    return {
-      system_technology: sqliteTable("system_element__system_technology", {
-        systemElementID: text("system_element_id").notNull(),
-        systemTechnologyID: text("system_technology_id").notNull(),
+    const system_technology = sqliteTable("system_element__system_technology", {
+      systemElementID: text("system_element_id").notNull(),
+      systemTechnologyID: text("system_technology_id").notNull(),
+    });
+
+    SystemTechnologyEntity.registerActionListener(
+      onDeletionAction(SystemTechnologySchema, async (db, systemTechnology) => {
+        await db
+          .delete(system_technology)
+          .where(eq(system_technology.systemTechnologyID, systemTechnology.id));
       }),
+    );
+
+    return {
+      system_technology,
     };
   },
 
@@ -287,6 +299,7 @@ export const SystemElementEntity = createSQLiteBackedEntity({
         schema,
       ),
 
+      // @nocommit implement deletion from technology
       delete: new ActionBuilder(
         "delete",
         async (db, entity: Pick<Entity, "id">) => {

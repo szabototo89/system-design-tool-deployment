@@ -3,6 +3,7 @@ import { systemTechnologyDelete } from "@/db/entities/system-technology/server-a
 import { Button } from "@mantine/core";
 import { openConfirmModal } from "@mantine/modals";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { getSystemElementQueryKey } from "./system-element-hooks";
 
 export function DeleteSystemTechnologyButton({
   systemTechnology,
@@ -19,6 +20,10 @@ export function DeleteSystemTechnologyButton({
     onSuccess() {
       queryClient.invalidateQueries({
         queryKey: ["system-technology"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: getSystemElementQueryKey(),
       });
     },
   });
