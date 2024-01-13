@@ -13,6 +13,7 @@ import ReactFlow, {
   EdgeTypes,
   Controls,
   Panel,
+  MarkerType,
 } from "reactflow";
 
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
@@ -87,6 +88,9 @@ function makeReactFlowEdgeFromSystemElementRelation(
     source: systemElementRelation.sourceID,
     target: systemElementRelation.targetID,
     type: SystemElementRelationEdgeRenderer.name,
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+    },
   } satisfies Edge<{}>;
 }
 
