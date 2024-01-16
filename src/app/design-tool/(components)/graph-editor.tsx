@@ -33,6 +33,7 @@ import { maximumBy } from "@/utils/maximumBy";
 import { SystemElementRelationEdgeRenderer } from "./system-element-relation-edge-renderer";
 import { CanvasLayout } from "./canvas-layout";
 import { CanvasToolbar } from "../workspace/[workspaceID]/canvas/(components)/canvas-toolbar";
+import { ElkCanvasLayout } from "./elk-canvas-layout";
 
 type Props = {
   systemElements: readonly SystemElement[];
@@ -65,8 +66,6 @@ function makeReactFlowNodeFromSystemElement(
 ): Node {
   return {
     id: systemElement.id,
-    width: 200,
-    height: 200,
     type:
       isParentNode && isExpanded
         ? SystemElementParentNode.name
@@ -212,10 +211,7 @@ export function GraphEditor(props: Props) {
             previousSystemElement.type === systemElement.type
           ) {
             if (systemElement.parentNode) {
-              return {
-                ...systemElement,
-                position: { x: 0, y: 0 },
-              };
+              return systemElement;
             } else {
               return {
                 ...systemElement,
@@ -288,7 +284,7 @@ export function GraphEditor(props: Props) {
     >
       <Background />
       <Controls />
-      <CanvasLayout />
+      <ElkCanvasLayout />
       <Panel position="bottom-center">
         <CanvasToolbar />
       </Panel>

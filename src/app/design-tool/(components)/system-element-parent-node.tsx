@@ -19,6 +19,7 @@ export function SystemElementParentNode(props: NodeProps<{}>) {
   const setExpanded = useExpandedGraphElements();
 
   const showLessDetails = useStore((state) => state.transform["2"] < 0.75);
+  const nodeInternal = useStore((state) => state.nodeInternals.get(id));
 
   const textSize: MantineSize = showLessDetails ? "xl" : "xs";
 
@@ -28,17 +29,22 @@ export function SystemElementParentNode(props: NodeProps<{}>) {
 
   const childrenCount = systemElement.data.children.length ?? 0;
 
+  const width = nodeInternal?.width ?? undefined;
+  const height = nodeInternal?.height ?? undefined;
+
   return (
     <>
-      <NodeResizer isVisible={props.selected} minWidth={300} minHeight={300} />
+      <NodeResizer
+        isVisible={props.selected}
+        minWidth={width}
+        minHeight={height}
+      />
       <Card
         padding="md"
         radius="md"
-        w={"100%"}
-        h={"100%"}
-        miw={300}
-        mih={300}
         withBorder
+        w={width}
+        h={height}
         style={{
           borderStyle: "dashed",
           borderWidth: "3px",

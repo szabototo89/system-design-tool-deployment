@@ -105,7 +105,7 @@ export function SystemElementNode(props: NodeProps) {
 
         {!showLessDetails && (
           <>
-            <Text size="xs" c="dimmed" lineClamp={4}>
+            <Text size="xs" c="dimmed">
               {systemElement.data.description}
             </Text>
 
