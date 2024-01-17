@@ -27,6 +27,8 @@ import { RelativeTimestamp } from "@/components/relative-timestamp";
 import Link from "next/link";
 import { SystemTechnologyInfoHoverCard } from "../../../../(components)/system-technology-info-hover-card";
 import { SystemElementRelationEntity } from "@/db/entities/system-element-relation/schema";
+import { AbsoluteTimestamp } from "@/components/absolute-timestamp";
+import { DeleteSystemElementButton } from "@/app/design-tool/(components)/delete-system-element-button";
 
 type Props = {
   params: { systemElementID: SystemElement["id"] };
@@ -104,6 +106,11 @@ export default async function SystemElementDetailsPage(props: Props) {
     <AppShellMainContent
       title={systemElement.name ?? ""}
       subtitle="System element"
+      endContent={
+        <DeleteSystemElementButton systemElement={systemElement}>
+          Delete
+        </DeleteSystemElementButton>
+      }
     >
       <SimpleGrid>
         <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -120,26 +127,27 @@ export default async function SystemElementDetailsPage(props: Props) {
               {systemElement.description}
             </CardInfoText>
 
-            <CardInfoText label="Technologies">
-              <Group mt={4} gap="xs">
-                {systemElement.technologies.map((technology) => (
-                  <SystemTechnologyInfoHoverCard
-                    key={technology.id}
-                    systemTechnology={technology}
-                  >
-                    <Badge variant="outline">{technology.name}</Badge>
-                  </SystemTechnologyInfoHoverCard>
-                ))}
-              </Group>
-            </CardInfoText>
+            {systemElement.technologies.length > 0 && (
+              <CardInfoText label="Technologies">
+                <Group mt={4} gap="xs">
+                  {systemElement.technologies.map((technology) => (
+                    <SystemTechnologyInfoHoverCard
+                      key={technology.id}
+                      systemTechnology={technology}
+                    >
+                      <Badge variant="outline">{technology.name}</Badge>
+                    </SystemTechnologyInfoHoverCard>
+                  ))}
+                </Group>
+              </CardInfoText>
+            )}
 
             <CardInfoText label="Created at">
-              <RelativeTimestamp>{systemElement.createdAt}</RelativeTimestamp>{" "}
-              ago
+              <AbsoluteTimestamp>{systemElement.createdAt}</AbsoluteTimestamp>
             </CardInfoText>
 
             {parentSystemElement != null && (
-              <CardInfoText label="Parent">
+              <CardInfoText label="Part of">
                 <SystemElementAnchor systemElement={parentSystemElement} />
                 <Text size="xs" c="dimmed">
                   {parentSystemElement.description}

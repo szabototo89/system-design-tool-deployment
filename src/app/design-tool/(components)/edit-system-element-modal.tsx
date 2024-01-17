@@ -1,13 +1,10 @@
-import { Button, Modal, Text } from "@mantine/core";
+import { Modal } from "@mantine/core";
 import React from "react";
 import { SystemElementEditorForm } from "./system-element-editor-form";
 import { SystemElement } from "@/db/entities/system-element/schema";
-import {
-  useDeleteSystemElement,
-  useUpdateSystemElement,
-} from "./system-element-hooks";
+import { useUpdateSystemElement } from "./system-element-hooks";
 import { SystemTechnology } from "@/db/entities/system-technology/schema";
-import { openConfirmModal } from "@mantine/modals";
+import { DeleteSystemElementButton } from "./delete-system-element-button";
 
 type Props = {
   systemElement: Pick<
@@ -18,7 +15,6 @@ type Props = {
 
 export function EditSystemElementModal(props: Props) {
   const updateSystemElement = useUpdateSystemElement();
-  const deleteSystemElement = useDeleteSystemElement();
 
   return (
     <Modal {...props} title="Edit element" centered>
@@ -61,28 +57,14 @@ export function EditSystemElementModal(props: Props) {
         }}
         submitButtonLabel="Save changes"
         startContent={
-          <Button
+          <DeleteSystemElementButton
             variant="outline"
             color="red"
-            loading={deleteSystemElement.isPending}
-            disabled={deleteSystemElement.isPending}
-            onClick={async () => {
-              openConfirmModal({
-                title: "Please confirm your action",
-                children: (
-                  <Text size="sm">Are you sure to delete this element?</Text>
-                ),
-                labels: { confirm: "Confirm", cancel: "Cancel" },
-                onCancel: props.onClose,
-                onConfirm: async () => {
-                  await deleteSystemElement.mutateAsync(props.systemElement);
-                  props.onClose();
-                },
-              });
-            }}
+            systemElement={props.systemElement}
+            onDelete={props.onClose}
           >
             Delete
-          </Button>
+          </DeleteSystemElementButton>
         }
       />
     </Modal>
