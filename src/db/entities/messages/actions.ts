@@ -1,19 +1,18 @@
 import { MessageBoard } from "../message-boards/types";
 import {
   db as appDb,
+  DrizzleDatabase,
   Message,
   messageQuery,
   MessageSchema,
   MessageTable,
 } from "../../schema";
 import { eq } from "drizzle-orm";
-import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { imageAction } from "@/db/entities/images/actions";
 import { reactionAction } from "@/db/entities/reaction/actions";
 import { UserContext } from "@/app/api/auth/[...nextauth]/auth-options";
 import { reactionQuery } from "@/db/entities/reaction/queries";
 import { Image } from "@/db/entities/images/entity";
-import { BaseSQLiteDatabase } from "drizzle-orm/sqlite-core";
 
 export async function createMessage(
   userContext: UserContext,
@@ -36,10 +35,7 @@ export async function createMessage(
   return MessageSchema.parse(message);
 }
 
-async function deleteMessage(
-  message: Message,
-  db: BetterSQLite3Database = appDb,
-) {
+async function deleteMessage(message: Message, db: DrizzleDatabase = appDb) {
   await db.transaction(async (tx) => {
     await tx.delete(MessageTable).where(eq(MessageTable.id, message.id));
 
@@ -57,10 +53,7 @@ async function deleteMessage(
 export const messageAction = {
   create: createMessage,
   delete: deleteMessage,
-  async deleteMany(
-    messages: readonly Message[],
-    db: BetterSQLite3Database = appDb,
-  ) {
+  async deleteMany(messages: readonly Message[], db: DrizzleDatabase = appDb) {
     if (messages.length === 0) {
       return;
     }
@@ -73,7 +66,7 @@ export const messageAction = {
   async toggleReaction(
     userContext: UserContext,
     message: Pick<Message, "id">,
-    db: BetterSQLite3Database = appDb,
+    db: DrizzleDatabase = appDb,
   ) {
     const reactions = await reactionQuery.queryAllFromSource(
       message.id,
@@ -90,14 +83,14 @@ export const messageAction = {
   async addReaction(
     userContext: UserContext,
     message: Pick<Message, "id">,
-    db: BetterSQLite3Database = appDb,
+    db: DrizzleDatabase = appDb,
   ) {
     await reactionAction.create(userContext, message.id, "messages", db);
   },
 
   async deleteReaction(
     message: Pick<Message, "id">,
-    db: BetterSQLite3Database = appDb,
+    db: DrizzleDatabase = appDb,
   ) {
     const reactions = await reactionQuery.queryAllFromSource(
       message.id,

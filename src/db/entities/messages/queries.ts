@@ -2,16 +2,15 @@ import { MessageBoard } from "../message-boards/types";
 
 import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
-import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { MessageTable } from "./tables";
 import { Message, MessageSchema } from "./types";
-import { db as appDb } from "../../schema";
+import { DrizzleDatabase, db as appDb } from "../../schema";
 import { reactionQuery } from "../reaction/queries";
 import { imageQuery } from "../images/entity";
 
 async function queryFromMessageBoard(
   messageBoard: MessageBoard,
-  db: BetterSQLite3Database = appDb,
+  db: DrizzleDatabase = appDb,
 ) {
   const messagesFromDb = await db
     .select()
@@ -33,10 +32,7 @@ export const messageQuery = {
     return imageQuery.queryByID(message.imageID);
   },
 
-  async queryReactionsFrom(
-    message: Message,
-    db: BetterSQLite3Database = appDb,
-  ) {
+  async queryReactionsFrom(message: Message, db: DrizzleDatabase = appDb) {
     const reactions = await reactionQuery.queryAllFromSource(
       message.id,
       "messages",

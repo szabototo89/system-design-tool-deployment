@@ -1,5 +1,5 @@
 import Database from "better-sqlite3";
-import { drizzle } from "drizzle-orm/better-sqlite3";
+import { BetterSQLite3Database, drizzle } from "drizzle-orm/better-sqlite3";
 import { SystemElementEntity } from "./entities/system-element/schema";
 import { SystemElementRelationEntity } from "./entities/system-element-relation/schema";
 
@@ -22,4 +22,6 @@ const sqliteClient = new Database("./app.db", {
     console.log("-----------------");
   },
 });
-export const db = drizzle(sqliteClient);
+export const db: BetterSQLite3Database = drizzle(sqliteClient);
+
+export type DrizzleDatabase = typeof db;

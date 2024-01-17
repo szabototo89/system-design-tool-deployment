@@ -2,6 +2,7 @@ import { SQLiteTable, SQLiteTableFn } from "drizzle-orm/sqlite-core";
 import { z } from "zod";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { sql } from "drizzle-orm";
+import { DrizzleDatabase } from "@/db/schema";
 
 export type ActionType = "create" | "update" | "delete" | "upsert";
 
@@ -12,14 +13,11 @@ export type EntityQueryConfiguration = Record<
 
 export const onDeletionAction = <TSchema extends z.ZodTypeAny>(
   entitySchema: TSchema,
-  listener: (
-    db: BetterSQLite3Database,
-    entity: z.infer<TSchema>,
-  ) => Promise<void>,
+  listener: (db: DrizzleDatabase, entity: z.infer<TSchema>) => Promise<void>,
 ) => {
   return async (
     actionType: ActionType,
-    db: BetterSQLite3Database,
+    db: DrizzleDatabase,
     entity: unknown,
   ) => {
     if (actionType !== "delete") {
@@ -79,7 +77,7 @@ export function createSQLiteBackedEntity<
       ActionType,
       any,
       z.ZodTypeAny,
-      (db: BetterSQLite3Database, ...rest: any[]) => Promise<any>
+      (db: DrizzleDatabase, ...rest: any[]) => Promise<any>
     >
   >,
   TSchema extends z.ZodTypeAny,
@@ -166,13 +164,13 @@ export function createSQLiteBackedEntity<
   });
 
   const actionListeners: Array<
-    (actionType: ActionType, db: BetterSQLite3Database, entity: unknown) => void
+    (actionType: ActionType, db: DrizzleDatabase, entity: unknown) => void
   > = [];
 
   function registerActionListener<
     TListener extends (
       actionType: ActionType,
-      db: BetterSQLite3Database,
+      db: DrizzleDatabase,
       deletionResult: unknown,
     ) => void,
   >(listener: TListener) {
@@ -212,7 +210,7 @@ export class ActionBuilder<
   TActionResult,
   TSchema extends z.ZodTypeAny,
   TImplementation extends (
-    db: BetterSQLite3Database,
+    db: DrizzleDatabase,
     ...rest: any[]
   ) => Promise<TActionResult>,
 > {

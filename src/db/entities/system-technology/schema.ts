@@ -8,6 +8,7 @@ import { z } from "zod";
 import { randomUUID } from "crypto";
 import { eq, sql } from "drizzle-orm";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
+import { DrizzleDatabase } from "@/db/schema";
 
 export const SystemTechnologyEntity = createSQLiteBackedEntity({
   table() {
@@ -27,22 +28,19 @@ export const SystemTechnologyEntity = createSQLiteBackedEntity({
   queries({ schema, table, queryBuilder }) {
     return {
       queryAll: queryBuilder
-        .implementation((db: BetterSQLite3Database) => {
+        .implementation((db: DrizzleDatabase) => {
           return db.select().from(table);
         })
         .output(z.array(schema)),
 
       queryByID: queryBuilder.implementation(
-        (
-          db: BetterSQLite3Database,
-          entity: Pick<z.infer<typeof schema>, "id">,
-        ) => {
+        (db: DrizzleDatabase, entity: Pick<z.infer<typeof schema>, "id">) => {
           return db.select().from(table).where(eq(table.id, entity.id));
         },
       ),
 
       queryByName: queryBuilder.implementation(
-        (db: BetterSQLite3Database, name: string) => {
+        (db: DrizzleDatabase, name: string) => {
           return db.select().from(table).where(eq(table.name, name));
         },
       ),

@@ -1,11 +1,11 @@
 import { Reaction, ReactionSchema } from "./types";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
-import { db as appDb, ReactionTable } from "../../schema";
+import { db as appDb, DrizzleDatabase, ReactionTable } from "../../schema";
 import { and, eq, inArray } from "drizzle-orm";
 import { z } from "zod";
 
 export const reactionQuery = {
-  async queryByIDs(ids: Reaction["id"][], db: BetterSQLite3Database = appDb) {
+  async queryByIDs(ids: Reaction["id"][], db: DrizzleDatabase = appDb) {
     if (ids.length === 0) {
       return [];
     }
@@ -21,7 +21,7 @@ export const reactionQuery = {
   async queryAllFromSource(
     sourceID: Reaction["sourceID"],
     sourceType: Reaction["sourceType"],
-    db: BetterSQLite3Database = appDb,
+    db: DrizzleDatabase = appDb,
   ) {
     const reactions = await db
       .select()

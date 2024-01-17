@@ -1,4 +1,4 @@
-import { db, db as appDb } from "@/db/schema";
+import { db, db as appDb, DrizzleDatabase } from "@/db/schema";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { z } from "zod";
 import { eq } from "drizzle-orm";
@@ -43,7 +43,7 @@ const PersonEntity = createSQLiteBackedEntity({
           (
             _: UserContext,
             id: z.infer<typeof schema>["id"],
-            db: BetterSQLite3Database = appDb,
+            db: DrizzleDatabase = appDb,
           ) => {
             return db.select().from(table).where(eq(table.id, id));
           },
@@ -51,7 +51,7 @@ const PersonEntity = createSQLiteBackedEntity({
         .output(schema.nullable()),
 
       queryAll: queryBuilder
-        .implementation((_: UserContext, db: BetterSQLite3Database = appDb) => {
+        .implementation((_: UserContext, db: DrizzleDatabase = appDb) => {
           return db.select().from(table);
         })
         .output(z.array(schema)),

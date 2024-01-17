@@ -17,6 +17,7 @@ import {
   SystemTechnologySchema,
 } from "../system-technology/schema";
 import { Workspace, WorkspaceIDSchema } from "../workspace/schema";
+import { DrizzleDatabase } from "@/db/schema";
 
 export const SystemElementEntity = createSQLiteBackedEntity({
   table() {
@@ -66,7 +67,7 @@ export const SystemElementEntity = createSQLiteBackedEntity({
   queries({ table, queryBuilder, schema, edges }) {
     type Entity = z.infer<typeof schema>;
     const queryTechnologiesGroupedByElementID = async (
-      db: BetterSQLite3Database,
+      db: DrizzleDatabase,
       entities: Array<InferSelectModel<typeof table>>,
     ) => {
       if (!entities.length) {
@@ -108,7 +109,7 @@ export const SystemElementEntity = createSQLiteBackedEntity({
     };
 
     const queryEntityWithTechnologies = async (
-      db: BetterSQLite3Database,
+      db: DrizzleDatabase,
       elements: InferSelectModel<typeof table>[],
     ) => {
       const technologies = await queryTechnologiesGroupedByElementID(
@@ -132,10 +133,7 @@ export const SystemElementEntity = createSQLiteBackedEntity({
     return {
       queryFromWorkspace: queryBuilder
         .implementation(
-          async (
-            db: BetterSQLite3Database,
-            workspace: Pick<Workspace, "id">,
-          ) => {
+          async (db: DrizzleDatabase, workspace: Pick<Workspace, "id">) => {
             return queryEntityWithTechnologies(
               db,
               await db
@@ -156,7 +154,7 @@ export const SystemElementEntity = createSQLiteBackedEntity({
       queryById: queryBuilder
         .implementation(
           async (
-            db: BetterSQLite3Database,
+            db: DrizzleDatabase,
             { id }: Pick<z.infer<typeof schema>, "id">,
           ) => {
             const [result] = await queryEntityWithTechnologies(
@@ -188,7 +186,7 @@ export const SystemElementEntity = createSQLiteBackedEntity({
       queryChildrenFrom: queryBuilder
         .implementation(
           async (
-            db: BetterSQLite3Database,
+            db: DrizzleDatabase,
             entity: Pick<z.infer<typeof schema>, "id">,
           ) => {
             return db.select().from(table).where(eq(table.parentID, entity.id));

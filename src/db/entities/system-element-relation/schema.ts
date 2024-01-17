@@ -18,6 +18,7 @@ import {
   SystemTechnologySchema,
 } from "../system-technology/schema";
 import { WorkspaceIDSchema } from "../workspace/schema";
+import { DrizzleDatabase } from "@/db/schema";
 
 export const SystemElementRelationEntity = createSQLiteBackedEntity({
   table() {
@@ -63,7 +64,7 @@ export const SystemElementRelationEntity = createSQLiteBackedEntity({
       queries({ table: junctionTable, queryBuilder }) {
         return {
           queryTechnologiesBySystemElementRelationID: queryBuilder
-            .implementation(async (db: BetterSQLite3Database, id: string) => {
+            .implementation(async (db: DrizzleDatabase, id: string) => {
               const results = await db
                 .select()
                 .from(junctionTable)
@@ -154,7 +155,7 @@ export const SystemElementRelationEntity = createSQLiteBackedEntity({
 
     return {
       queryAll: queryBuilder
-        .implementation(async (db: BetterSQLite3Database) => {
+        .implementation(async (db: DrizzleDatabase) => {
           const relations = await db.select().from(table);
 
           return Promise.all(
@@ -174,7 +175,7 @@ export const SystemElementRelationEntity = createSQLiteBackedEntity({
         })
         .output(z.array(schema)),
       queryByID: queryBuilder
-        .implementation(async (db: BetterSQLite3Database, id: Entity["id"]) => {
+        .implementation(async (db: DrizzleDatabase, id: Entity["id"]) => {
           const relation = db
             .select()
             .from(table)
@@ -199,10 +200,7 @@ export const SystemElementRelationEntity = createSQLiteBackedEntity({
         .output(schema),
       queryFromSystemElementSource: queryBuilder
         .implementation(
-          (
-            db: BetterSQLite3Database,
-            systemElement: Pick<SystemElement, "id">,
-          ) => {
+          (db: DrizzleDatabase, systemElement: Pick<SystemElement, "id">) => {
             return db
               .select()
               .from(table)
@@ -213,10 +211,7 @@ export const SystemElementRelationEntity = createSQLiteBackedEntity({
 
       queryFromSystemElementTarget: queryBuilder
         .implementation(
-          (
-            db: BetterSQLite3Database,
-            systemElement: Pick<SystemElement, "id">,
-          ) => {
+          (db: DrizzleDatabase, systemElement: Pick<SystemElement, "id">) => {
             return db
               .select()
               .from(table)

@@ -1,4 +1,4 @@
-import { db as appDb, ImageTable } from "@/db/schema";
+import { db as appDb, DrizzleDatabase, ImageTable } from "@/db/schema";
 import { z } from "zod";
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { eq } from "drizzle-orm";
@@ -44,7 +44,7 @@ export const imageAction = {
   create: createImage,
   createFromFile: createImageFromFile,
 
-  async delete(image: Pick<Image, "id">, db: BetterSQLite3Database = appDb) {
+  async delete(image: Pick<Image, "id">, db: DrizzleDatabase = appDb) {
     await db.delete(ImageTable).where(eq(ImageTable.id, image.id));
   },
 };
