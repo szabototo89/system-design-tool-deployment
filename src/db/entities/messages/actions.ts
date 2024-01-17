@@ -13,6 +13,7 @@ import { reactionAction } from "@/db/entities/reaction/actions";
 import { UserContext } from "@/app/api/auth/[...nextauth]/auth-options";
 import { reactionQuery } from "@/db/entities/reaction/queries";
 import { Image } from "@/db/entities/images/entity";
+import { BaseSQLiteDatabase } from "drizzle-orm/sqlite-core";
 
 export async function createMessage(
   userContext: UserContext,

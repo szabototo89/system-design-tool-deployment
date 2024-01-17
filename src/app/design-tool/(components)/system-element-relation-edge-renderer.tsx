@@ -27,20 +27,21 @@ function getNodeIntersection(
   targetNode: Node<any>,
 ) {
   // https://math.stackexchange.com/questions/1724792/an-algorithm-for-finding-the-intersection-point-between-a-center-of-vision-and-a
-  const {
-    width: intersectionNodeWidth,
-    height: intersectionNodeHeight,
-    positionAbsolute: intersectionNodePosition,
-  } = intersectionNode;
-  const targetPosition = targetNode.positionAbsolute;
+  const intersectionNodeWidth = intersectionNode.width ?? 0;
+  const intersectionNodeHeight = intersectionNode.height ?? 0;
+  const targetPosition = targetNode.positionAbsolute ?? { x: 0, y: 0 };
+  const intersectionNodePosition = intersectionNode.positionAbsolute ?? {
+    x: 0,
+    y: 0,
+  };
 
   const w = intersectionNodeWidth / 2;
   const h = intersectionNodeHeight / 2;
 
   const x2 = intersectionNodePosition.x + w;
   const y2 = intersectionNodePosition.y + h;
-  const x1 = targetPosition.x + targetNode.width / 2;
-  const y1 = targetPosition.y + targetNode.height / 2;
+  const x1 = targetPosition.x + (targetNode.width ?? 0) / 2;
+  const y1 = targetPosition.y + (targetNode.height ?? 0) / 2;
 
   const xx1 = (x1 - x2) / (2 * w) - (y1 - y2) / (2 * h);
   const yy1 = (x1 - x2) / (2 * w) + (y1 - y2) / (2 * h);
@@ -58,7 +59,14 @@ function getEdgePosition(
   node: Node<any>,
   intersectionPoint: Node<any>["position"],
 ) {
-  const n = { ...node.positionAbsolute, ...node };
+  const n = {
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+    ...node.positionAbsolute,
+    ...node,
+  };
   const nx = Math.round(n.x);
   const ny = Math.round(n.y);
   const px = Math.round(intersectionPoint.x);
@@ -67,13 +75,13 @@ function getEdgePosition(
   if (px <= nx + 1) {
     return Position.Left;
   }
-  if (px >= nx + n.width - 1) {
+  if (px >= nx + (n.width ?? 0) - 1) {
     return Position.Right;
   }
   if (py <= ny + 1) {
     return Position.Top;
   }
-  if (py >= n.y + n.height - 1) {
+  if (py >= n.y + (n.height ?? 0) - 1) {
     return Position.Bottom;
   }
 

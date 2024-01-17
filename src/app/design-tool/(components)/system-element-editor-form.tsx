@@ -80,6 +80,9 @@ export function SystemElementEditorForm(props: Props) {
             label="Description"
             description="Brief info about the element's purpose or functionality."
             size="xs"
+            autosize
+            minRows={4}
+            maxRows={8}
             {...form.getInputProps("description")}
           />
           {doesSupportTechnologies && (
