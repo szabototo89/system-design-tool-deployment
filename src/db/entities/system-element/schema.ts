@@ -162,16 +162,17 @@ export const SystemElementEntity = createSQLiteBackedEntity({
               await db.select().from(table).where(eq(table.id, id)),
             );
 
-            const children = db
+            const children = await db
               .select({ id: table.id })
               .from(table)
               .where(eq(table.parentID, id))
-              .all()
-              .map(({ id }) => id);
+              .all();
+
+            const childrenIds = children.map(({ id }) => id);
 
             return {
               ...result,
-              children,
+              children: childrenIds,
             };
           },
         )

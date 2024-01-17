@@ -1,4 +1,12 @@
-import { AppShellMain, Box, Text, Title, Divider, Flex } from "@mantine/core";
+import {
+  AppShellMain,
+  Box,
+  Text,
+  Title,
+  Divider,
+  Flex,
+  Space,
+} from "@mantine/core";
 
 type Props = React.PropsWithChildren<{
   title: string;
@@ -14,6 +22,8 @@ export function AppShellMainContent(props: Props) {
       <Box px="xl" py="md" bg="gray.2" pos="relative" h="100%">
         <Title order={3}>{props.title}</Title>
         <Text>{props.subtitle}</Text>
+
+        <Space h="md" />
 
         {props.children}
       </Box>

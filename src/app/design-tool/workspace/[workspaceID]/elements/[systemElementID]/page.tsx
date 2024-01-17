@@ -141,6 +141,9 @@ export default async function SystemElementDetailsPage(props: Props) {
             {parentSystemElement != null && (
               <CardInfoText label="Parent">
                 <SystemElementAnchor systemElement={parentSystemElement} />
+                <Text size="xs" c="dimmed">
+                  {parentSystemElement.description}
+                </Text>
               </CardInfoText>
             )}
           </Stack>
@@ -148,8 +151,11 @@ export default async function SystemElementDetailsPage(props: Props) {
 
         {children.length > 0 && (
           <Card shadow="sm" padding="lg" radius="md" withBorder>
-            <Group justify="space-between" mb="xs">
+            <Group gap="xs" align="baseline" mb="xs">
               <Text fw={500}>Children</Text>
+              <Badge variant="light" size="lg">
+                {children.length}
+              </Badge>
             </Group>
 
             <List
@@ -177,8 +183,11 @@ export default async function SystemElementDetailsPage(props: Props) {
         <SimpleGrid cols={2}>
           {incomingRelations.length > 0 && (
             <Card shadow="sm" padding="lg" radius="md" withBorder>
-              <Group justify="space-between" mb="xs">
+              <Group gap="xs" align="baseline" mb="xs">
                 <Text fw={500}>Incoming relations</Text>
+                <Badge variant="light" size="lg">
+                  {incomingRelations.length}
+                </Badge>
               </Group>
 
               <List
@@ -207,8 +216,11 @@ export default async function SystemElementDetailsPage(props: Props) {
 
           {outgoingRelations.length > 0 && (
             <Card shadow="sm" padding="lg" radius="md" withBorder>
-              <Group justify="space-between" mb="xs">
+              <Group gap="xs" align="baseline" mb="xs">
                 <Text fw={500}>Outgoing relations</Text>
+                <Badge variant="light" size="lg">
+                  {outgoingRelations.length}
+                </Badge>
               </Group>
 
               <List

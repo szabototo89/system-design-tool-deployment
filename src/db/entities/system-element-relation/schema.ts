@@ -176,7 +176,7 @@ export const SystemElementRelationEntity = createSQLiteBackedEntity({
         .output(z.array(schema)),
       queryByID: queryBuilder
         .implementation(async (db: DrizzleDatabase, id: Entity["id"]) => {
-          const relation = db
+          const relation = await db
             .select()
             .from(table)
             .where(eq(table.id, id))

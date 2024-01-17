@@ -1,5 +1,5 @@
-import Database from "better-sqlite3";
-import { BetterSQLite3Database, drizzle } from "drizzle-orm/better-sqlite3";
+import { createClient } from "@libsql/client";
+import { drizzle } from "drizzle-orm/libsql";
 import { SystemElementEntity } from "./entities/system-element/schema";
 import { SystemElementRelationEntity } from "./entities/system-element-relation/schema";
 
@@ -16,12 +16,10 @@ export * from "./entities/images/entity";
 export const SystemElementTable = SystemElementEntity.table;
 export const SystemElementRelationTable = SystemElementRelationEntity.table;
 
-const sqliteClient = new Database("./app.db", {
-  verbose(...args) {
-    console.log(...args);
-    console.log("-----------------");
-  },
+const sqliteClient = createClient({
+  url: "file:app.db",
 });
-export const db: BetterSQLite3Database = drizzle(sqliteClient);
+
+export const db = drizzle(sqliteClient);
 
 export type DrizzleDatabase = typeof db;

@@ -15,6 +15,7 @@
   "dependencies": {
     "@auth/drizzle-adapter": "^0.3.5",
     "@dagrejs/dagre": "^1.0.4",
+    "@libsql/client": "0.4.0-pre.7",
     "@mantine/core": "^7.3.2",
     "@mantine/form": "^7.1.0",
     "@mantine/hooks": "^7.3.2",
