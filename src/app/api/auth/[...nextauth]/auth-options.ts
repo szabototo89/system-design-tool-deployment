@@ -49,7 +49,7 @@ export async function getUserContext(options?: GetUserContextOptions) {
 
 export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
-  adapter: DrizzleAdapter(db),
+  adapter: DrizzleAdapter(db as any),
   session: {
     strategy: "jwt",
   },

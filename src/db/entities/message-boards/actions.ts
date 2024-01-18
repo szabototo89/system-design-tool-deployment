@@ -24,14 +24,14 @@ export const messageBoardAction = {
     await db.transaction(async (tx) => {
       const messages = await messageQuery.queryFromMessageBoard(
         messageBoard,
-        tx,
+        tx as any,
       );
 
       await Promise.all(
         [
-          ...messages.map((message) => messageAction.delete(message, tx)),
+          ...messages.map((message) => messageAction.delete(message, tx as any)),
           messageBoard.imageID &&
-            imageAction.delete({ id: messageBoard.imageID }, tx),
+            imageAction.delete({ id: messageBoard.imageID }, tx as any),
         ].filter(Boolean),
       );
 

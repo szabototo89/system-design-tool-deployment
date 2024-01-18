@@ -40,12 +40,12 @@ async function deleteMessage(message: Message, db: DrizzleDatabase = appDb) {
     await tx.delete(MessageTable).where(eq(MessageTable.id, message.id));
 
     if (message.imageID != null) {
-      await imageAction.delete({ id: message.imageID }, tx);
+      await imageAction.delete({ id: message.imageID }, tx as any);
     }
 
     const reactions = await messageQuery.queryReactionsFrom(message);
     await Promise.all(
-      reactions.map((reaction) => reactionAction.delete(reaction, tx)),
+      reactions.map((reaction) => reactionAction.delete(reaction, tx as any)),
     );
   });
 }
@@ -59,7 +59,7 @@ export const messageAction = {
     }
 
     await db.transaction(async (tx) => {
-      await Promise.all(messages.map((message) => deleteMessage(message, tx)));
+      await Promise.all(messages.map((message) => deleteMessage(message, tx as any)));
     });
   },
 

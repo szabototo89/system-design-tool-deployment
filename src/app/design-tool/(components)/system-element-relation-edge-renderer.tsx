@@ -120,7 +120,25 @@ export function SystemElementRelationEdgeRenderer(props: Props) {
     ),
   );
 
+  const theme = useMantineTheme();
+
+  const [selectedSystemElementID] = useSystemElementSelectionState();
+  const showLessDetails = useStore((state) => state.transform["2"] < 0.75);
+
+  const systemElementRelation = useQuery({
+    queryKey: ["system-element-relation", { id: props.id }] as const,
+    async queryFn() {
+      return systemElementRelationQueryByID(
+        SystemElementRelationIDSchema.parse(props.id),
+      );
+    },
+  });
+
   if (!sourceNode || !targetNode) {
+    return null;
+  }
+
+  if (systemElementRelation.data == null) {
     return null;
   }
 
@@ -137,24 +155,6 @@ export function SystemElementRelationEdgeRenderer(props: Props) {
     targetX: tx,
     targetY: ty,
   });
-
-  const theme = useMantineTheme();
-
-  const [selectedSystemElementID] = useSystemElementSelectionState();
-  const showLessDetails = useStore((state) => state.transform["2"] < 0.75);
-
-  const systemElementRelation = useQuery({
-    queryKey: ["system-element-relation", { id: props.id }] as const,
-    async queryFn() {
-      return systemElementRelationQueryByID(
-        SystemElementRelationIDSchema.parse(props.id),
-      );
-    },
-  });
-
-  if (systemElementRelation.data == null) {
-    return null;
-  }
 
   const technologies = systemElementRelation.data.technologies;
 
