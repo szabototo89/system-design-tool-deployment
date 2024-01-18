@@ -256,6 +256,7 @@ export const SystemElementEntity = createSQLiteBackedEntity({
         ) => {
           const {
             technologies: technologiesValue,
+            parentID,
             isExternal,
             ...newValue
           } = options.value;
@@ -267,6 +268,8 @@ export const SystemElementEntity = createSQLiteBackedEntity({
               }),
             ),
           );
+
+          const parent = parentID !== undefined ? { parentID } : {};
 
           await db
             .delete(edges.system_technology)
@@ -289,6 +292,7 @@ export const SystemElementEntity = createSQLiteBackedEntity({
             .update(table)
             .set({
               ...newValue,
+              ...parent,
               isExternal: isExternal ? 1 : 0,
             })
             .where(eq(table.id, options.entity.id))

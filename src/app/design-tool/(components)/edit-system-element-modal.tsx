@@ -42,7 +42,7 @@ export function EditSystemElementModal(props: Props) {
               name,
               description,
               type,
-              parentID: null,
+              parentID: undefined,
               isExternal,
               technologies: technologies.map((technologyName) => {
                 return {
