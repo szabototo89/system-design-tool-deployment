@@ -59,7 +59,9 @@ export const messageAction = {
     }
 
     await db.transaction(async (tx) => {
-      await Promise.all(messages.map((message) => deleteMessage(message, tx as any)));
+      await Promise.all(
+        messages.map((message) => deleteMessage(message, tx as any)),
+      );
     });
   },
 

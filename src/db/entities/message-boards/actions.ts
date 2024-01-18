@@ -29,7 +29,9 @@ export const messageBoardAction = {
 
       await Promise.all(
         [
-          ...messages.map((message) => messageAction.delete(message, tx as any)),
+          ...messages.map((message) =>
+            messageAction.delete(message, tx as any),
+          ),
           messageBoard.imageID &&
             imageAction.delete({ id: messageBoard.imageID }, tx as any),
         ].filter(Boolean),
