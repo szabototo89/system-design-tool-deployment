@@ -1,8 +1,8 @@
-import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
-import { db as appDb, DrizzleDatabase, ReactionTable } from "@/db/schema";
+import { db as appDb, DrizzleDatabase } from "@/db/schema";
 import { Reaction, ReactionSchema } from "./types";
 import { and, eq } from "drizzle-orm";
 import { UserContext } from "@/app/api/auth/[...nextauth]/auth-options";
+import { ReactionTable } from "./tables";
 
 export const reactionAction = {
   async create(

@@ -1,18 +1,14 @@
 import { MessageBoard } from "../message-boards/types";
-import {
-  db as appDb,
-  DrizzleDatabase,
-  Message,
-  messageQuery,
-  MessageSchema,
-  MessageTable,
-} from "../../schema";
+import { db as appDb, DrizzleDatabase } from "../../schema";
 import { eq } from "drizzle-orm";
 import { imageAction } from "@/db/entities/images/actions";
 import { reactionAction } from "@/db/entities/reaction/actions";
 import { UserContext } from "@/app/api/auth/[...nextauth]/auth-options";
 import { reactionQuery } from "@/db/entities/reaction/queries";
 import { Image } from "@/db/entities/images/entity";
+import { messageQuery } from "./queries";
+import { MessageTable } from "./tables";
+import { MessageSchema, Message } from "./types";
 
 export async function createMessage(
   userContext: UserContext,

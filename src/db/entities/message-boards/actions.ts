@@ -2,10 +2,12 @@ import {
   MessageBoard,
   MessageBoardSchema,
 } from "@/db/entities/message-boards/types";
-import { db, MessageBoardTable, messageQuery } from "@/db/schema";
+import { db } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { messageAction } from "@/db/entities/messages/actions";
 import { imageAction } from "@/db/entities/images/actions";
+import { messageQuery } from "../messages/queries";
+import { MessageBoardTable } from "./table";
 
 export const messageBoardAction = {
   async publishMessageBoard(messageBoard: Pick<MessageBoard, "id">) {

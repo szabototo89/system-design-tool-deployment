@@ -1,8 +1,8 @@
 import { Reaction, ReactionSchema } from "./types";
-import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
-import { db as appDb, DrizzleDatabase, ReactionTable } from "../../schema";
+import { db as appDb, DrizzleDatabase } from "../../schema";
 import { and, eq, inArray } from "drizzle-orm";
 import { z } from "zod";
+import { ReactionTable } from "./tables";
 
 export const reactionQuery = {
   async queryByIDs(ids: Reaction["id"][], db: DrizzleDatabase = appDb) {

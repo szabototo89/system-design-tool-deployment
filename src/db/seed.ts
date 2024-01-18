@@ -1,12 +1,12 @@
 import { faker } from "@faker-js/faker";
+import { db } from "./schema";
+import { MessageBoardTable } from "./entities/message-boards/table";
 import {
-  db,
-  Message,
   MessageBoard,
-  MessageBoardTable,
   messageBoardStatusList,
-  MessageTable,
-} from "./schema";
+} from "./entities/message-boards/types";
+import { MessageTable } from "./entities/messages/tables";
+import { Message } from "./entities/messages/types";
 
 await db.delete(MessageTable);
 await db.delete(MessageBoardTable);

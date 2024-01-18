@@ -1,12 +1,7 @@
-import {
-  db,
-  User,
-  UserSchema,
-  UsersTable,
-  UserWithPassword,
-} from "../../schema";
+import { db } from "../../schema";
 import { and, eq } from "drizzle-orm";
 import { v4 as uuid } from "uuid";
+import { UsersTable, UserSchema, UserWithPassword } from "./tables";
 
 export const userQuery = {
   async findUserByEmailAndPassword(email: string, password: string) {

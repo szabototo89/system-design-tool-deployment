@@ -1,5 +1,4 @@
 import { Button, Image, Text } from "@mantine/core";
-import { messageQuery } from "@/db/schema";
 import { ActionButton } from "@/components/action-button";
 import { revalidatePath } from "next/cache";
 import React from "react";
@@ -13,6 +12,7 @@ import { Message } from "@/db/entities/messages/types";
 import { messageAction } from "@/db/entities/messages/actions";
 import { withComponentLogger } from "@/logging/logger";
 import { getUserContext } from "@/app/api/auth/[...nextauth]/auth-options";
+import { messageQuery } from "@/db/entities/messages/queries";
 
 type Props = {
   message: Message;
