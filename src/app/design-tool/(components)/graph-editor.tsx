@@ -68,8 +68,8 @@ function makeReactFlowNodeFromSystemElement(
     id: systemElement.id,
     type:
       isParentNode && isExpanded
-        ? SystemElementParentNode.name
-        : SystemElementNode.name,
+        ? "SystemElementParentNode"
+        : "SystemElementNode",
     selectable: true,
     data: {},
     position: { x: 0, y: 0 },
@@ -86,7 +86,7 @@ function makeReactFlowEdgeFromSystemElementRelation(
     id: systemElementRelation.id,
     source: systemElementRelation.sourceID,
     target: systemElementRelation.targetID,
-    type: SystemElementRelationEdgeRenderer.name,
+    type: "SystemElementRelationEdgeRenderer",
     markerEnd: {
       type: MarkerType.ArrowClosed,
     },
